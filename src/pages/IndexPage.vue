@@ -1,14 +1,17 @@
 <template>
   <q-page class="bg-white">
     <div class="row" style="display: flex;justify-content: center;">
-      <div style="width: 100%; padding: 10px;">
-        <span style="font-size: 20px;color: #1b2df5;">Cliente:</span>
-        <q-btn style="margin-left: 20px;" color="positive" icon-right="person_add_alt" @click="buscarcliente = true" label="Agregar cliente"/>
-      </div>
       <div class="totales">
         <q-card class="my-card" bordered style="margin: 10px;">
+          <q-card-section style="padding: 7px 16px;">
+            <div style="width: 100%;">
+              <span style="color: #000213;">Cliente:</span>
+              <span style="color: #1b2df5;margin-left: 20PX;">{{nombrecliente.length > 0 ? nombrecliente : 'GENERAL'}}</span>
+            </div>
+          </q-card-section>
+          <q-separator />
           <q-card-section horizontal>
-            <q-card-section style="display: grid;">
+            <q-card-section style="display: grid;padding: 7px 16px;font-size: 12px;">
               <span>Subtotal:</span>
               <span>Impuesto:</span>
               <span>Descuento:</span>
@@ -17,7 +20,7 @@
 
             <q-separator vertical />
 
-            <q-card-section style="display: grid;">
+            <q-card-section style="display: grid;padding: 7px 16px;font-size: 12px;">
               <span>Bs. 356,90</span>
               <span>Bs. 356,90</span>
               <span>Bs. 356,90</span>
@@ -26,7 +29,7 @@
 
             <q-separator vertical />
 
-            <q-card-section style="display: grid;">
+            <q-card-section style="display: grid;padding: 7px 16px;font-size: 12px;">
               <span>$ 56,90</span>
               <span>$ 56,90</span>
               <span>$ 56,90</span>
@@ -35,9 +38,12 @@
           </q-card-section>
         </q-card>
       </div>
-      <div class="botones">
-        <q-btn color="primary" icon="zoom_in" @click="buscaritem = true" label="Buscar" style="width: 50%;" />
-        <q-btn color="secondary" icon-right="paid" label="Pagar" style="width: 50%;"/>
+      <div class="botones row">
+        <q-btn class="col-6" color="primary" icon="zoom_in" @click="buscaritem = true" label="Agregar item"/>
+        <q-btn class="col-6"  color="secondary" icon-right="paid" label="Pagar"/>
+        <q-btn class="col-6"  color="negative" icon="cancel" @click="buscarcliente = true" label="Cancelar venta"/>
+        <q-btn class="col-6"  color="positive" icon-right="person_add_alt" @click="abrirBuscarCliente" label="Agregar cliente"/>
+
       </div>
       <div class="puntodeventa">
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
@@ -65,18 +71,22 @@
 
               <q-item-section class="tarjeticainside">
                 <div style="display: flex;">
-                  <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
+                  <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Cantidad</div>
                     <input
                       class="inputCantidad"
                       value="2"
                     />
                   </div>
-                  <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
+                  <div style="display: grid;width: 25%;justify-content: center;">
+                    <q-btn class="btncantidad"  color="blue" icon-right="add_circle" @click="buscarcliente = true"/>
+                    <q-btn class="btncantidad"  color="red" icon="remove_circle" @click="buscarcliente = true"/>
+                  </div>
+                  <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                     <div class="text-center">%Imp.</div>
                     <div class="text-secondary">exento</div>
                   </div>
-                  <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
+                  <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Monto</div>
                     <div class="text-secondary text-center">Bs. 556.99</div>
                   </div>
@@ -137,43 +147,61 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="buscarcliente" position="top">
-      <q-card>
+    <q-dialog v-model="modalcliente" position="top">
+      <q-card style="max-height: 87vh;">
         <q-card-section>
-          <div class="text-h6">Agregar cliente</div>
+          <div class="text-h6">Buscar cliente</div>
         </q-card-section>
         <q-separator />
         <q-card-section>
           <div class="">
-            <q-select filled v-model="modeldocumento" :options="optionsdocumento" label="Seleccione tipo documento" />
+            <q-select
+             filled
+             v-model="modeldocumento"
+             :options="optionsdocumento"
+             option-label="tipodocumento"
+             option-value="cod"
+             label="Seleccione tipo documento"
+             dense
+            />
 
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
-          <div class="">
-            <q-input filled v-model="documento" label="Documento" stack-label />
-
+          <div class="row">
+            <q-input class="col-10"  filled v-model="documento" label="Documento" stack-label />
+            <q-btn class="col-2" icon="search" color="secondary" @click="buscarCliente" />
           </div>
         </q-card-section>
-        <q-separator />
+        <div v-if="noencontrado" class="noencontrado">
+            CLIENTE NO ENCONTRADO
+        </div>
+        <div v-if="encontrado" class="encontrado">
+            CLIENTE ENCONTRADO
+        </div>
+        <q-separator v-if="clientebuscado"  />
 
-        <q-card-section>
-          <q-input filled v-model="nombre" label="Nombre cliente" stack-label />
+        <q-card-section v-if="clientebuscado" >
+          <q-input filled v-model="nombrecliente" label="Nombre cliente" stack-label  />
         </q-card-section>
 
-        <q-separator />
-        <q-card-section>
-          <q-input filled v-model="correo" label="Email cliente" stack-label />
+        <q-separator v-if="clientebuscado" />
+        <q-card-section v-if="clientebuscado" >
+          <q-input filled v-model="correocliente" label="Email cliente" stack-label />
         </q-card-section>
-        <q-separator />
-        <q-card-section>
-          <q-input filled v-model="telefono" label="Teléfono cliente" stack-label />
+        <q-separator v-if="clientebuscado" />
+        <q-card-section v-if="clientebuscado" >
+          <q-input filled v-model="telefonocliente" label="Teléfono cliente" stack-label />
+        </q-card-section>
+        <q-separator v-if="clientebuscado" />
+        <q-card-section v-if="clientebuscado" >
+          <q-input filled v-model="direccioncliente" label="Dirección cliente" stack-label />
         </q-card-section>
         <q-separator />
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup />
-          <q-btn label="Aceptar" color="secondary" v-close-popup />
+          <q-btn label="Aceptar" color="secondary" @click="crearCliente" :disable="dsbBtnCrearCliente" />
         </q-card-actions>
 
       </q-card>
@@ -183,6 +211,9 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { Notify } from 'quasar'
+import axios from 'axios'
+const ENDPOINT_PATH_V2 = process.env.VUE_APP_ENDPOINT
 
 export default defineComponent({
   name: 'IndexPage',
@@ -191,29 +222,145 @@ export default defineComponent({
       slide: ref(2),
       textitem: ref(''),
       documento: ref(''),
-      nombre: ref(''),
-      correo: ref(''),
-      telefono: ref(''),
+      nombrecliente: ref(''),
+      correocliente: ref(''),
+      telefonocliente: ref(''),
+      direccioncliente: ref(''),
       buscaritem: ref(false),
-      buscarcliente: ref(false),
+      noencontrado: ref(false),
+      clientebuscado: ref(false),
+      encontrado: ref(false),
+      modalcliente: ref(false),
+      dsbBtnCrearCliente: ref(true),
       modeldocumento: ref(null),
-      optionsdocumento: [
-        'Cédula de identidad', 'Pasaporte', 'RIF', 'Extranjero'
-      ]
+      optionsdocumento: []
     }
   },
   methods: {
-    gotoHipismo () {
-      this.$router.push('/hipismo')
+    abrirBuscarCliente () {
+      this.modalcliente = true
+      this.documento = ''
+      this.modeldocumento = null
+      this.limpiarCliente()
+    },
+    limpiarCliente () {
+      this.nombrecliente = ''
+      this.telefonocliente = ''
+      this.correocliente = ''
+      this.direccioncliente = ''
+      this.noencontrado = false
+      this.encontrado = false
+      this.clientebuscado = false
+    },
+    listarTiposDocumentos () {
+      axios.get(ENDPOINT_PATH_V2 + 'tipodocumento').then(async response => {
+        const datos = response.data.data
+        this.optionsdocumento = []
+        for (const i in datos) {
+          const obj = {}
+          obj.cod = datos[i].id
+          obj.tipodocumento = datos[i].tipodocumento
+          this.optionsdocumento.push(obj)
+        }
+      }).catch(error => {
+        Notify.create('Problemas al listar Tipos ' + error)
+      })
+    },
+    buscarCliente () {
+      this.limpiarCliente()
+      if (!this.modeldocumento) {
+        Notify.create('Debe seleccionar TIPO DOCUMENTO')
+        return
+      }
+      if (this.documento.length === 0) {
+        Notify.create('Debe agregar DOCUMENTO')
+        return
+      }
+      const body = {
+        idtipodocumento: this.modeldocumento.cod,
+        documento: this.documento
+      }
+      axios.post(ENDPOINT_PATH_V2 + 'clientes/buscar', body).then(async response => {
+        const datos = response.data.resp
+        if (datos.length > 0) {
+          this.nombrecliente = datos[0].nombre
+          this.telefonocliente = datos[0].telefono
+          this.correocliente = datos[0].correo
+          this.direccioncliente = datos[0].direccion
+          this.noencontrado = false
+          this.encontrado = true
+        } else {
+          this.noencontrado = true
+          this.encontrado = false
+        }
+        this.clientebuscado = true
+        this.dsbBtnCrearCliente = false
+      }).catch(error => {
+        Notify.create('Problemas al buscar cliente ' + error)
+      })
+    },
+    crearCliente () {
+      // if (this.modeldocumento)
+      console.log(this.modeldocumento)
+      if (!this.modeldocumento) {
+        Notify.create('Debe seleccionar TIPO DOCUMENTO')
+        return
+      }
+      if (this.documento.length === 0) {
+        Notify.create('Debe agregar DOCUMENTO')
+        return
+      }
+      if (this.nombrecliente.length === 0) {
+        Notify.create('Debe agregar NOMBRE')
+        return
+      }
+      const body = {
+        idtipodocumento: this.modeldocumento.cod,
+        documento: this.documento,
+        nombre: this.nombrecliente,
+        telefono: this.telefonocliente,
+        correo: this.correocliente,
+        direccion: this.direccioncliente
+      }
+      axios.post(ENDPOINT_PATH_V2 + 'clientes/crear', body).then(async response => {
+        const datos = response.data.resp
+        if (datos) {
+          this.modalcliente = false
+          this.idclienteventa = datos.id
+          this.nombreclienteventa = this.nombrecliente
+          this.documentoclienteventa = this.modeldocumento.abrev + ' ' + this.modeldocumento.documento
+        }
+      }).catch(error => {
+        Notify.create('Problemas al crear cliente ' + error)
+      })
     }
+  },
+  mounted () {
+    console.log('Modo producción')
+    this.listarTiposDocumentos()
   }
 })
 </script>
 
 <style>
+.encontrado {
+  margin-top: -16px;
+  text-align: center;
+  color: green;
+  font-weight: bolder;
+}
+.noencontrado {
+  margin-top: -16px;
+  text-align: center;
+  color: red;
+  font-weight: bolder;
+}
+.btncantidad {
+  font-size: 10px;
+  width: 33px;
+}
 .totales {
     background: #ededed;
-    height: 150px;
     width: 100%;
 }
 .botones {
@@ -249,6 +396,7 @@ export default defineComponent({
 }
 .inputCantidad {
   width: 50px;
+  text-align: center;
   border-radius: 7px;
   border-color: lightblue;
 }
