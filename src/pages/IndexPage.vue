@@ -48,11 +48,11 @@
       <div class="puntodeventa">
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
         <div v-else class="puntodeventaconitem">
-          <q-card v-for="i in 10" :key="i" class="my-card tarjetaitem">
+          <q-card v-for="item in holds" :key="item" class="my-card tarjetaitem">
             <q-item horizontal>
               <q-item-section>
-                <q-item-label>{{i}} - Descripción del producto</q-item-label>
-                <q-item-label caption>Categoría</q-item-label>
+                <q-item-label>{{item.producto}}</q-item-label>
+                <q-item-label caption>{{item.categoria}}</q-item-label>
               </q-item-section>
               <q-item-section side>
                 <q-btn flat round color="red" icon="delete" />
@@ -61,11 +61,11 @@
 
             <q-item horizontal>
               <q-item-section avatar style="padding-right: 15px;align-items: center;">
-                <q-avatar>
-                  <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+                <q-avatar color="primary" text-color="white">
+                  {{primeraletra(item.producto)}}
                 </q-avatar>
                 <q-badge color="blue" style="margin-top: 5px;">
-                  Bs 445
+                  Bs {{item.precio}}
                 </q-badge>
               </q-item-section>
 
@@ -75,7 +75,7 @@
                     <div class="text-center">Cantidad</div>
                     <input
                       class="inputCantidad"
-                      value="2"
+                      :value="item.cantidad"
                     />
                   </div>
                   <div style="display: grid;width: 25%;justify-content: center;">
@@ -84,11 +84,11 @@
                   </div>
                   <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                     <div class="text-center">%Imp.</div>
-                    <div class="text-secondary">exento</div>
+                    <div class="text-secondary">{{item.tasa}}</div>
                   </div>
                   <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Monto</div>
-                    <div class="text-secondary text-center">Bs. 556.99</div>
+                    <div class="text-secondary text-center">Bs. {{item.monto}}</div>
                   </div>
                 </div>
               </q-item-section>
@@ -119,22 +119,47 @@
         <q-separator />
 
         <q-card-section style="max-height: 65vh" class="scroll">
-          <q-card v-for="i in 10" :key="i" class="my-card tarjetaitem">
+          <q-card v-for="item in rowsproductos" :key="item" class="my-card tarjetaitem">
             <q-item horizontal>
-              <q-item-section avatar style="padding-right: 15px;align-items: center;">
-                <q-avatar>
-                  <img src="https://cdn.quasar.dev/img/avatar2.jpg">
-                </q-avatar>
-                <q-badge color="blue" style="margin-top: 5px;">
-                  Bs 445
-                </q-badge>
-              </q-item-section>
               <q-item-section>
-                <q-item-label>Descripción del producto - {{i}}</q-item-label>
-                <q-item-label caption>Categoría - {{i}}</q-item-label>
+                <q-item-label>{{item.producto}}</q-item-label>
+                <q-item-label caption>{{item.categoria}}</q-item-label>
               </q-item-section>
               <q-item-section side>
-                <q-btn flat round color="blue" icon="add_shopping_cart" />
+                <div style="display: flex;">
+                  <q-btn flat round color="blue" icon="add_shopping_cart" @click="additemholds(item)" />
+                </div>
+              </q-item-section>
+            </q-item>
+
+            <q-item horizontal>
+              <q-item-section avatar style="padding-right: 15px;align-items: center;">
+                <q-avatar color="primary" text-color="white">
+                  {{primeraletra(item.categoria)}}
+                </q-avatar>
+                <q-badge color="blue" style="margin-top: 5px;">
+                  {{item.precio}}
+                </q-badge>
+              </q-item-section>
+
+              <q-item-section class="tarjeticainside">
+                <div style="display: flex;">
+                  {{item.descripcion}}
+                </div>
+                <div style="display: flex;">
+                  <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
+                    <div class="text-center">Unidad</div>
+                    <div class="text-secondary">{{item.unidad}}</div>
+                  </div>
+                  <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
+                    <div class="text-center">Impuesto.</div>
+                    <div class="text-secondary">{{item.impuesto}}</div>
+                  </div>
+                  <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
+                    <div class="text-center">Costo</div>
+                    <div class="text-secondary text-center">{{item.costo}}</div>
+                  </div>
+                </div>
               </q-item-section>
             </q-item>
           </q-card>
@@ -233,10 +258,49 @@ export default defineComponent({
       modalcliente: ref(false),
       dsbBtnCrearCliente: ref(true),
       modeldocumento: ref(null),
-      optionsdocumento: []
+      optionsdocumento: [],
+      rowsproductos: [],
+      holds: []
     }
   },
   methods: {
+    additemholds (item) {
+      console.log(item)
+      const obj = {}
+      obj.precio = item.precio
+      obj.cantidad = 1
+      obj.tasa = item.tasa
+      const monto = (item.precio * item.tasa / 100 + item.precio) * obj.cantidad
+      obj.monto = monto
+      obj.producto = item.producto
+      obj.categoria = item.categoria
+      obj.descripcion = item.descripcion
+      this.holds.push(obj)
+      this.buscaritem = false
+    },
+    listarProductos () {
+      const idcategoria = 0
+      axios.get(ENDPOINT_PATH_V2 + 'productos/' + sessionStorage.getItem('co_empresa') + '/' + idcategoria).then(async response => {
+        console.log(response.data)
+        const datos = response.data.resp
+        this.rowsproductos = []
+        for (const i in datos) {
+          const obj = {}
+          obj.cod = datos[i].id
+          obj.producto = datos[i].producto
+          obj.categoria = datos[i].categoria
+          obj.descripcion = datos[i].descripcion
+          obj.unidad = datos[i].unidad
+          obj.impuesto = datos[i].impuesto
+          obj.precio = datos[i].precio
+          obj.costo = datos[i].costo
+          obj.tasa = datos[i].tasa
+          this.rowsproductos.push(obj)
+        }
+      }).catch(error => {
+        Notify.create('Problemas al listar Categorias ' + error)
+      })
+    },
     abrirBuscarCliente () {
       this.modalcliente = true
       this.documento = ''
@@ -333,11 +397,14 @@ export default defineComponent({
       }).catch(error => {
         Notify.create('Problemas al crear cliente ' + error)
       })
+    },
+    primeraletra (item) {
+      return item[0]
     }
   },
   mounted () {
-    console.log('Modo producción')
     this.listarTiposDocumentos()
+    this.listarProductos()
   }
 })
 </script>
