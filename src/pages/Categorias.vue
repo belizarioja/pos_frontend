@@ -1,39 +1,41 @@
 <template>
-  <q-page class="bg-white">
-    <div class="row" style="display: flex;justify-content: center;">
-      <div class="botones">
+  <q-page class="bg-white row">
+    <div class="col">
+      <div class="botones row">
         <q-btn color="secondary" icon="add_circle" @click="buscaritem = true" label="Agregar categoria" style="margin: 10px;" />
       </div>
-      <div class="puntodeventa">
+      <div class="listarcategorias row">
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
-        <div v-else class="puntodeventaconitem">
-          <q-card v-for="item in rows" :key="item" class="my-card tarjetaitem">
-            <q-item horizontal>
-              <q-item-section>
-                <q-item-label>{{item.categoria}}</q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <div style="display: flex;">
-                  <q-btn flat round color="red" icon="delete" />
-                  <q-btn flat round color="blue" icon="edit" />
-                </div>
-              </q-item-section>
-            </q-item>
+        <div v-else class="listarcategoriasconitem col">
+          <div class="row justify-center">
+            <q-card v-for="item in rows" :key="item" class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11">
+              <q-item horizontal>
+                <q-item-section>
+                  <q-item-label>{{item.categoria}}</q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <div style="display: flex;">
+                    <q-btn flat round color="red" icon="delete" />
+                    <q-btn flat round color="blue" icon="edit" />
+                  </div>
+                </q-item-section>
+              </q-item>
 
-            <q-item horizontal>
-              <q-item-section avatar style="padding-right: 15px;align-items: center;">
-                <q-avatar color="primary" text-color="white">
-                  {{primeraletra(item.categoria)}}
-                </q-avatar>
-              </q-item-section>
+              <q-item horizontal>
+                <q-item-section avatar style="padding-right: 15px;align-items: center;">
+                  <q-avatar text-color="white" :style="'background: ' + colorLetra(item.categoria)">
+                    {{primeraletra(item.categoria)}}
+                  </q-avatar>
+                </q-item-section>
 
-              <q-item-section class="tarjeticainside">
-                <div style="display: flex;">
-                  {{item.descripcion}}
-                </div>
-              </q-item-section>
-            </q-item>
-          </q-card>
+                <q-item-section class="tarjeticainside">
+                  <div style="display: flex;">
+                    {{item.descripcion}}
+                  </div>
+                </q-item-section>
+              </q-item>
+            </q-card>
+          </div>
         </div>
       </div>
     </div>
@@ -130,6 +132,10 @@ export default defineComponent({
     },
     primeraletra (item) {
       return item[0]
+    },
+    colorLetra (item) {
+      const asciicode = item[0].charCodeAt(0)
+      return '#' + asciicode + '0'
     }
   },
   mounted () {
@@ -150,27 +156,23 @@ export default defineComponent({
     justify-content: space-around;
     width: 100%;
 }
-.puntodeventa {
-    height: 87vh;
-    background: #ededed;
-    width: 100%;
+.listarcategorias {
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 .carritofondo {
   font-size: 170px;
-  color: cornflowerblue;
+  color: white;
+  margin-top: 114px;
 }
 .itemtotal {
     font-size: 18px;
     color: #26a69a;
     font-weight: bolder;
 }
-.puntodeventaconitem {
+.listarcategoriasconitem {
     height: 85vh;
     background: coral;
-    width: 95%;
     overflow: auto;
 }
 .tarjetaitem {
