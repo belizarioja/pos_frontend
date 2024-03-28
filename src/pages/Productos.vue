@@ -1,17 +1,17 @@
 <template>
   <q-page class="bg-white">
     <div class="col">
-      <div class="botones row">
-        <q-btn color="secondary" icon="add_circle" @click="buscaritem = true" label="Agregar producto" style="margin: 10px;" />
+      <div class="botones row" style="background: #ededed;">
+        <q-btn color="secondary" icon="add_circle" @click="openCrear" label="Agregar producto" style="margin: 10px;" />
       </div>
-      <div class="puntodeventa row">
+      <div class="listarproductos row">
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
         <div v-else class="puntodeventaconitem col">
           <div class="row justify-center">
             <q-card v-for="item in rows" :key="item" class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11 ">
               <q-item horizontal>
                 <q-item-section>
-                  <q-item-label>{{item.producto}}</q-item-label>
+                  <q-item-label>{{item.sku}} {{item.producto}}</q-item-label>
                   <q-item-label caption>{{item.categoria}}</q-item-label>
                 </q-item-section>
                 <q-item-section side>
@@ -73,8 +73,9 @@
           <div class="text-h6">Crear producto</div>
         </q-card-section>
         <q-separator />
-        <q-card-section>
-          <div class="">
+        <q-card-section class="row">
+          <q-input class="col" filled v-model="sku" label="SKU" stack-label dense />
+          <div class="col" style="padding: 0 10px;">
             <q-select
              filled
              v-model="model"
@@ -144,7 +145,7 @@
         </q-card-section>
         <q-separator />
         <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup />
+          <q-btn label="Cancelar" color="negative" v-close-popup />
           <q-btn label="Aceptar" color="secondary" @click="crear" v-close-popup />
         </q-card-actions>
 
@@ -157,8 +158,9 @@
           <div class="text-h6">Editar producto</div>
         </q-card-section>
         <q-separator />
-        <q-card-section>
-          <div class="">
+        <q-card-section class="row">
+          <q-input class="col" filled v-model="sku" label="SKU" stack-label dense />
+          <div class="col" style="padding: 0 10px;">
             <q-select
              filled
              v-model="model"
@@ -228,7 +230,7 @@
         </q-card-section>
         <q-separator />
         <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup />
+          <q-btn label="Cancelar" color="negative" v-close-popup />
           <q-btn label="Aceptar" color="secondary" @click="editar" v-close-popup />
         </q-card-actions>
 
@@ -249,6 +251,7 @@ export default defineComponent({
     return {
       slide: ref(2),
       rows: ref([]),
+      sku: ref(''),
       producto: ref(''),
       idproducto: ref(null),
       descripcion: ref(''),
@@ -276,6 +279,7 @@ export default defineComponent({
         for (const i in datos) {
           const obj = {}
           obj.cod = datos[i].id
+          obj.sku = datos[i].sku
           obj.producto = datos[i].producto
           obj.categoria = datos[i].categoria
           obj.idcategoria = datos[i].idcategoria
@@ -303,6 +307,7 @@ export default defineComponent({
       this.modeltax = find2
       const find3 = this.optionsunidad.find(obj => obj.cod === item.idunidad)
       this.modelunidad = find3
+      this.sku = item.sku
       this.descripcion = item.descripcion
       this.idproducto = item.cod
       this.producto = item.producto
@@ -310,10 +315,16 @@ export default defineComponent({
       this.inventario = item.inventario
       this.precio = item.precio
     },
+    openCrear () {
+      // console.log(item)
+      this.limpiar()
+      this.buscaritem = true
+    },
     limpiar () {
       this.model = null
       this.modeltax = null
       this.modelunidad = null
+      this.sku = ''
       this.descripcion = ''
       this.producto = ''
       this.costo = ''
@@ -343,6 +354,7 @@ export default defineComponent({
         idunidad: this.modelunidad.cod,
         descripcion: this.descripcion,
         producto: this.producto,
+        sku: this.sku,
         costo: this.costo,
         inventario: this.inventario,
         precio: this.precio
@@ -377,6 +389,7 @@ export default defineComponent({
         idunidad: this.modelunidad.cod,
         descripcion: this.descripcion,
         producto: this.producto,
+        sku: this.sku,
         costo: this.costo,
         inventario: this.inventario,
         precio: this.precio
@@ -461,7 +474,7 @@ export default defineComponent({
   justify-content: space-around;
   width: 100%;
 }
-.puntodeventa {
+.listarproductos {
   display: flex;
   justify-content: center;
 }

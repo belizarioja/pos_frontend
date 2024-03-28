@@ -17,13 +17,12 @@
             <q-separator />
             <q-card-section horizontal>
               <q-card-section class="column" style="padding: 7px;font-size: 12px;align-items: center;">
-                <span>BCV Bs. {{ tasausd || '0.00'}}</span>
-                <q-avatar text-color="white" :style="'background: ' + colorLetra(nombrecliente.toUpperCase() || 'GENERAL')">
-                  {{primeraletra(nombrecliente.toUpperCase() || 'GENERAL')}}
-                </q-avatar>
-                <q-badge color="blue" style="margin-top: 5px;">
-                  {{documentoclienteventa || 'GENERAL'}}
-                </q-badge>
+                  <q-avatar text-color="white" :style="'background: ' + colorLetra(nombrecliente.toUpperCase() || 'GENERAL')">
+                    {{primeraletra(nombrecliente.toUpperCase() || 'GENERAL')}}
+                  </q-avatar>
+                  <q-badge color="blue" style="margin-top: 5px;">
+                    {{documentoclienteventa || 'GENERAL'}}
+                  </q-badge>
               </q-card-section>
               <q-separator vertical />
               <q-card-section style="display: grid;padding: 7px 16px;font-size: 12px; width: 140px;">
@@ -277,7 +276,7 @@
           <q-avatar color="primary" text-color="white">
             <q-icon name="shopping_cart_checkout"/>
           </q-avatar>
-          <div class="text-h6" style="margin-left: 10px;"> Realizar esta venta?</div>
+          <div class="text-h6" style="margin-left: 10px;"> Seguro de realizar esta venta?</div>
         </q-card-section>
         <q-separator />
         <q-card-section>
@@ -287,7 +286,7 @@
               <td style="font-weight: bold;">{{ nombrecliente }}</td>
             </tr>
             <tr>
-              <td>{{ documentoabrev }}:</td>
+              <td>RIF/CI:</td>
               <td style="font-weight: bold;">{{ documentoclientesolo }}</td>
             </tr>
             <tr>
@@ -360,106 +359,6 @@
 
       </q-card>
     </q-dialog>
-    <!-- MOSTRAR DETALLE DE VENTA -->
-    <q-dialog v-model="modaldetalleinvoice" persistent>
-      <q-card style="width: 320px;">
-        <q-card-section style="justify-content: center;">
-          <div class="text-center letratotalesfactura " style=""> {{ empresa }} - {{ rif }}</div>
-          <div class="text-center letratotalesfactura " style=""> {{ direccion }}</div>
-          <div class="text-center letratotalesfactura " style=""> {{ telefono }}</div>
-          <div class="text-center letratotalesfactura " style=""> {{ email }}</div>
-          <q-separator style="margin: 10px 0px;" />
-          <div style="display: flex; align-items: left;width: 100%;">
-            <div class="numero" style="margin-left: 10px;"> {{ detalleventa.tipofactura }}</div>
-            <div class="numero" style="margin-left: 10px;"> {{ detalleventa.numerointerno }}</div>
-          </div>
-          <div style="display: flex; align-items: center;">
-            <div class="control" style="margin-left: 10px;"> N° de control:</div>
-            <div class="control" style="margin-left: 10px;"> {{ detalleventa.numerocontrol }}</div>
-          </div>
-          <q-separator style="margin: 10px 0px;" />
-          <table style="width: 100%;">
-            <tr class="letratotalesfactura">
-              <td style="width: 30%;">Razón social:</td>
-              <td style="font-weight: bold;">{{ detalleventa.nombrecliente }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td>{{ detalleventa.abrev }}</td>
-              <td style="font-weight: bold;">{{ detalleventa.documento }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td>Fecha:</td>
-              <td style="font-weight: bold;">{{ fechaDetalle(detalleventa.fecha) }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td>Cajero:</td>
-              <td style="font-weight: bold;">{{ detalleventa.usuario }}</td>
-            </tr>
-          </table>
-          <table style="width: 100%;">
-            <tr style="font-weight: bold; font-size: 11px;">
-              <td class="rayafactura rayaarriba">Producto</td>
-              <td class="rayafactura rayaarriba">Precio</td>
-              <td class="rayafactura rayaarriba">Cant.</td>
-              <td class="rayafactura rayaarriba">Imp %</td>
-              <td class="rayafactura rayaarriba">Total</td>
-            </tr>
-            <tr v-for="item in ventas" :key="item" style="font-size: 11px;">
-              <td>{{item.producto}}</td>
-              <td>{{item.precio}}</td>
-              <td>{{item.cantidad}}</td>
-              <td>{{item.tasa}}%</td>
-              <td style="text-align: right;">{{item.subtotal}}</td>
-            </tr>
-
-            <tr>
-              <td class="rayafactura"></td>
-              <td class="rayafactura"></td>
-              <td class="rayafactura"></td>
-              <td class="rayafactura"></td>
-              <td class="rayafactura"></td>
-            </tr>
-          </table>
-          <table style="width: 100%;">
-            <tr class="letratotalesfactura">
-              <td style="width: 40%;"></td>
-              <td>Subtotal Bs.:</td>
-              <td style="text-align: right;">{{ detalleventa.subtotal }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td></td>
-              <td>Impuestos Bs.:</td>
-              <td style="text-align: right;">{{ detalleventa.impuesto }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td></td>
-              <td>Descuentos Bs.:</td>
-              <td style="text-align: right;">{{ detalleventa.descuentos }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td></td>
-              <td class="rayafactura">IGTF 3% Bs.:</td>
-              <td class="rayafactura" style="text-align: right;">{{ detalleventa.igtf }}</td>
-            </tr>
-            <tr class="letratotalesfactura"  style="font-weight: bold;">
-              <td></td>
-              <td>Total Bs.:</td>
-              <td style="text-align: right;">{{ detalleventa.total }}</td>
-            </tr>
-            <tr class="letratotalesfactura"  style="font-weight: bold;">
-              <td></td>
-              <td>Total $:</td>
-              <td style="text-align: right;">{{ detalleventa.totalusd }}</td>
-            </tr>
-          </table>
-        </q-card-section>
-        <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
-          <q-btn label="Imprimir" color="secondary" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 
@@ -476,14 +375,7 @@ export default defineComponent({
   setup () {
     return {
       slide: ref(2),
-      empresa: ref(''),
-      direccion: ref(''),
-      rif: ref(''),
-      telefono: ref(''),
-      email: ref(''),
       igtf: ref(0),
-      numerointerno: ref(''),
-      idventa: ref(''),
       textitem: ref(''),
       subtotal: ref(0),
       impuesto: ref(0),
@@ -499,7 +391,6 @@ export default defineComponent({
       direccioncliente: ref(''),
       idclienteventa: ref(''),
       nombreclienteventa: ref(''),
-      documentoabrev: ref(''),
       documentoclientesolo: ref(''),
       documentoclienteventa: ref(''),
       fechahoy: ref(moment().format('DD/MM/YYYY')),
@@ -515,46 +406,15 @@ export default defineComponent({
       dsbBtnCrearCliente: ref(true),
       modeldocumento: ref(null),
       modaldeleteholds: ref(false),
-      modaldetalleinvoice: ref(false),
       optionsdocumento: [],
       rowsproductos: [],
       rowsproductosfiltre: [],
       holds: [],
-      ventas: [],
-      detalleventa: {},
       tasausd: ref(0),
       idusuario: ref(sessionStorage.getItem('id_usuario'))
-
     }
   },
   methods: {
-    fechaDetalle (fecha) {
-      return moment(fecha).format('DD/MM/YYYY HH:mm:ss')
-    },
-    async abrirDetalleInvoive () {
-      const $this = this
-      this.detalleventa = {}
-      await axios.get(ENDPOINT_PATH_V2 + 'ventas/getventa/' + this.idventa).then(async response => {
-        console.log(this.idventa)
-        console.log(response)
-        this.detalleventa = response.data.resp
-        await axios.get(ENDPOINT_PATH_V2 + 'ventas/getitemsventas/' + this.idventa).then(async response2 => {
-          $this.ventas = []
-          console.log(response2)
-          const data = response2.data.resp
-          for (const i in data) {
-            const obj = data[i]
-            $this.ventas.push(obj)
-          }
-          $this.deleteHolds()
-          console.log('VENTA REALIZADA')
-          $this.modaldetalleinvoice = true
-        }).catch(error => {
-          Notify.create('Problemas al listar items Ventas ' + error)
-        })
-        console.log(this.detalleventa)
-      })
-    },
     async actualizarCantidad (item, accion) {
       const idcantidad = document.getElementById('cantidad' + item.idproducto)
       if (accion === 1) {
@@ -571,10 +431,8 @@ export default defineComponent({
         idcantidad.value = idcantidad.value <= 1 ? 1 : Number(idcantidad.value) - 1
       }
       item.total = (Number(item.precio) + (item.precio * item.tasa / 100)) * idcantidad.value
-      console.log('this.tasausd')
-      console.log(this.tasausd)
-      this.subtotalusd = (this.subtotal / this.tasausd).toFixed(2)
-      this.impuestousd = (this.impuesto / this.tasausd).toFixed(2)
+      // this.subtotalusd = (this.subtotal / this.tasausd).toFixed(2)
+      // this.impuestousd = (this.impuesto / this.tasausd).toFixed(2)
       this.totalusd = (this.total / this.tasausd).toFixed(2)
       const resp = await this.updItemHolds(item.iditemhold, idcantidad.value, idcantidad.value * (Number(item.precio) + item.precio * item.tasa / 100), item.idproducto, accion)
       if (resp) {
@@ -601,6 +459,26 @@ export default defineComponent({
         document.getElementById('monto' + item.idproducto).innerHTML = 'Bs.' + item.monto.toFixed(2)
       }
     },
+    /* async crearItemHolds (idhold, idproducto, precio, cantidad, tasa, total, idunidad) {
+      const body = {
+        idhold,
+        idproducto,
+        precio,
+        cantidad,
+        tasa,
+        total,
+        idunidad
+      }
+      // console.log(body)
+      await axios.post(ENDPOINT_PATH_V2 + 'ventas/setitemholds', body).then(async response => {
+        const datos = response.data.resp
+        if (datos) {
+          return datos.iditemhold
+        }
+      }).catch(error => {
+        Notify.create('Problemas al crear itemhold de venta ' + error)
+      })
+    }, */
     async updItemHolds (iditemhold, cantidad, total, idproducto, accion) {
       const body = {
         idproducto,
@@ -611,6 +489,7 @@ export default defineComponent({
       }
       // console.log(body)
       const response = await axios.post(ENDPOINT_PATH_V2 + 'ventas/upditemholds', body)
+      console.log('response.status')
       console.log(response.status)
       if (response.status === 202) {
         this.$q.dialog({
@@ -662,7 +541,7 @@ export default defineComponent({
         persistent: true
       }).onOk(() => {
         axios.post(ENDPOINT_PATH_V2 + 'ventas/deleteitemholds', body).then(async response => {
-          console.log(response.data.success)
+          // console.log(response.data.success)
           this.nombrecliente = ''
           this.listarHolds()
         }).catch(error => {
@@ -677,8 +556,6 @@ export default defineComponent({
       let resp = false
       const find = this.holds.findIndex(obj => obj.idproducto === item.idproducto)
       // console.log(find)
-      // console.log('resp1')
-      // console.log(resp)
       if (find === -1) {
         const monto = (item.precio * item.tasa / 100 + item.precio)
         // const iditemhold = await this.crearItemHolds(this.idhold, item.cod, item.precio, 1, item.tasa, monto, item.idunidad)
@@ -712,6 +589,7 @@ export default defineComponent({
             this.subtotal = (Number(this.subtotal) + (obj.precio * obj.cantidad)).toFixed(2)
             this.impuesto = (Number(this.impuesto) + (item.precio * item.tasa / 100)).toFixed(2)
             this.total = (Number(this.total) + monto).toFixed(2)
+            this.totalusd = (this.total / this.tasausd).toFixed(2)
             this.holds.push(obj)
             resp = true
           } else {
@@ -722,8 +600,6 @@ export default defineComponent({
           Notify.create('Problemas al crear itemhold de venta ' + error)
         })
       } else { // si find
-        // console.log('this.holds[find]')
-        // console.log(this.holds[find])
         this.holds[find].cantidad = Number(this.holds[find].cantidad) + 1
         const monto = (item.precio * item.tasa / 100 + item.precio)
         document.getElementById('monto' + item.idproducto).innerHTML = 'Bs.' + (monto * this.holds[find].cantidad).toFixed(2)
@@ -731,16 +607,8 @@ export default defineComponent({
         this.impuesto = (Number(this.impuesto) + (item.precio * item.tasa / 100)).toFixed(2)
         this.total = (Number(this.total) + monto).toFixed(2)
         resp = await this.updItemHolds(this.holds[find].iditemhold, this.holds[find].cantidad, monto * this.holds[find].cantidad, item.idproducto, 1)
-        // console.log('resp2')
-        // console.log(resp)
       }
-      // console.log('resp3')
-      // console.log(resp)
-      if (resp) {
-        this.subtotalusd = (this.subtotal / this.tasausd).toFixed(2)
-        this.impuestousd = (this.impuesto / this.tasausd).toFixed(2)
-        this.totalusd = (this.total / this.tasausd).toFixed(2)
-        // this.calcularMonto(item)
+        // this.totalusd = (this.total / this.tasausd).toFixed(2)
         this.buscaritem = false
         this.slide = 2
       }
@@ -748,7 +616,6 @@ export default defineComponent({
     listarProductos () {
       const idcategoria = 0
       axios.get(ENDPOINT_PATH_V2 + 'productos/' + sessionStorage.getItem('co_empresa') + '/' + idcategoria).then(async response => {
-        // console.log(response.data)
         const datos = response.data.resp
         this.rowsproductos = []
         for (const i in datos) {
@@ -773,8 +640,7 @@ export default defineComponent({
       })
     },
     abrirRealizarVenta () {
-      this.listarHolds()
-      // console.log(this.holds)
+      console.log(this.holds)
       this.modalrealizarventa = true
     },
     realizarVenta () {
@@ -788,9 +654,18 @@ export default defineComponent({
       axios.post(ENDPOINT_PATH_V2 + 'ventas/setventa', body).then(async response => {
         const datos = response.data
         if (datos.success) {
-          $this.idventa = datos.resp.idventa
-          $this.abrirDetalleInvoive()
-          // $this.modaldetalleinvoice = true
+          this.$q.dialog({
+            title: 'En hora buena!',
+            message: '¡Venta # ' + datos.resp.numerointerno + ' realizada con éxito!',
+            ok: {
+              color: 'secondary',
+              label: 'Aceptar'
+            },
+            persistent: true
+          }).onOk(() => {
+            $this.deleteHolds()
+            console.log('VENTA REALIZADA')
+          })
         }
       }).catch(error => {
         Notify.create('Problemas al crear hold de venta ' + error)
@@ -939,7 +814,7 @@ export default defineComponent({
       await axios.get(ENDPOINT_PATH_V2 + 'ventas/gethols/' + sessionStorage.getItem('id_usuario')).then(async response => {
         // console.log(response.data)
         const datos = response.data.resp.length > 0 ? response.data.resp[0] : null
-        console.log(datos)
+        // console.log(datos)
         this.holds = []
         // const obj = {}
         this.slide = 1
@@ -949,7 +824,6 @@ export default defineComponent({
         if (datos) {
           this.idcliente = datos.idcliente
           this.nombrecliente = datos.nombre
-          this.documentoabrev = datos.abrev
           this.documentoclienteventa = datos.abrev + ' ' + datos.documento
           this.documentoclientesolo = datos.documento
           this.idhold = datos.idhold
@@ -970,8 +844,8 @@ export default defineComponent({
             Notify.create('Problemas al listar items Holds ' + error)
           })
         }
-        this.subtotalusd = (this.subtotal / this.tasa).toFixed(2)
-        this.impuestousd = (this.impuesto / this.tasa).toFixed(2)
+        // this.subtotalusd = (this.subtotal / this.tasa).toFixed(2)
+        // this.impuestousd = (this.impuesto / this.tasa).toFixed(2)
         this.totalusd = (this.total / this.tasausd).toFixed(2)
         // this.holds.push(obj)
         /* for (const i in datos) {
@@ -996,7 +870,7 @@ export default defineComponent({
       return datos.data.resp
     }
   },
-  watch: {
+  /* watch: {
     textitem (val) {
       console.log('textitem')
       console.log(val)
@@ -1014,15 +888,10 @@ export default defineComponent({
       this.rowsproductosfiltre = this.rowsproductosfiltre.slice().reverse()
       console.log(this.rowsproductosfiltre)
     }
-  },
+  }, */
   async mounted () {
     const datos = await this.cargar()
     this.tasausd = datos.tasabcv
-    this.empresa = datos.empresa
-    this.rif = datos.rif
-    this.direccion = datos.direccion
-    this.telefono = datos.telefono
-    this.email = datos.email
     console.log('this.tasausd')
     console.log(this.tasausd)
     await this.listarTiposDocumentos()

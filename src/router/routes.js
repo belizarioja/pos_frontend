@@ -9,7 +9,11 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: '/categorias', component: () => import('pages/Categorias.vue') },
-      { path: '/productos', component: () => import('pages/Productos.vue') }
+      { path: '/productos', component: () => import('pages/Productos.vue') },
+      { path: '/ventas', component: () => import('pages/Ventas.vue') },
+      { path: '/empresas', component: () => import('pages/Empresas.vue') },
+      { path: '/usuarios', component: () => import('pages/Usuarios.vue') },
+      { path: '/configuracion', component: () => import('pages/Configuracion.vue') }
     ]
   },
 

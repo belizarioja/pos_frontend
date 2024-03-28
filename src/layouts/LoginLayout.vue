@@ -1,7 +1,7 @@
 <template>
   <div class="" style="display: grid;;">
       <div style="display: grid;justify-content: center;text-align: center;">
-        <div style="text-aling: center;">
+        <div class="text-center">
           <img src="login_sid.png" style="margin-top: 20px;" />
         </div>
         <h5 class="text-h5 text-primary q-my-md">Identificarse</h5>
@@ -77,8 +77,6 @@ export default {
             sessionStorage.setItem('co_empresa', response.data.resp.idempresa)
             sessionStorage.setItem('tx_rol', response.data.resp.rol)
             sessionStorage.setItem('co_rol', response.data.resp.idrol)
-            sessionStorage.setItem('tasa', response.data.resp.tasa)
-            // this.$router.push('/dashboard')
             this.$router.push('/puntodeventa')
           } else {
             this.loading = false
