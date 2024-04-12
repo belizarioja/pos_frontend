@@ -1,7 +1,7 @@
 <template>
   <q-page class="bg-white row">
     <div class="col">
-      <div class="botones row">
+      <div class="botones row" style="background: #ededed;">
         <q-btn color="secondary" icon="add_circle" @click="buscaritem = true" label="Agregar categoria" style="margin: 10px;" />
       </div>
       <div class="listarcategorias row">

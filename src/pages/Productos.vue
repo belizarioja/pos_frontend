@@ -1,17 +1,17 @@
 <template>
   <q-page class="bg-white">
     <div class="col">
-      <div class="botones row">
-        <q-btn color="secondary" icon="add_circle" @click="buscaritem = true" label="Agregar producto" style="margin: 10px;" />
+      <div class="botones row" style="background: #ededed;">
+        <q-btn color="secondary" icon="add_circle" @click="openCrear" label="Agregar producto" style="margin: 10px;" />
       </div>
-      <div class="puntodeventa row">
+      <div class="listarproductos row">
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
         <div v-else class="puntodeventaconitem col">
           <div class="row justify-center">
             <q-card v-for="item in rows" :key="item" class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11 ">
               <q-item horizontal>
                 <q-item-section>
-                  <q-item-label>{{item.producto}}</q-item-label>
+                  <q-item-label>{{item.sku}} {{item.producto}}</q-item-label>
                   <q-item-label caption>{{item.categoria}}</q-item-label>
                 </q-item-section>
                 <q-item-section side>
@@ -73,8 +73,9 @@
           <div class="text-h6">Crear producto</div>
         </q-card-section>
         <q-separator />
-        <q-card-section>
-          <div class="">
+        <q-card-section class="row">
+          <q-input class="col" filled v-model="sku" label="SKU" stack-label dense />
+          <div class="col" style="padding: 0 10px;">
             <q-select
              filled
              v-model="model"
@@ -130,21 +131,54 @@
              label="Elija unidad"
              dense
             />
-
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
           <div class="row">
-            <q-input style="margin-right: 5px;" class="col" filled v-model="costo" label="Costo" stack-label dense />
-            <q-input style="margin-left: 5px;" class="col" filled v-model="precio" label="Precio" stack-label dense />
+            <q-input
+             style="margin-right: 5px;"
+             type="number"
+             min="0"
+             class="col"
+             filled
+             v-model="costo"
+             label="Costo Bs."
+             stack-label
+             dense
+            />
+            <q-input
+             style="margin-left: 5px;"
+             class="col"
+             filled
+             v-model="costousd"
+             label="Costo USD"
+             stack-label
+             dense
+            />
+          </div>
+          <div class="row">
+            <q-input
+             style="margin-right: 5px;"
+             type="number"
+             min="0"
+             class="col"
+             filled
+             v-model="precio"
+             label="Precio Bs."
+             stack-label
+             dense
+            />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="preciousd" label="Precio USD" stack-label dense />
+          </div>
+          <div class="row">
+            <q-input style="margin-right: 5px;" class="col" filled v-model="utilidad" label="Utilidad %" stack-label dense readonly/>
             <q-input style="margin-left: 5px;" class="col" filled v-model="inventario" label="Inventario" stack-label dense />
-
           </div>
         </q-card-section>
         <q-separator />
         <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup />
+          <q-btn label="Cancelar" color="negative" v-close-popup />
           <q-btn label="Aceptar" color="secondary" @click="crear" v-close-popup />
         </q-card-actions>
 
@@ -157,8 +191,9 @@
           <div class="text-h6">Editar producto</div>
         </q-card-section>
         <q-separator />
-        <q-card-section>
-          <div class="">
+        <q-card-section class="row">
+          <q-input class="col" filled v-model="sku" label="SKU" stack-label dense />
+          <div class="col" style="padding: 0 10px;">
             <q-select
              filled
              v-model="model"
@@ -214,21 +249,56 @@
              label="Elija unidad"
              dense
             />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="inventario" label="Inventario" stack-label dense />
 
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
           <div class="row">
-            <q-input style="margin-right: 5px;" class="col" filled v-model="costo" label="Costo" stack-label dense />
-            <q-input style="margin-left: 5px;" class="col" filled v-model="precio" label="Precio" stack-label dense />
+            <q-input
+             style="margin-right: 5px;"
+             type="number"
+             min="0"
+             class="col"
+             filled
+             v-model="costo"
+             label="Costo Bs."
+             stack-label
+             dense
+            />
+            <q-input
+             style="margin-left: 5px;"
+             class="col"
+             filled
+             v-model="costousd"
+             label="Costo USD"
+             stack-label
+             dense
+            />
+          </div>
+          <div class="row">
+            <q-input
+             style="margin-right: 5px;"
+             type="number"
+             min="0"
+             class="col"
+             filled
+             v-model="precio"
+             label="Precio Bs."
+             stack-label
+             dense
+            />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="preciousd" label="Precio USD" stack-label dense />
+          </div>
+          <div class="row">
+            <q-input style="margin-right: 5px;" class="col" filled v-model="utilidad" label="Utilidad %" stack-label dense readonly/>
             <q-input style="margin-left: 5px;" class="col" filled v-model="inventario" label="Inventario" stack-label dense />
-
           </div>
         </q-card-section>
         <q-separator />
         <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup />
+          <q-btn label="Cancelar" color="negative" v-close-popup />
           <q-btn label="Aceptar" color="secondary" @click="editar" v-close-popup />
         </q-card-actions>
 
@@ -249,12 +319,16 @@ export default defineComponent({
     return {
       slide: ref(2),
       rows: ref([]),
+      sku: ref(''),
       producto: ref(''),
       idproducto: ref(null),
       descripcion: ref(''),
-      costo: ref(''),
-      precio: ref(''),
-      inventario: ref(''),
+      costo: ref(0),
+      precio: ref(0),
+      costousd: ref(0),
+      preciousd: ref(0),
+      utilidad: ref(0),
+      inventario: ref(0),
       buscaritem: ref(false),
       editaritem: ref(false),
       model: ref(null),
@@ -276,6 +350,7 @@ export default defineComponent({
         for (const i in datos) {
           const obj = {}
           obj.cod = datos[i].id
+          obj.sku = datos[i].sku
           obj.producto = datos[i].producto
           obj.categoria = datos[i].categoria
           obj.idcategoria = datos[i].idcategoria
@@ -286,6 +361,9 @@ export default defineComponent({
           obj.idimpuesto = datos[i].idimpuesto
           obj.precio = datos[i].precio
           obj.costo = datos[i].costo
+          obj.utilidad = datos[i].utilidad
+          obj.preciousd = datos[i].preciousd
+          obj.costousd = datos[i].costousd
           obj.inventario = Number(datos[i].inventario1) || 0
           this.rows.push(obj)
         }
@@ -303,22 +381,34 @@ export default defineComponent({
       this.modeltax = find2
       const find3 = this.optionsunidad.find(obj => obj.cod === item.idunidad)
       this.modelunidad = find3
+      this.sku = item.sku
       this.descripcion = item.descripcion
       this.idproducto = item.cod
       this.producto = item.producto
       this.costo = item.costo
       this.inventario = item.inventario
       this.precio = item.precio
+      this.costousd = item.costousd
+      this.utilidad = item.utilidad
+      this.preciousd = item.preciousd
+    },
+    openCrear () {
+      // console.log(item)
+      this.limpiar()
+      this.buscaritem = true
     },
     limpiar () {
       this.model = null
       this.modeltax = null
       this.modelunidad = null
+      this.sku = ''
       this.descripcion = ''
       this.producto = ''
-      this.costo = ''
+      this.costo = 0
+      this.costousd = 0
       this.inventario = ''
-      this.precio = ''
+      this.precio = 0
+      this.preciousd = 0
     },
     editar () {
       if (this.producto.length === 0) {
@@ -327,10 +417,10 @@ export default defineComponent({
       if (this.descripcion.length === 0) {
         return
       }
-      if (this.costo.length === 0) {
+      if (this.precio.length === 0) {
         return
       }
-      if (this.precio.length === 0) {
+      if (this.preciousd.length === 0) {
         return
       }
       if (this.inventario.length === 0) {
@@ -343,14 +433,18 @@ export default defineComponent({
         idunidad: this.modelunidad.cod,
         descripcion: this.descripcion,
         producto: this.producto,
-        costo: this.costo,
+        sku: this.sku,
+        costo: this.costo || 0,
+        costousd: this.costousd || 0,
         inventario: this.inventario,
-        precio: this.precio
+        utilidad: this.utilidad,
+        precio: this.precio,
+        preciousd: this.preciousd
       }
       axios.post(ENDPOINT_PATH_V2 + 'productos/updateproductos', data).then(async response => {
         this.modalcrear = false
-        // console.log(response.data)
-        Notify.create(response.data.message)
+        console.log(response.data)
+        Notify.create(response.data.resp.message)
         // this.limpiar()
         this.listar()
       })
@@ -362,10 +456,10 @@ export default defineComponent({
       if (this.descripcion.length === 0) {
         return
       }
-      if (this.costo.length === 0) {
+      if (this.precio.length === 0) {
         return
       }
-      if (this.precio.length === 0) {
+      if (this.preciousd.length === 0) {
         return
       }
       if (this.inventario.length === 0) {
@@ -377,8 +471,12 @@ export default defineComponent({
         idunidad: this.modelunidad.cod,
         descripcion: this.descripcion,
         producto: this.producto,
+        sku: this.sku,
         costo: this.costo,
+        costousd: this.costousd,
+        preciousd: this.preciousd,
         inventario: this.inventario,
+        utilidad: this.utilidad,
         precio: this.precio
       }
       axios.post(ENDPOINT_PATH_V2 + 'productos', data).then(async response => {
@@ -439,9 +537,43 @@ export default defineComponent({
     colorLetra (item) {
       const asciicode = item[0].charCodeAt(0)
       return '#' + asciicode + '0'
+    },
+    async cargar () {
+      const datos = await axios.get(ENDPOINT_PATH_V2 + 'configuracion/' + sessionStorage.getItem('co_empresa'))
+        .catch(error => {
+          Notify.create('Problemas al listar Configuracion ' + error)
+        })
+      console.log(datos)
+      return datos.data.resp
     }
   },
-  mounted () {
+  watch: {
+    costo () {
+      if (this.costo > 0) {
+        this.costousd = (this.costo / this.tasausd).toFixed(2)
+        this.utilidad = ((this.precio - this.costo) / this.costo * 100).toFixed(2)
+      } else {
+        this.costousd = 0
+        this.utilidad = 0
+        this.costo = 0
+      }
+    },
+    precio () {
+      if (this.precio > 0) {
+        this.preciousd = (this.precio / this.tasausd).toFixed(2)
+        if (this.costo > 0) {
+          this.utilidad = ((this.precio - this.costo) / this.costo * 100).toFixed(2)
+        }
+      } else {
+        this.preciousd = 0
+        this.utilidad = 0
+        this.precio = 0
+      }
+    }
+  },
+  async mounted () {
+    const datos = await this.cargar()
+    this.tasausd = datos.tasabcv
     this.listar()
     this.listarCategoria()
     this.listarImpuesto()
@@ -461,7 +593,7 @@ export default defineComponent({
   justify-content: space-around;
   width: 100%;
 }
-.puntodeventa {
+.listarproductos {
   display: flex;
   justify-content: center;
 }
