@@ -28,7 +28,7 @@
                 </template>
                 <template v-slot:top-right>
                   <div style="display: inline;">
-                    <q-btn icon-right="add_business" class="q-ml-sm col-md-4 col-sm-3 col-xs-3" color="secondary" label="Crear Emisor" @click="drawerFilters = true" />
+                    <q-btn icon-right="add_business" class="q-ml-sm col-md-4 col-sm-3 col-xs-3" color="secondary" label="Crear Emisor" @click="openCrear" />
                   </div>
                 </template>
                 <template v-slot:body-cell-token="props">
@@ -48,7 +48,7 @@
                 <template v-slot:body-cell-estatus="props">
                   <q-td :props="props">
                     <div>
-                      <q-btn :color="props.row.estatus === '1' ? 'secondary' : 'negative'" :icon="props.row.estatus === '1' ? 'toggle_on' : 'toggle_off'" @click.stop="abrirDetalleInvoive(props.row)" dense/>
+                      <q-btn :color="props.row.estatus === '1' ? 'secondary' : 'negative'" :icon="props.row.estatus === '1' ? 'toggle_on' : 'toggle_off'" @click.stop="btnOpenUpdEstatus(props.row)" dense/>
                     </div>
                   </q-td>
                 </template>
@@ -73,11 +73,11 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <!-- MODAL PARA EDITAR EMISOR -->
+    <!-- MODAL PARA EDITAR/CREAR EMISOR -->
     <q-dialog v-model="modalEdit" persistent>
       <q-card class="col-md-6 col-sm-11 col-xs-11" style="margin-top: 20px;">
           <q-card-section class="row">
-            <div class="text-h6">Editar Emisor</div>
+            <div class="text-h6">{{titulomodal}} Emisor</div>
           </q-card-section>
           <q-separator class="row" />
           <q-card-section>
@@ -123,6 +123,29 @@
           </q-card-actions>
         </q-card>
     </q-dialog>
+    <!-- MODAL PARA EDITAR ESTATUS -->
+    <q-dialog v-model="modalUpdEstatus" persistent>
+      <q-card style="width: 250px;" >
+        <q-card-section>
+          <div class="text-h6" style="text-align: center;">Actualizar Estatus</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <div>
+            ¿Desea {{ messageActualizar }} este usuario?
+           </div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <div style="display: flex; justify-content: space-evenly;margin-top: 20px;">
+             <q-btn color="negative" label="Cancelar" v-close-popup />
+             <q-btn
+              color="secondary"
+              label="Aceptar"
+              @click="actualizarEstatus"
+             />
+           </div>
+         </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -136,8 +159,15 @@ export default defineComponent({
   name: 'IndexPage',
   setup () {
     return {
-      modaldetalleinvoice: ref(false),
+      modalUpdEstatus: ref(false),
       tokenfacturacion: ref(''),
+      urlfacturacion: ref(''),
+      rif: ref(''),
+      empresa: ref(''),
+      direccion: ref(''),
+      telefono: ref(''),
+      email: ref(''),
+      tasabcv: ref(''),
       rows: ref([]),
       cols: [
         { name: 'rif', align: 'center', label: 'Rif', field: 'rif' },
@@ -152,6 +182,7 @@ export default defineComponent({
         { name: 'accion', align: 'left', label: 'Accion', field: 'accion' }
       ],
       filterTable: ref(''),
+      titulomodal: ref(''),
       idUpd: ref(''),
       buscaritem: ref(false),
       detalleventa: ref({}),
@@ -174,6 +205,7 @@ export default defineComponent({
     },
     openEdit (row) {
       console.log(row)
+      this.titulomodal = 'Editar'
       this.idUpd = row.cod
       this.tasabcv = row.tasabcv
       this.tokenfacturacion = row.token
@@ -185,7 +217,53 @@ export default defineComponent({
       this.email = row.email
       this.modalEdit = true
     },
+    openCrear () {
+      this.idUpd = undefined
+      this.titulomodal = 'Crear'
+      this.tasabcv = ''
+      this.tokenfacturacion = ''
+      this.urlfacturacion = ''
+      this.empresa = ''
+      this.rif = ''
+      this.direccion = ''
+      this.telefono = ''
+      this.email = ''
+      this.modalEdit = true
+    },
+    crear () {
+      const body = {
+        empresa: this.empresa || '',
+        email: this.email || '',
+        telefono: this.telefono || '',
+        direccion: this.direccion || '',
+        rif: this.rif || '',
+        urlfacturacion: this.urlfacturacion || '',
+        tasabcv: this.tasabcv || 0,
+        tokenfacturacion: this.tokenfacturacion || ''
+      }
+      axios.post(ENDPOINT_PATH_V2 + 'sede', body).then(async response => {
+        // console.log(response.status)
+        if (response.status === 200) {
+          const datos = response.data.resp
+          // console.log(datos)
+          Notify.create(datos)
+          this.modalEdit = false
+          this.listar()
+        }
+      }).catch(error => {
+        Notify.create('Problemas al Crear Cliente Emisor ' + error)
+      })
+    },
     guardar () {
+      if (this.titulomodal === 'Editar') {
+        // console.log(this.titulomodal)
+        this.editar()
+      } else {
+        // console.log(this.titulomodal)
+        this.crear()
+      }
+    },
+    editar () {
       const body = {
         empresa: this.empresa || '',
         email: this.email || '',
@@ -197,16 +275,37 @@ export default defineComponent({
         tokenfacturacion: this.tokenfacturacion || ''
       }
       axios.put(ENDPOINT_PATH_V2 + 'configuracion/' + this.idUpd, body).then(async response => {
-        console.log(response.status)
+        // console.log(response.status)
         if (response.status === 200) {
           const datos = response.data.resp
-          console.log(datos)
+          // console.log(datos)
           Notify.create(datos)
           this.modalEdit = false
           this.listar()
         }
       }).catch(error => {
         Notify.create('Problemas al actualizar Configuracion ' + error)
+      })
+    },
+    btnOpenUpdEstatus (row) {
+      // console.log(row)
+      this.idUpd = row.cod
+      this.messageActualizar = row.estatus === '1' ? 'desactivar' : 'activar'
+      this.estatusAct = row.estatus
+      this.modalUpdEstatus = true
+    },
+    actualizarEstatus () {
+      const data = {
+        estatus: this.estatusAct === '1' ? 0 : 1
+      }
+      axios.put(ENDPOINT_PATH_V2 + 'sede/estatus/' + this.idUpd, data).then(async response => {
+        if (response.status === 200) {
+          const datos = response.data.resp
+          // console.log(datos)
+          Notify.create(datos)
+          this.modalUpdEstatus = false
+          this.listar()
+        }
       })
     },
     listar () {

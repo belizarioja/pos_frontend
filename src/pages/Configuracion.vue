@@ -13,7 +13,7 @@
             </div>
           </q-card-section>
           <q-separator class="row" />
-          <q-card-section>
+          <!-- <q-card-section>
             <div class="row justify-around">
               <q-input class="col-md-3 col-sm-12 col-xs-12" filled v-model="rif" label="RIF" stack-label dense style="margin-bottom: 10px;" />
               <q-input class="col-md-8 col-sm-12 col-xs-12" filled v-model="empresa" label="Razón Social" stack-label dense />
@@ -31,7 +31,7 @@
             <div class="row justify-around">
               <q-input class="col-12" filled v-model="direccion" label="Dirección" stack-label dense style="margin-bottom: 10px;" />
             </div>
-          </q-card-section>
+          </q-card-section> -->
 
           <q-separator />
           <q-card-actions align="right">
@@ -54,29 +54,19 @@ export default defineComponent({
   name: 'IndexPage',
   setup () {
     return {
-      tasabcv: ref(''),
-      rif: ref(''),
-      empresa: ref(''),
-      direccion: ref(''),
-      email: ref(''),
-      telefono: ref('')
+      tasabcv: ref('')
     }
   },
   methods: {
     guardar () {
       const body = {
-        rif: this.rif || '',
-        empresa: this.empresa || '',
-        email: this.email || '',
-        telefono: this.telefono || '',
-        direccion: this.direccion || '',
-        tasabcv: this.tasabcv || 0
+        tasabcv: this.tasabcv || ''
       }
       axios.put(ENDPOINT_PATH_V2 + 'configuracion/' + sessionStorage.getItem('co_empresa'), body).then(async response => {
-        console.log(response.status)
+        // console.log(response.status)
         if (response.status === 200) {
           const datos = response.data.resp
-          console.log(datos)
+          // console.log(datos)
           Notify.create(datos)
         }
       }).catch(error => {

@@ -962,13 +962,16 @@ export default defineComponent({
       }
       axios.post(ENDPOINT_PATH_V2 + 'ventas/setventa', body).then(async response => {
         const datos = response.data
+        console.log(datos.success)
         if (datos.success) {
           $this.idventa = datos.resp.idventa
           $this.abrirDetalleInvoive()
           // $this.modaldetalleinvoice = true
+        } else {
+          Notify.create(datos.resp.message)
         }
       }).catch(error => {
-        Notify.create('Problemas al crear hold de venta ' + error)
+        Notify.create('Problemas al REALIZAR venta ' + error)
       })
       this.modalrealizarventa = false
     },
