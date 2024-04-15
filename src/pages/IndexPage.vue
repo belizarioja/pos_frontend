@@ -7,7 +7,7 @@
             <q-card-section style="padding: 7px 16px;">
               <div style="width: 100%; background: #ddd; border-radius: 7px; display: flex; justify-content: space-between; padding: 3px 10px;">
                 <span style="color: #000213;">Cliente:
-                  <span style="color: blue; margin-left: 5PX;">{{nombrecliente.length > 0 ? nombrecliente : 'GENERAL'}}</span>
+                  <span style="color: blue; margin-left: 5PX;">{{nombrecliente.length > 0 ? nombrecliente : 'S/INF'}}</span>
                 </span>
                <span style="color: #000213;">Fecha venta:
                   <span style="color: blue; margin-left: 5PX;">{{nombrecliente.length > 0 ? fechaholds : fechahoy}}</span>
@@ -18,11 +18,11 @@
             <q-card-section horizontal>
               <q-card-section class="column" style="padding: 7px;font-size: 12px;align-items: center;">
                 <span>BCV Bs. {{ tasausd || '0.00'}}</span>
-                <q-avatar text-color="white" :style="'background: ' + colorLetra(nombrecliente.toUpperCase() || 'GENERAL')">
-                  {{primeraletra(nombrecliente.toUpperCase() || 'GENERAL')}}
+                <q-avatar text-color="white" :style="'background: ' + colorLetra(nombrecliente.toUpperCase() || 'S/INF')">
+                  {{primeraletra(nombrecliente.toUpperCase() || 'S/INF')}}
                 </q-avatar>
                 <q-badge color="blue" style="margin-top: 5px;">
-                  {{documentoclienteventa || 'GENERAL'}}
+                  {{documentoclienteventa || 'S/INF'}}
                 </q-badge>
               </q-card-section>
               <q-separator vertical />
@@ -53,14 +53,26 @@
         </div>
         <div class="col-md-6 col-sm-12 col-xs-12" style="display: -webkit-box; align-items: center;">
           <div class="botones row">
-            <q-btn class="col-6" color="primary" icon="zoom_in" @click="abrirBuscarItem" label="Agregar item" style="font-size: 12px;"/>
-            <q-btn class="col-6" color="secondary" icon-right="paid" @click="abrirRealizarVenta" label="Realizar venta" style="font-size: 12px;" :disable="holds.length <= 0"/>
-            <q-btn class="col-6" color="negative" icon="cancel" @click="openDeleteHolds" label="Cancelar venta" style="font-size: 12px;" :disable="holds.length <= 0"/>
-            <q-btn class="col-6" color="positive" icon-right="person_add_alt" @click="abrirBuscarCliente" label="Agregar cliente" style="font-size: 12px;"/>
-            <q-btn class="col-6" color="dark" icon="cancel_presentation" @click="abrirBuscarFactura" label="Anular" style="font-size: 12px;"/>
+            <div class="col-6 contenedorBtn" style="margin: 5px,">
+              <q-btn color="primary" icon="zoom_in" @click="abrirBuscarItem" label="Agregar item" style="font-size: 12px;"/>
+            </div>
+            <div class="col-6 contenedorBtn" style="margin: 5px,">
+              <q-btn color="secondary" icon-right="paid" @click="abrirRealizarVenta" label="Realizar venta" style="font-size: 12px;" :disable="holds.length <= 0"/>
+            </div>
+            <div class="col-6 contenedorBtn" style="margin: 5px,">
+              <q-btn color="secondary" icon="cancel" @click="openDeleteHolds" label="Cancelar venta" style="font-size: 12px;" :disable="holds.length <= 0"/>
+            </div>
+            <div class="col-6 contenedorBtn" style="margin: 5px,">
+              <q-btn color="primary" icon-right="person_add_alt" @click="abrirBuscarCliente" label="Agregar cliente" style="font-size: 12px;"/>
+            </div>
+            <div class="col-6 contenedorBtn" style="margin: 5px,">
+              <q-btn color="primary" icon="cancel_presentation" @click="abrirBuscarFactura" label="Anular" style="font-size: 12px;"/>
+            </div>
             <!-- <q-btn class="col-6" color="accent" icon="playlist_remove" @click="abrirBuscarFactura" label="Nota de Crédito" style="font-size: 12px;" :disable="holds.length <= 0"/>
             <q-btn class="col-6" color="info" icon="playlist_add" @click="abrirBuscarFactura" label="Nota de Dédito" style="font-size: 12px;" :disable="holds.length <= 0"/> -->
-            <q-btn class="col-6" color="grey" icon-right="assignment_return" @click="abrirBuscarFactura" label="Devoluciones" style="font-size: 12px;" :disable="true"/>
+            <div class="col-6 contenedorBtn" style="margin: 5px,">
+              <q-btn color="secondary" icon-right="assignment_return" @click="abrirBuscarFactura" label="Devoluciones" style="font-size: 12px;" :disable="true"/>
+            </div>
           </div>
         </div>
       </div>
@@ -808,6 +820,7 @@ export default defineComponent({
       axios.post(ENDPOINT_PATH_V2 + 'ventas/deleteholds', body).then(async response => {
         // console.log(response.data.success)
         this.modaldeleteholds = false
+        this.documentoclienteventa = ''
         this.listarHolds()
       }).catch(error => {
         Notify.create('Problemas al ELIMINAR Hold de venta ' + error)
@@ -1240,7 +1253,7 @@ export default defineComponent({
 }
 .puntodeventa {
     height: 59vh;
-    background: coral;
+    background: rgb(187, 193, 194);;
     display: flex;
     justify-content: center;
     overflow: auto;
@@ -1289,5 +1302,9 @@ export default defineComponent({
 .anulada{
   color: red;
   font-weight: bold;
+}
+.contenedorBtn {
+  padding: 3px;
+  display: grid;
 }
 </style>

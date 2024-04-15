@@ -274,7 +274,7 @@ export default defineComponent({
         tasabcv: this.tasabcv || 0,
         tokenfacturacion: this.tokenfacturacion || ''
       }
-      axios.put(ENDPOINT_PATH_V2 + 'configuracion/' + this.idUpd, body).then(async response => {
+      axios.put(ENDPOINT_PATH_V2 + 'sede/' + this.idUpd, body).then(async response => {
         // console.log(response.status)
         if (response.status === 200) {
           const datos = response.data.resp
