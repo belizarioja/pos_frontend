@@ -368,7 +368,7 @@ export default defineComponent({
 }
 .listarcategoriasconitem {
     height: 85vh;
-    background: coral;
+    background: rgb(187, 193, 194);
     overflow: auto;
 }
 .tarjetaitem {
