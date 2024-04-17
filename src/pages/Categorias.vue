@@ -171,9 +171,9 @@ export default defineComponent({
     font-weight: bolder;
 }
 .listarcategoriasconitem {
-    height: 85vh;
-    background: coral;
-    overflow: auto;
+  height: 85vh;
+  background: rgb(187, 193, 194);
+  overflow: auto;
 }
 .tarjetaitem {
   margin: 10px;

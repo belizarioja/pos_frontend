@@ -1253,7 +1253,7 @@ export default defineComponent({
 }
 .puntodeventa {
     height: 59vh;
-    background: rgb(187, 193, 194);;
+    background: rgb(187, 193, 194);
     display: flex;
     justify-content: center;
     overflow: auto;

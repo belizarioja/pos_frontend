@@ -2,22 +2,43 @@
   <q-page class="bg-white">
     <div class="col">
       <div class="botones row" style="background: #ededed;">
+        <q-input
+         color="white"
+         bg-color="primary"
+         rounded standout
+         v-model="textitem"
+         label="Nombre o Sku de producto"
+         style="margin: 5px; width: 310px;"
+         autofocus>
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+          <template v-slot:append>
+            <q-icon name="close" @click="textitem = ''" class="cursor-pointer" />
+          </template>
+        </q-input>
         <q-btn color="secondary" icon="add_circle" @click="openCrear" label="Agregar producto" style="margin: 10px;" />
       </div>
       <div class="listarproductos row">
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
         <div v-else class="puntodeventaconitem col">
-          <div class="row justify-center">
-            <q-card v-for="item in rows" :key="item" class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11 ">
+          <div v-if="buscadoproducto" class="row justify-center">
+            <q-card v-for="item in rowsproductosfiltre" :key="item" class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11 ">
               <q-item horizontal>
                 <q-item-section>
                   <q-item-label>{{item.sku}} {{item.producto}}</q-item-label>
-                  <q-item-label caption>{{item.categoria}}</q-item-label>
+                  <q-item-label caption>
+                    <q-badge :color="item.intipoproducto === '1' ? 'green' : 'orange'" style="margin-top: 5px;margin-right: 5px;">
+                      {{item.intipoproducto === '1' ? 'Simple' : 'Compuesto'}}
+                    </q-badge>
+                    {{item.categoria}}
+                  </q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <div style="display: flex;">
-                    <q-btn flat round color="red" icon="delete" />
-                    <q-btn flat round color="blue" icon="edit" @click="openEditar(item)" />
+                    <q-btn dense v-if="item.intipoproducto === '2'" color="primary" icon="inventory_2" style="margin: 3px;" />
+                    <q-btn dense color="primary" icon="delete" style="margin: 3px;" />
+                    <q-btn dense color="primary" icon="edit" @click="openEditar(item)" style="margin: 3px;" />
                   </div>
                 </q-item-section>
               </q-item>
@@ -27,8 +48,8 @@
                   <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
                     {{primeraletra(item.producto)}}
                   </q-avatar>
-                  <q-badge color="blue" style="margin-top: 5px;">
-                    {{item.precio}}
+                  <q-badge color="secondary" style="margin-top: 5px;">
+                    Bs.{{item.precio}}
                   </q-badge>
                 </q-item-section>
 
@@ -78,6 +99,20 @@
           <div class="col" style="padding: 0 10px;">
             <q-select
              filled
+             v-model="modeltipoproducto"
+             :options="optionstipoproducto"
+             option-label="tipoproducto"
+             option-value="id"
+             label="Seleccione tipo"
+             dense
+            />
+          </div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section class="row">
+          <div class="col" style="padding: 0 10px;">
+            <q-select
+             filled
              v-model="model"
              :options="options"
              option-label="categoria"
@@ -85,7 +120,6 @@
              label="Seleccione categoría"
              dense
             />
-
           </div>
         </q-card-section>
         <q-separator />
@@ -196,6 +230,21 @@
           <div class="col" style="padding: 0 10px;">
             <q-select
              filled
+             disable
+             v-model="modeltipoproducto"
+             :options="optionstipoproducto"
+             option-label="tipoproducto"
+             option-value="id"
+             label="Seleccione tipo"
+             dense
+            />
+          </div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section class="row">
+          <div class="col" style="padding: 0 10px;">
+            <q-select
+             filled
              v-model="model"
              :options="options"
              option-label="categoria"
@@ -203,7 +252,6 @@
              label="Seleccione categoría"
              dense
             />
-
           </div>
         </q-card-section>
         <q-separator />
@@ -249,8 +297,6 @@
              label="Elija unidad"
              dense
             />
-            <q-input style="margin-left: 5px;" class="col" filled v-model="inventario" label="Inventario" stack-label dense />
-
           </div>
         </q-card-section>
         <q-separator />
@@ -319,6 +365,8 @@ export default defineComponent({
     return {
       slide: ref(2),
       rows: ref([]),
+      rowsproductosfiltre: ref([]),
+      textitem: ref(''),
       sku: ref(''),
       producto: ref(''),
       idproducto: ref(null),
@@ -336,7 +384,10 @@ export default defineComponent({
       modeltax: ref(null),
       optionstax: [],
       modelunidad: ref(null),
-      optionsunidad: []
+      modeltipoproducto: ref(null),
+      buscadoproducto: ref(true),
+      optionsunidad: ref([]),
+      optionstipoproducto: ref([])
     }
   },
   methods: {
@@ -359,6 +410,7 @@ export default defineComponent({
           obj.idunidad = datos[i].idunidad
           obj.impuesto = datos[i].impuesto
           obj.idimpuesto = datos[i].idimpuesto
+          obj.intipoproducto = datos[i].intipoproducto
           obj.precio = datos[i].precio
           obj.costo = datos[i].costo
           obj.utilidad = datos[i].utilidad
@@ -367,13 +419,15 @@ export default defineComponent({
           obj.inventario = Number(datos[i].inventario1) || 0
           this.rows.push(obj)
         }
-        console.log(this.rows)
+        // console.log(this.rows)
+        this.rowsproductosfiltre = this.rows
       }).catch(error => {
         Notify.create('Problemas al listar Categorias ' + error)
       })
     },
     openEditar (item) {
-      // console.log(item)
+      console.log(item.intipoproducto)
+      console.log(this.optionstipoproducto)
       this.editaritem = true
       const find = this.options.find(obj => obj.cod === item.idcategoria)
       this.model = find
@@ -381,6 +435,9 @@ export default defineComponent({
       this.modeltax = find2
       const find3 = this.optionsunidad.find(obj => obj.cod === item.idunidad)
       this.modelunidad = find3
+      const find4 = this.optionstipoproducto.find(obj => obj.id === Number(item.intipoproducto))
+      this.modeltipoproducto = find4
+      console.log(find4)
       this.sku = item.sku
       this.descripcion = item.descripcion
       this.idproducto = item.cod
@@ -431,6 +488,7 @@ export default defineComponent({
         idcategoria: this.model.cod,
         idimpuesto: this.modeltax.cod,
         idunidad: this.modelunidad.cod,
+        intipoproducto: this.modelunidad.id,
         descripcion: this.descripcion,
         producto: this.producto,
         sku: this.sku,
@@ -469,6 +527,7 @@ export default defineComponent({
         idcategoria: this.model.cod,
         idimpuesto: this.modeltax.cod,
         idunidad: this.modelunidad.cod,
+        intipoproducto: this.modeltipoproducto.id,
         descripcion: this.descripcion,
         producto: this.producto,
         sku: this.sku,
@@ -485,6 +544,8 @@ export default defineComponent({
         Notify.create(response.data.message)
         // this.limpiar()
         this.listar()
+      }).catch(error => {
+        Notify.create('Problemas al Crear Producto ' + error)
       })
     },
     listarCategoria () {
@@ -548,6 +609,25 @@ export default defineComponent({
     }
   },
   watch: {
+    textitem (val) {
+      console.log('textitem')
+      console.log(val)
+      this.buscadoproducto = false
+      if (val.length > 0) {
+        this.rowsproductosfiltre = this.rowsproductosfiltre.filter(obj => {
+          if (obj.producto.toUpperCase().includes(val.toUpperCase()) || (obj.sku && obj.sku.includes(val))) {
+            return true
+          } else {
+            return false
+          }
+        })
+      } else {
+        this.rowsproductosfiltre = this.rows
+      }
+      this.buscadoproducto = true
+      // this.rowsproductosfiltre = this.rowsproductosfiltre.slice().reverse()
+      // console.log(this.rowsproductosfiltre)
+    },
     costo () {
       if (this.costo > 0) {
         this.costousd = (this.costo / this.tasausd).toFixed(2)
@@ -578,6 +658,14 @@ export default defineComponent({
     this.listarCategoria()
     this.listarImpuesto()
     this.listarUnidades()
+    let obj = {}
+    obj.id = 1
+    obj.tipoproducto = 'Simple'
+    this.optionstipoproducto.push(obj)
+    obj = {}
+    obj.id = 2
+    obj.tipoproducto = 'Compuesto'
+    this.optionstipoproducto.push(obj)
   }
 })
 </script>
@@ -608,7 +696,7 @@ export default defineComponent({
 }
 .puntodeventaconitem {
   height: 85vh;
-  background: coral;
+  background: rgb(187, 193, 194);
   width: 95%;
   overflow: auto;
 }
