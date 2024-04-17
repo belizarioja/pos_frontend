@@ -56,101 +56,104 @@
     <!-- MOSTRAR DETALLE DE VENTA -->
     <q-dialog v-model="modaldetalleinvoice" persistent>
       <q-card style="width: 320px;">
-        <q-card-section style="justify-content: center;">
-          <div class="text-center letratotalesfactura " style=""> {{ empresa }} - {{ rif }}</div>
-          <div class="text-center letratotalesfactura " style=""> {{ direccion }}</div>
-          <div class="text-center letratotalesfactura " style=""> {{ telefono }}</div>
-          <div class="text-center letratotalesfactura " style=""> {{ email }}</div>
-          <q-separator style="margin: 10px 0px;" />
-          <div v-if="detalleventa.estatus === '2'" class="anulada" style="display: flex; justify-content: center; align-items: center;width: 100%;">ANULADA</div>
-          <div style="display: flex; align-items: left;width: 100%;">
-            <div class="numero" style="margin-left: 10px;"> {{ detalleventa.tipofactura }}</div>
-            <div class="numero" style="margin-left: 10px;"> {{ detalleventa.numerointerno }}</div>
-          </div>
-          <div style="display: flex; align-items: center;">
-            <div class="control" style="margin-left: 10px;"> N° de control:</div>
-            <div class="control" style="margin-left: 10px;"> {{ detalleventa.numerocontrol }}</div>
-          </div>
-          <q-separator style="margin: 10px 0px;" />
-          <table style="width: 100%;">
-            <tr class="letratotalesfactura">
-              <td style="width: 30%;">Razón social:</td>
-              <td style="font-weight: bold;">{{ detalleventa.cliente }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td>{{ detalleventa.abrev }}</td>
-              <td style="font-weight: bold;">{{ detalleventa.documentosolo }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td>Fecha:</td>
-              <td style="font-weight: bold;">{{ detalleventa.fecha }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td>Cajero:</td>
-              <td style="font-weight: bold;">{{ detalleventa.usuario }}</td>
-            </tr>
-          </table>
-          <table style="width: 100%;">
-            <tr style="font-weight: bold; font-size: 11px;">
-              <td class="rayafactura rayaarriba">Producto</td>
-              <td class="rayafactura rayaarriba">Precio</td>
-              <td class="rayafactura rayaarriba">Cant.</td>
-              <td class="rayafactura rayaarriba">Imp %</td>
-              <td class="rayafactura rayaarriba">Total</td>
-            </tr>
-            <tr v-for="item in ventas" :key="item" style="font-size: 11px;">
-              <td>{{item.producto}}</td>
-              <td>{{item.precio}}</td>
-              <td>{{item.cantidad}}</td>
-              <td>{{item.tasa}}%</td>
-              <td style="text-align: right;">{{item.subtotal}}</td>
-            </tr>
+        <div id="areaImprimir"  style="width: 100%;">
+          <q-card-section style="justify-content: center;">
+            <div class="text-center letratotalesfactura " style=""> {{ empresa }} - {{ rif }}</div>
+            <div class="text-center letratotalesfactura " style=""> {{ direccion }}</div>
+            <div class="text-center letratotalesfactura " style=""> {{ telefono }}</div>
+            <div class="text-center letratotalesfactura " style=""> {{ email }}</div>
+            <q-separator style="margin: 10px 0px;" />
+            <div v-if="detalleventa.estatus === '2'" class="anulada" style="display: flex; justify-content: center; align-items: center;width: 100%;">ANULADA</div>
+            <div style="display: flex; align-items: left;width: 100%;">
+              <div class="numero" style="margin-left: 10px;"> {{ detalleventa.tipofactura }}</div>
+              <div class="numero" style="margin-left: 10px;"> {{ detalleventa.numerointerno }}</div>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <div class="control" style="margin-left: 10px;"> N° de control:</div>
+              <div class="control" style="margin-left: 10px;"> {{ detalleventa.numerocontrol }}</div>
+            </div>
+            <q-separator style="margin: 10px 0px;" />
+            <table style="width: 100%;">
+              <tr class="letratotalesfactura">
+                <td style="width: 30%;">Razón social:</td>
+                <td style="font-weight: bold;">{{ detalleventa.cliente }}</td>
+              </tr>
+              <tr class="letratotalesfactura">
+                <td>{{ detalleventa.abrev }}</td>
+                <td style="font-weight: bold;">{{ detalleventa.documentosolo }}</td>
+              </tr>
+              <tr class="letratotalesfactura">
+                <td>Fecha:</td>
+                <td style="font-weight: bold;">{{ detalleventa.fecha }}</td>
+              </tr>
+              <tr class="letratotalesfactura">
+                <td>Cajero:</td>
+                <td style="font-weight: bold;">{{ detalleventa.usuario }}</td>
+              </tr>
+            </table>
+            <table style="width: 100%;">
+              <tr style="font-weight: bold; font-size: 11px;">
+                <td class="rayafactura rayaarriba">Producto</td>
+                <td class="rayafactura rayaarriba">Precio</td>
+                <td class="rayafactura rayaarriba">Cant.</td>
+                <td class="rayafactura rayaarriba">Imp %</td>
+                <td class="rayafactura rayaarriba">Total</td>
+              </tr>
+              <tr v-for="item in ventas" :key="item" style="font-size: 11px;">
+                <td style="width: 140px; font-style: italic;">{{item.producto}}</td>
+                <td>{{item.precio}}</td>
+                <td>{{item.cantidad}}</td>
+                <td>{{item.tasa}}%</td>
+                <td style="text-align: right;">{{item.subtotal}}</td>
+              </tr>
 
-            <tr>
-              <td class="rayafactura"></td>
-              <td class="rayafactura"></td>
-              <td class="rayafactura"></td>
-              <td class="rayafactura"></td>
-              <td class="rayafactura"></td>
-            </tr>
-          </table>
-          <table style="width: 100%;">
-            <tr class="letratotalesfactura">
-              <td style="width: 40%;"></td>
-              <td>Subtotal Bs.:</td>
-              <td style="text-align: right;">{{ detalleventa.subtotal }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td></td>
-              <td>Impuestos Bs.:</td>
-              <td style="text-align: right;">{{ detalleventa.impuesto }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td></td>
-              <td>Descuentos Bs.:</td>
-              <td style="text-align: right;">{{ detalleventa.descuentos }}</td>
-            </tr>
-            <tr class="letratotalesfactura">
-              <td></td>
-              <td class="rayafactura">IGTF 3% Bs.:</td>
-              <td class="rayafactura" style="text-align: right;">{{ detalleventa.igtf }}</td>
-            </tr>
-            <tr class="letratotalesfactura"  style="font-weight: bold;">
-              <td></td>
-              <td>Total Bs.:</td>
-              <td style="text-align: right;">{{ detalleventa.total }}</td>
-            </tr>
-            <tr class="letratotalesfactura"  style="font-weight: bold;">
-              <td></td>
-              <td>Total $:</td>
-              <td style="text-align: right;">{{ detalleventa.totalusd }}</td>
-            </tr>
-          </table>
-        </q-card-section>
-        <q-separator />
+              <tr>
+                <td class="rayafactura"></td>
+                <td class="rayafactura"></td>
+                <td class="rayafactura"></td>
+                <td class="rayafactura"></td>
+                <td class="rayafactura"></td>
+              </tr>
+            </table>
+            <table style="width: 100%;">
+              <tr class="letratotalesfactura">
+                <td style="width: 40%;"></td>
+                <td>Subtotal Bs.:</td>
+                <td style="text-align: right;">{{ detalleventa.subtotal }}</td>
+              </tr>
+              <tr class="letratotalesfactura">
+                <td></td>
+                <td>Impuestos Bs.:</td>
+                <td style="text-align: right;">{{ detalleventa.impuesto }}</td>
+              </tr>
+              <tr class="letratotalesfactura">
+                <td></td>
+                <td>Descuentos Bs.:</td>
+                <td style="text-align: right;">{{ detalleventa.descuentos }}</td>
+              </tr>
+              <tr class="letratotalesfactura">
+                <td></td>
+                <td class="rayafactura">IGTF 3% Bs.:</td>
+                <td class="rayafactura" style="text-align: right;">{{ detalleventa.igtf }}</td>
+              </tr>
+              <tr class="letratotalesfactura"  style="font-weight: bold;">
+                <td></td>
+                <td>Total Bs.:</td>
+                <td style="text-align: right;">{{ detalleventa.total }}</td>
+              </tr>
+              <tr class="letratotalesfactura"  style="font-weight: bold;">
+                <td></td>
+                <td>Total $:</td>
+                <td style="text-align: right;">{{ detalleventa.totalusd }}</td>
+              </tr>
+            </table>
+          </q-card-section>
+          <q-separator />
+        </div>
+        <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
         <q-card-actions align="right">
           <q-btn label="Cerrar" color="negative" v-close-popup />
-          <q-btn label="Imprimir" color="secondary" />
+          <q-btn label="Imprimir" color="secondary" @click="imprimir" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -203,6 +206,12 @@ export default defineComponent({
     }
   },
   methods: {
+    imprimir () {
+      window.frames.print_frame.document.body.innerHTML = document.getElementById('areaImprimir').innerHTML
+      window.frames.print_frame.window.focus()
+      window.frames.print_frame.window.print()
+      this.modaldetalleinvoice = false
+    },
     async abrirDetalleInvoive (item) {
       console.log(item)
       this.detalleventa = item
