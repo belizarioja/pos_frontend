@@ -1,11 +1,7 @@
 <template>
-   <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr lff" container style="height: 100vh" class="shadow-2 rounded-borders">
     <q-header>
       <q-toolbar>
-        <q-toolbar-title style="display: grid;">
-          <span class="bienvenido">Bienvenido {{ nombreusuario }} "{{rol}}"</span>
-          <span class="rulusuario">{{ empresa }} </span>
-        </q-toolbar-title>
         <q-btn
           flat
           dense
@@ -14,84 +10,92 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
+        <q-toolbar-title style="display: grid;">
+          <span class="rulusuario">{{ empresa }} </span>
+          <span class="bienvenido">{{ nombreusuario }} "{{rol}}"</span>
+        </q-toolbar-title>
+        <q-btn
+          flat
+          dense
+          icon="logout"
+          aria-label="Salir"
+          @click="salir"
+        />
       </q-toolbar>
     </q-header>
+    <!-- <q-drawer bordered overlay
+      v-model="leftDrawerOpen"
+      :width="200"
+      :breakpoint="500"
+      show-if-above
+    >
+      <q-scroll-area class="fit">
+        <q-list padding class="menu-list">
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="inbox" ></q-icon>
+            </q-item-section>
 
-    <q-drawer
+            <q-item-section>
+              Inbox
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
+    </q-drawer> -->
+    <q-drawer overlay bordered
         v-model="leftDrawerOpen"
         show-if-above
-        :width="200"
-        :breakpoint="400"
+        :width="120"
+        :breakpoint="600"
       >
-        <q-scroll-area style="height: calc(100% - 150px); margin-top: 95px; border-right: 1px solid #ddd">
+        <q-scroll-area style="height: calc(100% - 30px); margin-top: 20px; border-right: 1px solid #ddd">
           <q-list padding>
-            <q-item clickable v-ripple @click="puntodeventa" style="font-size: 12px;">
-              <q-item-section avatar>
-                <q-icon color="secondary" name="point_of_sale" />
-              </q-item-section>
+            <q-item clickable v-ripple @click="puntodeventa">
               <q-item-section>
-                <div class="text-secondary">Punto de venta</div>
+                <div class="text-secondary text-center"><q-icon color="secondary" name="point_of_sale"  size="50px"/></div>
+                <div class="text-secondary text-center" style="font-size: 12px;">Punto de venta</div>
               </q-item-section>
             </q-item>
-            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="categorias" style="font-size: 12px;">
-              <q-item-section avatar>
-                <q-icon color="secondary" name="category" />
-              </q-item-section>
+            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="categorias">
               <q-item-section>
-                <div class="text-secondary">Categorias</div>
+                <div class="text-secondary text-center"><q-icon color="secondary" name="category"  size="50px"/></div>
+                <div class="text-secondary text-center" style="font-size: 12px;">Categorias</div>
               </q-item-section>
             </q-item>
-            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="productos" style="font-size: 12px;">
-              <q-item-section avatar>
-                <q-icon color="secondary" name="inventory_2" />
-              </q-item-section>
+            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="productos">
               <q-item-section>
-                <div class="text-secondary">Productos</div>
+                <div class="text-secondary text-center"><q-icon color="secondary" name="inventory_2"  size="50px"/></div>
+                <div class="text-secondary text-center" style="font-size: 12px;">Productos</div>
               </q-item-section>
             </q-item>
-            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="configuracion" style="font-size: 12px;">
-              <q-item-section avatar>
-                <q-icon color="secondary" name="settings" />
-              </q-item-section>
+            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="configuracion">
               <q-item-section>
-                <div class="text-secondary">Configuración</div>
+                <div class="text-secondary text-center"><q-icon color="secondary" name="settings"  size="50px"/></div>
+                <div class="text-secondary text-center" style="font-size: 12px;">Configuración</div>
               </q-item-section>
             </q-item>
-            <q-item v-if="corol === '1'" clickable v-ripple @click="empresas" style="font-size: 12px;">
-              <q-item-section avatar>
-                <q-icon color="secondary" name="store" />
-              </q-item-section>
+            <q-item v-if="corol === '1'" clickable v-ripple @click="empresas">
               <q-item-section>
-                <div class="text-secondary">Emisores</div>
+                <div class="text-secondary text-center"><q-icon color="secondary" name="store"  size="50px"/></div>
+                <div class="text-secondary text-center" style="font-size: 12px;">Emisores</div>
               </q-item-section>
             </q-item>
-            <q-item clickable v-ripple @click="ventas" style="font-size: 12px;">
-              <q-item-section avatar>
-                <q-icon color="secondary" name="view_list" />
-              </q-item-section>
+            <q-item clickable v-ripple @click="ventas">
               <q-item-section>
-                <div class="text-secondary">Ventas</div>
+                <div class="text-secondary text-center"><q-icon color="secondary" name="view_list"  size="50px"/></div>
+                <div class="text-secondary text-center" style="font-size: 12px;">Ventas</div>
               </q-item-section>
             </q-item>
-            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="usuarios" style="font-size: 12px;">
-              <q-item-section avatar>
-                <q-icon color="secondary" name="people" />
-              </q-item-section>
+            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="usuarios">
               <q-item-section>
-                <div class="text-secondary">Usuarios</div>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple @click="salir" style="font-size: 12px;">
-              <q-item-section avatar>
-                <q-icon color="secondary" name="logout" />
-              </q-item-section>
-              <q-item-section>
-                <div class="text-secondary">Salir</div>
+                <div class="text-secondary text-center"><q-icon color="secondary" name="people"  size="50px"/></div>
+                <div class="text-secondary text-center" style="font-size: 12px;">Usuarios</div>
               </q-item-section>
             </q-item>
           </q-list>
         </q-scroll-area>
-        <q-img class="absolute-top" src="logo_sit.jpg" style="height: 100px"></q-img>
+        <!-- <q-img class="absolute-top" src="logo_sit.jpg" style="height: 100px"></q-img> -->
       </q-drawer>
 
     <q-page-container>
@@ -187,11 +191,11 @@ export default defineComponent({
 </script>
 <style>
 .bienvenido {
-  font-size: 16px;
-  font-weight: bolder;
+  font-size: 15px;
+  /* font-weight: bolder; */
 }
 .rulusuario {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bolder;
 }
 </style>
