@@ -360,6 +360,7 @@
       <q-card style="background: #ddd; width: 350px;">
         <q-card-section style="padding: 10px 15px 7px;">
           <div class="titulobuscar">Agregar item al Producto Compuesto</div>
+          <div class="subtitulobuscar">{{ productocompuestoedit }}</div>
         </q-card-section>
         <q-separator />
         <q-card-section style="padding: 10px 15px 7px;">
@@ -391,7 +392,7 @@
               </q-item-section>
               <q-item-section side>
                 <div style="display: flex;">
-                  <q-btn flat round color="blue" icon="add_box" @click="addproductosimple(item)" />
+                  <q-btn flat round color="blue" icon="add_box" @click="addproductosimple(item)" style="font-size: 20px;"></q-btn>
                 </div>
               </q-item-section>
             </q-item>
@@ -433,11 +434,12 @@
       </q-card>
     </q-dialog>
 
-    <!-- EDITAR PRODUCTOS SIMPLES DEL COMPUESTO-->
+    <!-- EDITAR PRODUCTOS SIMPLES DEL COMPUESTO -->
     <q-dialog v-model="buscarcompuestos" position="top" persistent>
       <q-card style="background: #ddd; width: 350px;">
         <q-card-section style="padding: 10px 15px 7px;">
           <div class="titulobuscar">Editar items del Producto Compuesto</div>
+          <div class="subtitulobuscar">{{ productocompuestoedit }}</div>
         </q-card-section>
 
         <q-separator />
@@ -449,42 +451,34 @@
             <q-item horizontal>
               <q-item-section>
                 <q-item-label>{{item.producto}}</q-item-label>
-                <q-item-label>SKU {{item.sku}}</q-item-label>
-                <q-item-label caption>{{item.categoria}}</q-item-label>
+                <q-item-label caption>SKU {{item.sku}} - {{item.categoria}}</q-item-label>
               </q-item-section>
             </q-item>
 
             <q-item horizontal>
-              <q-item-section avatar style="padding-right: 15px;align-items: center;">
-                <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
-                  {{primeraletra(item.producto)}}
-                </q-avatar>
-                <q-badge color="blue" style="margin-top: 5px;">
-                  Bs. {{item.precio}}
-                </q-badge>
-              </q-item-section>
-
               <q-item-section class="tarjeticainside">
-                <div style="display: flex;">
-                  {{item.descripcion}}
-                </div>
                 <div style="display: flex;">
                   <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                       <div class="text-center">Cantidad</div>
                       <input
                         class="inputCantidad"
-                        :id="'cantidad' + item.idproducto"
+                        :id="'cantidad' + item.cod"
                         :value="item.cantidad"
+                        pattern="^\d*(\.\d{0,2})?$"
                         @input="calcularMonto(item)"
                       />
                   </div>
-                  <div style="display: grid;width: 48%;font-size: 11px; justify-content: center;">
-                    <div class="text-center">Unidad</div>
-                    <div class="text-secondary">{{item.unidad}}</div>
+                  <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
+                    <div class="text-center">Disponible</div>
+                    <div class="text-secondary text-center">{{item.inventario}}</div>
                   </div>
-                  <div style="display: grid;width: 48%;font-size: 11px; justify-content: center;">
-                    <div class="text-center">Impuesto.</div>
-                    <div class="text-secondary">{{item.impuesto}}</div>
+                  <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
+                    <div class="text-center">Unidad</div>
+                    <div class="text-secondary text-center">{{item.unidad}}</div>
+                  </div>
+                  <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
+                    <div class="text-center">Estimado</div>
+                    <div :id="'estimado' + item.cod" class="text-secondary text-center">{{item.estimado}}</div>
                   </div>
                 </div>
               </q-item-section>
@@ -496,6 +490,7 @@
 
         <q-card-actions align="right">
           <q-btn label="Cerrar" color="negative" v-close-popup />
+          <q-btn label="Guardar" color="primary" @click="editarCompuesto" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -513,12 +508,14 @@ export default defineComponent({
   setup () {
     return {
       slide: ref(2),
+      inventariocompuesto: ref(0),
       rows: ref([]),
       rowsproductosfiltre: ref([]),
       rowsproductosimple: ref([]),
       rowsproductocompuesto: ref([]),
       textitemsimple: ref(''),
       textitem: ref(''),
+      productocompuestoedit: ref(''),
       sku: ref(''),
       producto: ref(''),
       idproducto: ref(null),
@@ -546,6 +543,15 @@ export default defineComponent({
     }
   },
   methods: {
+    calcularMonto (item) {
+      console.log(item.inventario)
+      const idcantidad = document.getElementById('cantidad' + item.cod)
+      // console.log(idcantidad)
+      if (idcantidad) {
+        const cantidad = idcantidad.value > 0 ? idcantidad.value : 1
+        document.getElementById('estimado' + item.cod).innerHTML = (item.inventario / cantidad).toFixed(2)
+      }
+    },
     listar () {
       this.btndisable = false
       const idcategoria = 0
@@ -586,10 +592,13 @@ export default defineComponent({
     openEditarCompuesto (item) {
       console.log(item)
       this.idproducto = item.cod
+      this.productocompuestoedit = item.producto
       this.buscarsimples = true
     },
     openAbrirCompuesto (item) {
       console.log(item)
+      this.idproducto = item.cod
+      this.productocompuestoedit = item.producto
       const body = {
         idproducto: item.cod
       }
@@ -597,6 +606,7 @@ export default defineComponent({
         console.log(response.data)
         const datos = response.data.resp
         this.rowsproductocompuesto = []
+        this.minimacantidad = 1000000
         for (const i in datos) {
           const obj = {}
           obj.cod = datos[i].id
@@ -617,6 +627,8 @@ export default defineComponent({
           obj.costousd = datos[i].costousd
           obj.cantidad = datos[i].cantidad
           obj.inventario = Number(datos[i].inventario1) || 0
+          obj.estimado = (obj.inventario / datos[i].cantidad).toFixed(2)
+
           this.rowsproductocompuesto.push(obj)
         }
         console.log(this.rowsproductocompuesto)
@@ -687,6 +699,34 @@ export default defineComponent({
       this.inventario = ''
       this.precio = 0
       this.preciousd = 0
+    },
+    async editarCompuesto () {
+      // console.log(this.idproducto)
+      let minimo = 999999999
+      for (const i in this.rowsproductocompuesto) {
+        // console.log(this.rowsproductocompuesto[i])
+        const item = this.rowsproductocompuesto[i]
+        const cantidad = document.getElementById('cantidad' + item.cod).value
+        const estimado = document.getElementById('estimado' + item.cod).innerHTML
+        if (Number(estimado) < Number(minimo)) {
+          minimo = estimado
+        }
+        const data = {
+          idproductopadre: this.idproducto,
+          idproductohijo: item.cod,
+          cantidad
+        }
+        await axios.post(ENDPOINT_PATH_V2 + 'productos/updatecompuesto', data)
+      }
+      console.log(parseInt(minimo))
+      const data2 = {
+        idproducto: this.idproducto,
+        inventario: parseInt(minimo)
+      }
+      await axios.post(ENDPOINT_PATH_V2 + 'productos/updateinventario', data2)
+      this.buscarcompuestos = false
+
+      this.listar()
     },
     editar () {
       if (this.producto.length === 0) {
@@ -939,8 +979,10 @@ export default defineComponent({
 .tarjetaitem {
   margin: 10px;
 }
+
 .inputCantidad {
   width: 50px;
+  text-align: center;
   border-radius: 7px;
   border-color: lightblue;
 }
@@ -974,6 +1016,12 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.subtitulobuscar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
 }
 .titulonohay {
     border: 1px solid #9c0707;
