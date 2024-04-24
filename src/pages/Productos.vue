@@ -549,6 +549,7 @@ export default defineComponent({
       // console.log(idcantidad)
       if (idcantidad) {
         const cantidad = idcantidad.value > 0 ? idcantidad.value : 1
+        console.log(item.inventario, cantidad)
         document.getElementById('estimado' + item.cod).innerHTML = (item.inventario / cantidad).toFixed(2)
       }
     },
@@ -627,7 +628,7 @@ export default defineComponent({
           obj.costousd = datos[i].costousd
           obj.cantidad = datos[i].cantidad
           obj.inventario = Number(datos[i].inventario1) || 0
-          obj.estimado = (obj.inventario / datos[i].cantidad).toFixed(2)
+          obj.estimado = datos[i].cantidad > 0 ? (obj.inventario / datos[i].cantidad).toFixed(2) : 0
 
           this.rowsproductocompuesto.push(obj)
         }

@@ -159,7 +159,12 @@
             <q-item horizontal>
               <q-item-section>
                 <q-item-label>{{item.producto}}</q-item-label>
-                <q-item-label>SKU {{item.sku}}</q-item-label>
+                <q-item-label>
+                  <q-badge :color="item.intipoproducto === '1' ? 'green' : 'orange'" style="margin-top: 5px;margin-right: 5px;">
+                      {{item.intipoproducto === '1' ? 'Simple' : 'Compuesto'}}
+                  </q-badge>
+                  SKU {{item.sku}}
+                </q-item-label>
                 <q-item-label caption>{{item.categoria}}</q-item-label>
               </q-item-section>
               <q-item-section side>
@@ -762,6 +767,7 @@ export default defineComponent({
       })
     },
     async actualizarCantidad (item, accion) {
+      console.log(item)
       const idcantidad = document.getElementById('cantidad' + item.idproducto)
       if (accion === 1) {
         idcantidad.value = Number(idcantidad.value) + 1
@@ -782,7 +788,7 @@ export default defineComponent({
       this.subtotalusd = (this.subtotal / this.tasausd).toFixed(2)
       this.impuestousd = (this.impuesto / this.tasausd).toFixed(2)
       this.totalusd = (this.total / this.tasausd).toFixed(2)
-      const resp = await this.updItemHolds(item.iditemhold, idcantidad.value, idcantidad.value * (Number(item.precio) + item.precio * item.tasa / 100), item.idproducto, accion)
+      const resp = await this.updItemHolds(item.iditemhold, idcantidad.value, idcantidad.value * (Number(item.precio) + item.precio * item.tasa / 100), item.idproducto, accion, item.intipoproducto)
       if (resp) {
         await this.calcularMonto(item)
       } else {
@@ -807,13 +813,14 @@ export default defineComponent({
         document.getElementById('monto' + item.idproducto).innerHTML = 'Bs.' + item.monto.toFixed(2)
       }
     },
-    async updItemHolds (iditemhold, cantidad, total, idproducto, accion) {
+    async updItemHolds (iditemhold, cantidad, total, idproducto, accion, intipoproducto) {
       const body = {
         idproducto,
         iditemhold,
         cantidad,
         accion,
-        total
+        total,
+        intipoproducto
       }
       // console.log(body)
       const response = await axios.post(ENDPOINT_PATH_V2 + 'ventas/upditemholds', body)
@@ -882,7 +889,7 @@ export default defineComponent({
       })
     },
     async additemholds (item) {
-      // console.log(item)
+      console.log(item)
       // console.log(this.holds)
       const descuento = this.descuento // DESCUENTO CERO POR DEFECTO
       let resp = false
@@ -901,6 +908,7 @@ export default defineComponent({
           tasa: item.tasa,
           total: monto,
           idunidad: item.idunidad,
+          intipoproducto: item.intipoproducto,
           descuento
         }
         // console.log(body)
@@ -918,6 +926,7 @@ export default defineComponent({
             obj.producto = item.producto
             obj.categoria = item.categoria
             obj.descripcion = item.descripcion
+            obj.intipoproducto = item.intipoproducto
             obj.descuento = descuento
 
             this.subtotal = (Number(this.subtotal) + (obj.precio * obj.cantidad)).toFixed(2)
@@ -928,6 +937,7 @@ export default defineComponent({
           } else {
             this.buscaritem = false
             this.slide = 2
+            Notify.create(response.data.resp.toUpperCase())
           }
         }).catch(error => {
           Notify.create('Problemas al crear itemhold de venta ' + error)
@@ -977,6 +987,7 @@ export default defineComponent({
           obj.inventario = Number(datos[i].inventario1)
           obj.costo = datos[i].costo
           obj.tasa = datos[i].tasa
+          obj.intipoproducto = datos[i].intipoproducto
           this.rowsproductos.push(obj)
         }
         this.rowsproductosfiltre = this.rowsproductos
