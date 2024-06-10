@@ -5,11 +5,11 @@
         <div class="totales  col-md-6 col-sm-12 col-xs-12">
           <q-card class="my-card" bordered style="margin: 10px;">
             <q-card-section style="padding: 7px 16px;">
-              <div style="width: 100%; background: #ddd; border-radius: 7px; display: flex; justify-content: space-between; padding: 3px 10px;">
+              <div style="width: 100%; background: #ddd; border-radius: 7px; display: flex; justify-content: space-between; padding: 3px 10px; font-size: 11px;">
                 <span style="color: #000213;">Cliente:
-                  <span style="color: blue; margin-left: 5PX;">{{nombrecliente.length > 0 ? nombrecliente : 'S/INF'}}</span>
+                  <span style="color: blue; margin-left: 5PX;">{{nombrecliente.length > 0 ? nombrecliente + ' (' + documentoclienteventa + ')' : 'S/INF'}}</span>
                 </span>
-               <span style="color: #000213;">Fecha venta:
+               <span style="color: #000213;">Fecha:
                   <span style="color: blue; margin-left: 5PX;">{{nombrecliente.length > 0 ? fechaholds : fechahoy}}</span>
                </span>
               </div>
@@ -17,19 +17,16 @@
             <q-separator />
             <q-card-section horizontal>
               <q-card-section class="column" style="padding: 7px;font-size: 12px;align-items: center;">
-                <span>BCV Bs. {{ tasausd || '0.00'}}</span>
-                <q-avatar text-color="white" :style="'background: ' + colorLetra(nombrecliente.toUpperCase() || 'S/INF')">
-                  {{primeraletra(nombrecliente.toUpperCase() || 'S/INF')}}
-                </q-avatar>
-                <q-badge color="blue" style="margin-top: 5px;">
-                  {{documentoclienteventa || 'S/INF'}}
+                <img src="logo_bcv.png" style="width: 60px;"/>
+                <q-badge color="secondary" style="margin-top: 5px;">
+                  Bs. {{ tasausd || '0.00'}}
                 </q-badge>
               </q-card-section>
               <q-separator vertical />
-              <q-card-section style="display: grid;padding: 7px 16px;font-size: 12px; width: 140px;">
-                <span>Subtotal:</span>
-                <span>Impuesto:</span>
-                <span>Descuento:</span>
+              <q-card-section style="display: grid;padding: 7px 16px;font-size: 12px; width: 115px;">
+                <span style="color: #757575;">Subtotal:</span>
+                <span style="color: #757575;">Impuesto:</span>
+                <span style="color: #757575;">Descuento:</span>
                 <span class="itemtotal">$ {{totalusd}}</span>
               </q-card-section>
 
@@ -54,16 +51,16 @@
         <div class="col-md-6 col-sm-12 col-xs-12" style="display: -webkit-box; align-items: center;">
           <div class="botones row">
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="primary" icon="zoom_in" @click="abrirBuscarItem" label="Agregar item (F2)" style="font-size: 12px;"/>
+              <q-btn color="primary" icon="zoom_in" @click="abrirBuscarItem" label="Item (F2)" style="font-size: 12px;"/>
             </div>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="secondary" icon-right="paid" @click="abrirRealizarVenta" label="Realizar venta (F5)" style="font-size: 12px;" :disable="holds.length <= 0"/>
+              <q-btn color="secondary" icon-right="paid" @click="abrirRealizarVenta" label="Vender (F6)" style="font-size: 12px;" :disable="holds.length <= 0"/>
             </div>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="secondary" icon="cancel" @click="openDeleteHolds" label="Cancelar venta" style="font-size: 12px;" :disable="holds.length <= 0"/>
+              <q-btn color="secondary" icon="cancel" @click="openDeleteHolds" label="Cancelar" style="font-size: 12px;" :disable="holds.length <= 0"/>
             </div>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="primary" icon-right="person_add_alt" @click="abrirBuscarCliente" label="Agregar cliente (F3)" style="font-size: 12px;"/>
+              <q-btn color="primary" icon-right="person_add_alt" @click="abrirBuscarCliente" label="Cliente (F3)" style="font-size: 12px;"/>
             </div>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
               <q-btn color="primary" icon="cancel_presentation" @click="abrirBuscarFactura" label="Anular" style="font-size: 12px;"/>
@@ -90,7 +87,6 @@
                   <q-btn flat round color="red" icon="delete" @click="deleteItemHolds(item)" />
                 </q-item-section>
               </q-item>
-
               <q-item horizontal>
                 <q-item-section avatar style="padding-right: 15px;align-items: center;">
                   <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
@@ -159,7 +155,12 @@
             <q-item horizontal>
               <q-item-section>
                 <q-item-label>{{item.producto}}</q-item-label>
-                <q-item-label>SKU {{item.sku}}</q-item-label>
+                <q-item-label>
+                  <q-badge :color="item.intipoproducto === '1' ? 'green' : item.intipoproducto === '2' ? 'orange' : 'accent'" style="margin-top: 5px;margin-right: 5px;">
+                      {{item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' : 'Servicio'}}
+                  </q-badge>
+                  SKU {{item.sku}}
+                </q-item-label>
                 <q-item-label caption>{{item.categoria}}</q-item-label>
               </q-item-section>
               <q-item-section side>
@@ -762,6 +763,7 @@ export default defineComponent({
       })
     },
     async actualizarCantidad (item, accion) {
+      console.log(item)
       const idcantidad = document.getElementById('cantidad' + item.idproducto)
       if (accion === 1) {
         idcantidad.value = Number(idcantidad.value) + 1
@@ -782,7 +784,7 @@ export default defineComponent({
       this.subtotalusd = (this.subtotal / this.tasausd).toFixed(2)
       this.impuestousd = (this.impuesto / this.tasausd).toFixed(2)
       this.totalusd = (this.total / this.tasausd).toFixed(2)
-      const resp = await this.updItemHolds(item.iditemhold, idcantidad.value, idcantidad.value * (Number(item.precio) + item.precio * item.tasa / 100), item.idproducto, accion)
+      const resp = await this.updItemHolds(item.iditemhold, idcantidad.value, idcantidad.value * (Number(item.precio) + item.precio * item.tasa / 100), item.idproducto, accion, item.intipoproducto)
       if (resp) {
         await this.calcularMonto(item)
       } else {
@@ -807,13 +809,14 @@ export default defineComponent({
         document.getElementById('monto' + item.idproducto).innerHTML = 'Bs.' + item.monto.toFixed(2)
       }
     },
-    async updItemHolds (iditemhold, cantidad, total, idproducto, accion) {
+    async updItemHolds (iditemhold, cantidad, total, idproducto, accion, intipoproducto) {
       const body = {
         idproducto,
         iditemhold,
         cantidad,
         accion,
-        total
+        total,
+        intipoproducto
       }
       // console.log(body)
       const response = await axios.post(ENDPOINT_PATH_V2 + 'ventas/upditemholds', body)
@@ -851,10 +854,11 @@ export default defineComponent({
       })
     },
     deleteItemHolds (item) {
-      // console.log(item)
+      console.log(item)
       const body = {
         iditemhold: item.iditemhold,
         idproducto: item.idproducto,
+        intipoproducto: item.intipoproducto,
         cantidad: item.cantidad
       }
       // console.log(body)
@@ -882,7 +886,7 @@ export default defineComponent({
       })
     },
     async additemholds (item) {
-      // console.log(item)
+      console.log(item)
       // console.log(this.holds)
       const descuento = this.descuento // DESCUENTO CERO POR DEFECTO
       let resp = false
@@ -901,6 +905,7 @@ export default defineComponent({
           tasa: item.tasa,
           total: monto,
           idunidad: item.idunidad,
+          intipoproducto: item.intipoproducto,
           descuento
         }
         // console.log(body)
@@ -918,6 +923,7 @@ export default defineComponent({
             obj.producto = item.producto
             obj.categoria = item.categoria
             obj.descripcion = item.descripcion
+            obj.intipoproducto = item.intipoproducto
             obj.descuento = descuento
 
             this.subtotal = (Number(this.subtotal) + (obj.precio * obj.cantidad)).toFixed(2)
@@ -928,6 +934,7 @@ export default defineComponent({
           } else {
             this.buscaritem = false
             this.slide = 2
+            Notify.create(response.data.resp.toUpperCase())
           }
         }).catch(error => {
           Notify.create('Problemas al crear itemhold de venta ' + error)
@@ -977,6 +984,7 @@ export default defineComponent({
           obj.inventario = Number(datos[i].inventario1)
           obj.costo = datos[i].costo
           obj.tasa = datos[i].tasa
+          obj.intipoproducto = datos[i].intipoproducto
           this.rowsproductos.push(obj)
         }
         this.rowsproductosfiltre = this.rowsproductos
@@ -1265,7 +1273,7 @@ export default defineComponent({
               $this.crearCliente()
             }
           }
-          if (event.key === 'F5') {
+          if (event.key === 'F6') {
             if ($this.holds.length <= 0) {
               Notify.create('NO TIENE VENTA ')
             } else {
