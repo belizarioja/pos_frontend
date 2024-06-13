@@ -1,8 +1,8 @@
 {
   "name": "com.puntodeventa.app",
-  "displayName": "SMART",
+  "displayName": "Smart ProSales",
   "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "description": "Apliación web para pequeños emisores de la emrpesa Smart Factura Digital",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

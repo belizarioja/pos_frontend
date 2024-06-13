@@ -1,22 +1,31 @@
 <template>
-  <q-page class="bg-white row">
+  <q-page class="row">
     <div class="col">
-      <div class="botones row" style="background: #ededed;">
-        <q-btn color="secondary" icon="add_circle" @click="buscaritem = true" label="Agregar categoria" style="margin: 10px;" />
+      <div class="botones row fondo-gris  shadow-up-9">
+
+        <h6 class="p-4">Categorías</h6>
+
       </div>
+      <div class="botones ">
+        <q-btn no-caps unelevated dense class="gradient-btn " icon-right="add_circle" @click="buscaritem = true"
+          label="Agregar categoria" style="margin: 10px;" />
+      </div>
+
       <div class="listarcategorias row">
+
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
         <div v-else class="listarcategoriasconitem col">
           <div class="row justify-center">
-            <q-card v-for="item in rows" :key="item" class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11">
+            <q-card v-for="item in rows" :key="item"
+              class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11  custom-shadow custom-border-radius">
               <q-item horizontal>
                 <q-item-section>
-                  <q-item-label>{{item.categoria}}</q-item-label>
+                  <q-item-label class="color-texto"><b>{{ item.categoria }}</b></q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <div style="display: flex;">
-                    <q-btn flat round color="red" icon="delete" />
-                    <q-btn flat round color="blue" icon="edit" />
+                    <q-btn flat round icon="delete" />
+                    <q-btn flat round icon="edit" />
                   </div>
                 </q-item-section>
               </q-item>
@@ -24,13 +33,13 @@
               <q-item horizontal>
                 <q-item-section avatar style="padding-right: 15px;align-items: center;">
                   <q-avatar text-color="white" :style="'background: ' + colorLetra(item.categoria)">
-                    {{primeraletra(item.categoria)}}
+                    {{ primeraletra(item.categoria) }}
                   </q-avatar>
                 </q-item-section>
 
                 <q-item-section class="tarjeticainside">
                   <div style="display: flex;">
-                    {{item.descripcion}}
+                    {{ item.descripcion }}
                   </div>
                 </q-item-section>
               </q-item>
@@ -54,12 +63,7 @@
         <q-separator />
 
         <q-card-section>
-          <q-input
-          v-model="descripcion"
-          label="Descripción de categoría"
-          filled
-          type="textarea"
-        />
+          <q-input v-model="descripcion" label="Descripción de categoría" filled type="textarea" />
         </q-card-section>
 
         <q-separator />
@@ -81,7 +85,7 @@ const ENDPOINT_PATH_V2 = process.env.VUE_APP_ENDPOINT
 
 export default defineComponent({
   name: 'IndexPage',
-  setup () {
+  setup() {
     return {
       rows: ref([]),
       slide: ref(2),
@@ -91,7 +95,7 @@ export default defineComponent({
     }
   },
   methods: {
-    listar () {
+    listar() {
       this.btndisable = false
       axios.get(ENDPOINT_PATH_V2 + 'categoria/' + sessionStorage.getItem('co_empresa')).then(async response => {
         console.log(response.data)
@@ -109,7 +113,7 @@ export default defineComponent({
         Notify.create('Problemas al listar Categorias ' + error)
       })
     },
-    crear () {
+    crear() {
       if (this.categoria.length === 0) {
         return
       }
@@ -130,15 +134,15 @@ export default defineComponent({
         this.listar()
       })
     },
-    primeraletra (item) {
+    primeraletra(item) {
       return item[0]
     },
-    colorLetra (item) {
+    colorLetra(item) {
       const asciicode = item[0].charCodeAt(0)
       return '#' + asciicode + '0'
     }
   },
-  mounted () {
+  mounted() {
     console.log('Modo producción')
     this.listar()
   }
@@ -147,42 +151,49 @@ export default defineComponent({
 
 <style>
 .totales {
-    background: #ededed;
-    height: 150px;
-    width: 100%;
+  background: #ededed;
+  height: 150px;
+  width: 100%;
 }
+
 .botones {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
+
 .listarcategorias {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
+
 .carritofondo {
   font-size: 170px;
   color: white;
   margin-top: 114px;
 }
+
 .itemtotal {
-    font-size: 18px;
-    color: #26a69a;
-    font-weight: bolder;
+  font-size: 18px;
+  color: #26a69a;
+  font-weight: bolder;
 }
+
 .listarcategoriasconitem {
   height: 85vh;
-  background: rgb(187, 193, 194);
   overflow: auto;
 }
+
 .tarjetaitem {
   margin: 10px;
 }
+
 .inputCantidad {
   width: 50px;
   border-radius: 7px;
   border-color: lightblue;
 }
+
 .tarjeticainside {
   background: #ededed;
   padding: 10px;

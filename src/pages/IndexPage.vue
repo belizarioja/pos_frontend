@@ -1,25 +1,94 @@
 <template>
-  <q-page class="bg-coral">
-    <div class="col" style="">
+  <q-page>
+    <q-banner class=" fondo-gris shadow-up-9">
+
+      <div class="row" style="padding-left: 5%; padding-right: 5%;">
+        <div class="col"
+          style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
+          <img src="img/logo-prosales.png" style="width: 70%; height: auto">
+        </div>
+        <div class="col">
+          <span class="letra-pequenia">Cliente: </span><br>
+          <span class="negrita">{{ nombrecliente.length > 0 ? nombrecliente : 'S/INF' }}</span> <br>
+          <span class="letra-pequenia">{{ documentoclienteventa }}</span>
+
+        </div>
+        <div class="col bd-left">
+          <span class="letra-pequenia">Fecha de venta: </span><br>
+          <span class="negrita">{{ nombrecliente.length > 0 ? fechaholds :
+            fechahoy }}</span>
+          <br>
+          <span class="letra-pequenia">Tasa del día <b>(BCV)</b>: </span><br>
+          <q-chip dense color="green-2" text-color="green-9">🇻🇪 Bs.{{ tasausd || '0.00' }}</q-chip>
+        </div>
+        <div class="col bd-left">
+          <span class="letra-pequenia">Subtotal: </span><br>
+          <span class="letra-pequenia">Impuesto: </span><br>
+          <span class="letra-pequenia">Descuento: </span><br>
+          <q-chip dense color="green-2" text-color="green-9">$ {{ totalusd }}</q-chip>
+        </div>
+        <div class="col bd-left">
+          <span class="letra-pequenia">Bs. {{ subtotal }}</span><br>
+          <span class="letra-pequenia">Bs. {{ impuesto }}</span><br>
+          <span class="letra-pequenia">Bs. {{ descuento }}</span><br>
+          <q-chip dense class="color-degradado">Bs. {{ total }}</q-chip>
+        </div>
+        <div class="col bd-left"
+          style="   display: flex; flex-direction: column; justify-content: center; align-items: flex-end;">
+          <q-btn class="boton-banner" outline no-caps dense color="accent" icon="cancel_presentation"
+            @click="abrirBuscarFactura" label="Anular documento" style="font-size: 12px;" /> <br>
+          <q-btn class="boton-banner" outline no-caps dense color="accent" icon="settings_backup_restore"
+            @click="abrirBuscarFactura" label="Devoluciones" style="font-size: 12px;" :disable="true" />
+        </div>
+      </div>
+
+    </q-banner>
+    <div class="row botones text-center">
+      <div class="col-2">
+        <q-btn no-caps dense unelevated color="warning" icon-right="add" @click="abrirBuscarItem"
+          label="Agregar item (F2)" style="font-size: 12px;" />
+      </div>
+      <div class="col-2">
+        <q-btn outline no-caps dense unelevated color="warning" icon-right="person" @click="abrirBuscarCliente"
+          label="Cliente (F3)" style="font-size: 12px;" />
+      </div>
+      <div class="col-4">
+
+      </div>
+      <div class="col-2">
+        <q-btn outline no-caps dense unelevated color="warning" icon-right="close" @click="openDeleteHolds"
+          label="Cancelar" style="font-size: 12px;" :disable="holds.length <= 0" />
+      </div>
+      <div class="col-2">
+        <q-btn no-caps dense unelevated color="warning" icon-right="paid" @click="abrirRealizarVenta"
+          label="Realizar venta (F6)" style="font-size: 12px;" :disable="holds.length <= 0" />
+
+      </div>
+
+    </div>
+    <div class="col">
       <div class="row">
-        <div class="totales  col-md-6 col-sm-12 col-xs-12">
+        <!-- <div class="totales  col-md-6 col-sm-12 col-xs-12">
           <q-card class="my-card" bordered style="margin: 10px;">
             <q-card-section style="padding: 7px 16px;">
-              <div style="width: 100%; background: #ddd; border-radius: 7px; display: flex; justify-content: space-between; padding: 3px 10px; font-size: 11px;">
+              <div
+                style="width: 100%; background: #ddd; border-radius: 7px; display: flex; justify-content: space-between; padding: 3px 10px; font-size: 11px;">
                 <span style="color: #000213;">Cliente:
-                  <span style="color: blue; margin-left: 5PX;">{{nombrecliente.length > 0 ? nombrecliente + ' (' + documentoclienteventa + ')' : 'S/INF'}}</span>
+                  <span style="color: blue; margin-left: 5PX;">{{ nombrecliente.length > 0 ? nombrecliente + ' (' +
+                    documentoclienteventa + ')' : 'S/INF' }}</span>
                 </span>
-               <span style="color: #000213;">Fecha:
-                  <span style="color: blue; margin-left: 5PX;">{{nombrecliente.length > 0 ? fechaholds : fechahoy}}</span>
-               </span>
+                <span style="color: #000213;">Fecha:
+                  <span style="color: blue; margin-left: 5PX;">{{ nombrecliente.length > 0 ? fechaholds :
+                    fechahoy }}</span>
+                </span>
               </div>
             </q-card-section>
             <q-separator />
             <q-card-section horizontal>
               <q-card-section class="column" style="padding: 7px;font-size: 12px;align-items: center;">
-                <img src="logo_bcv.png" style="width: 60px;"/>
-                <q-badge color="secondary" style="margin-top: 5px;">
-                  Bs. {{ tasausd || '0.00'}}
+                <img src="logo_bcv.png" style="width: 60px;" />
+                <q-badge color="primary" style="margin-top: 5px;">
+                  Bs. {{ tasausd || '0.00' }}
                 </q-badge>
               </q-card-section>
               <q-separator vertical />
@@ -27,100 +96,126 @@
                 <span style="color: #757575;">Subtotal:</span>
                 <span style="color: #757575;">Impuesto:</span>
                 <span style="color: #757575;">Descuento:</span>
-                <span class="itemtotal">$ {{totalusd}}</span>
+                <span class="itemtotal">$ {{ totalusd }}</span>
               </q-card-section>
 
               <q-separator vertical />
 
               <q-card-section style="display: grid;padding: 7px 16px;font-size: 12px;">
-                <span>Bs. {{subtotal}}</span>
-                <span>Bs. {{impuesto}}</span>
-                <span>Bs. {{descuento}}</span>
-                <span class="itemtotal">Bs. {{total}}</span>
+                <span>Bs. {{ subtotal }}</span>
+                <span>Bs. {{ impuesto }}</span>
+                <span>Bs. {{ descuento }}</span>
+                <span class="itemtotal">Bs. {{ total }}</span>
               </q-card-section>
-              <!-- <q-separator vertical />
+            <q-separator vertical />
 
               <q-card-section style="display: grid;padding: 7px 16px;font-size: 12px; color:white;">
                 <span>$ {{subtotalusd}}</span>
                 <span>$ {{impuestousd}}</span>
                 <span>$ {{descuentousd}}</span>
-              </q-card-section> -->
+              </q-card-section>
             </q-card-section>
           </q-card>
-        </div>
-        <div class="col-md-6 col-sm-12 col-xs-12" style="display: -webkit-box; align-items: center;">
+        </div> -->
+        <!-- <div class="col-md-6 col-sm-12 col-xs-12" style="display: -webkit-box; align-items: center;">
           <div class="botones row">
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="primary" icon="zoom_in" @click="abrirBuscarItem" label="Item (F2)" style="font-size: 12px;"/>
+              <q-btn color="primary" icon="zoom_in" @click="abrirBuscarItem" label="Item (F2)"
+                style="font-size: 12px;" />
             </div>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="secondary" icon-right="paid" @click="abrirRealizarVenta" label="Vender (F6)" style="font-size: 12px;" :disable="holds.length <= 0"/>
+              <q-btn color="secondary" icon-right="paid" @click="abrirRealizarVenta" label="Vender (F6)"
+                style="font-size: 12px;" :disable="holds.length <= 0" />
             </div>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="secondary" icon="cancel" @click="openDeleteHolds" label="Cancelar" style="font-size: 12px;" :disable="holds.length <= 0"/>
+              <q-btn color="secondary" icon="cancel" @click="openDeleteHolds" label="Cancelar" style="font-size: 12px;"
+                :disable="holds.length <= 0" />
             </div>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="primary" icon-right="person_add_alt" @click="abrirBuscarCliente" label="Cliente (F3)" style="font-size: 12px;"/>
+              <q-btn color="primary" icon-right="person_add_alt" @click="abrirBuscarCliente" label="Cliente (F3)"
+                style="font-size: 12px;" />
             </div>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="primary" icon="cancel_presentation" @click="abrirBuscarFactura" label="Anular" style="font-size: 12px;"/>
+              <q-btn color="primary" icon="cancel_presentation" @click="abrirBuscarFactura" label="Anular"
+                style="font-size: 12px;" />
             </div>
-            <!-- <q-btn class="col-6" color="accent" icon="playlist_remove" @click="abrirBuscarFactura" label="Nota de Crédito" style="font-size: 12px;" :disable="holds.length <= 0"/>
-            <q-btn class="col-6" color="info" icon="playlist_add" @click="abrirBuscarFactura" label="Nota de Dédito" style="font-size: 12px;" :disable="holds.length <= 0"/> -->
+            <q-btn class="col-6" color="accent" icon="playlist_remove" @click="abrirBuscarFactura" label="Nota de Crédito" style="font-size: 12px;" :disable="holds.length <= 0"/>
+            <q-btn class="col-6" color="info" icon="playlist_add" @click="abrirBuscarFactura" label="Nota de Dédito" style="font-size: 12px;" :disable="holds.length <= 0"/>
             <div class="col-6 contenedorBtn" style="margin: 5px,">
-              <q-btn color="secondary" icon-right="assignment_return" @click="abrirBuscarFactura" label="Devoluciones" style="font-size: 12px;" :disable="true"/>
+              <q-btn color="secondary" icon-right="assignment_return" @click="abrirBuscarFactura" label="Devoluciones"
+                style="font-size: 12px;" :disable="true" />
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="puntodeventa row">
-        <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
+        <q-img v-if="slide === 1" src="img/sin-productos.png" style=" width: 35% ; height: auto;" fit="contain" />
         <div v-else class="puntodeventaconitem col">
           <div class="row justify-center">
-            <q-card v-for="item in holds" :key="item" class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11" style="height: fit-content;">
-              <q-item horizontal>
-                <q-item-section>
-                  <q-item-label>{{item.producto}}</q-item-label>
-                  <q-item-label caption>{{item.categoria}}</q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-btn flat round color="red" icon="delete" @click="deleteItemHolds(item)" />
-                </q-item-section>
-              </q-item>
+            <q-card v-for="item in holds" :key="item"
+              class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11  custom-shadow custom-border-radius"
+              style="height: fit-content;">
               <q-item horizontal>
                 <q-item-section avatar style="padding-right: 15px;align-items: center;">
                   <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
-                    {{primeraletra(item.producto)}}
+                    {{ primeraletra(item.producto) }}
                   </q-avatar>
-                  <q-badge color="blue" style="margin-top: 5px;">
-                    Bs {{item.precio}}
-                  </q-badge>
+
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label><span class="color-texto"><b>{{ item.producto }}</b></span></q-item-label>
+                  <q-item-label caption>{{ item.categoria }}</q-item-label>
                 </q-item-section>
 
+                <q-item-section side>
+                  <q-btn flat round icon="close" @click="deleteItemHolds(item)" />
+                </q-item-section>
+              </q-item>
+
+              <q-item horizontal>
                 <q-item-section class="tarjeticainside">
-                  <div style="display: flex;">
+                  <div><span class="color-texto">Precio unitario: <b>Bs {{ item.precio }}</b> </span></div>
+                  <div><span class="color-texto">🏛️ Imp %: <b>{{ item.tasa }}</b></span></div>
+                  <div class="row">
+                    <div class="col">
+                      <div :id="'monto' + item.idproducto" class="precio"><span>Bs. {{
+                        item.total }}</span></div>
+                    </div>
+                    <div class="col">
+                      <div style="display: flex; align-items: center; font-size: 11px; justify-content: center;">
+                        <div class="text-center" style="margin-right: 10px;">Cantidad</div>
+                        <input class="inputCantidad" :id="'cantidad' + item.idproducto" :value="item.cantidad"
+                          @input="calcularMonto(item)" style="margin-right: 10px;" />
+
+                        <q-btn flat round unelevated class="btncantidad" icon="remove" color="grey-7"
+                          @click="actualizarCantidad(item, 2)" />
+                        <q-btn flat round unelevated class="btncantidad" color="light-green-8" icon="add"
+                          @click="actualizarCantidad(item, 1)" style="margin-right: 5px;" />
+                      </div>
+
+                    </div>
+                  </div>
+                  <!-- <div style="display: flex;">
                     <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                       <div class="text-center">Cantidad</div>
-                      <input
-                        class="inputCantidad"
-                        :id="'cantidad' + item.idproducto"
-                        :value="item.cantidad"
-                        @input="calcularMonto(item)"
-                      />
+                      <input class="inputCantidad" :id="'cantidad' + item.idproducto" :value="item.cantidad"
+                        @input="calcularMonto(item)" />
                     </div>
                     <div style="display: grid;width: 25%;justify-content: center;">
-                      <q-btn class="btncantidad"  color="blue" icon-right="add_circle" @click="actualizarCantidad(item, 1)" style="margin-bottom: 7px;"/>
-                      <q-btn class="btncantidad"  color="red" icon="remove_circle" @click="actualizarCantidad(item, 2)"/>
+                      <q-btn class="btncantidad" color="blue" icon-right="add_circle"
+                        @click="actualizarCantidad(item, 1)" style="margin-bottom: 7px;" />
+                      <q-btn class="btncantidad" color="red" icon="remove_circle"
+                        @click="actualizarCantidad(item, 2)" />
                     </div>
                     <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                       <div class="text-center">%Imp.</div>
-                      <div class="text-secondary">{{item.tasa}}</div>
+                      <div class="text-secondary">{{ item.tasa }}</div>
                     </div>
                     <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                       <div class="text-center">Monto</div>
-                      <div :id="'monto' + item.idproducto" class="text-secondary text-center">Bs. {{item.total}}</div>
+                      <div :id="'monto' + item.idproducto" class="text-secondary text-center">Bs. {{ item.total }}</div>
                     </div>
-                  </div>
+                  </div> -->
                 </q-item-section>
               </q-item>
             </q-card>
@@ -129,11 +224,12 @@
       </div>
     </div>
     <!-- BUSCAR ITEMS DE PRODUCTOS -->
-    <q-dialog v-model="buscaritem" position="top">
-      <q-card style="background: #ddd; width: 350px;">
+    <q-dialog v-model="buscaritem">
+      <q-card class="q-pa-lg custom-shadow custom-border-radius" style=" width: 400px;">
         <q-card-section style="padding: 10px 15px 7px;">
           <div class="">
-            <q-input color="white" bg-color="primary"  rounded standout bottom-slots v-model="textitem" label="Nombre o Sku de producto" counter autofocus>
+            <q-input color="blue-grey-3" outlined standout bottom-slots v-model="textitem"
+              label="Nombre o Sku de producto" counter autofocus>
               <template v-slot:prepend>
                 <q-icon name="search" />
               </template>
@@ -151,21 +247,25 @@
         <q-separator />
 
         <q-card-section v-if="buscadoproducto" style="max-height: 64vh" class="scroll">
-          <q-card v-for="item in rowsproductosfiltre" :key="item.id" class="my-card tarjetaitem">
+          <q-card v-for="item in rowsproductosfiltre" :key="item.id" class=" custom-shadow custom-border-radius"
+            style="margin:10px">
             <q-item horizontal>
               <q-item-section>
-                <q-item-label>{{item.producto}}</q-item-label>
+                <q-item-label>{{ item.producto }}</q-item-label>
                 <q-item-label>
-                  <q-badge :color="item.intipoproducto === '1' ? 'green' : item.intipoproducto === '2' ? 'orange' : 'accent'" style="margin-top: 5px;margin-right: 5px;">
-                      {{item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' : 'Servicio'}}
+                  <q-badge
+                    :color="item.intipoproducto === '1' ? 'light-green-2' : item.intipoproducto === '2' ? 'deep-orange-2' : 'orange-2'"
+                    style="margin-top: 5px;margin-right: 5px; border-radius: 10%; color:#404d52">
+                    {{ item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' : 'Servicio'
+                    }}
                   </q-badge>
-                  SKU {{item.sku}}
+                  SKU {{ item.sku }}
                 </q-item-label>
-                <q-item-label caption>{{item.categoria}}</q-item-label>
+                <q-item-label caption>{{ item.categoria }}</q-item-label>
               </q-item-section>
               <q-item-section side>
                 <div style="display: flex;">
-                  <q-btn flat round color="blue" icon="add_shopping_cart" @click="additemholds(item)" />
+                  <q-btn flat round color="primary" icon="add_shopping_cart" @click="additemholds(item)" />
                 </div>
               </q-item-section>
             </q-item>
@@ -173,25 +273,25 @@
             <q-item horizontal>
               <q-item-section avatar style="padding-right: 15px;align-items: center;">
                 <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
-                  {{primeraletra(item.producto)}}
+                  {{ primeraletra(item.producto) }}
                 </q-avatar>
-                <q-badge color="blue" style="margin-top: 5px;">
-                  Bs. {{item.precio}}
+                <q-badge color="dark" style="margin-top: 5px;">
+                  Bs. {{ item.precio }}
                 </q-badge>
               </q-item-section>
 
               <q-item-section class="tarjeticainside">
                 <div style="display: flex;">
-                  {{item.descripcion}}
+                  {{ item.descripcion }}
                 </div>
                 <div style="display: flex;">
                   <div style="display: grid;width: 48%;font-size: 11px; justify-content: center;">
-                    <div class="text-center">Unidad</div>
-                    <div class="text-secondary">{{item.unidad}}</div>
+                    <div class="text-left">Unidad</div>
+                    <div class="text-primary">{{ item.unidad }}</div>
                   </div>
                   <div style="display: grid;width: 48%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Impuesto.</div>
-                    <div class="text-secondary">{{item.impuesto}}</div>
+                    <div class="text-primary">{{ item.impuesto }}</div>
                   </div>
                 </div>
               </q-item-section>
@@ -201,77 +301,87 @@
 
         <q-separator />
 
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
+        <q-card-actions align="center">
+          <q-btn outline no-caps icon-right="close" label="Cancelar" color="warning" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <!-- BUSCAR Y AGREGAR CLIENTES A LA VENTA -->
 
-    <q-dialog v-model="modalcliente" position="top">
-      <q-card style="max-height: 87vh;">
-        <q-card-section>
-          <div class="text-h6">Buscar cliente</div>
+    <q-dialog v-model="modalcliente">
+      <q-card class="q-pa-lg custom-shadow custom-border-radius">
+        <q-card-section class="text-center">
+          <h6>Buscar cliente</h6>
         </q-card-section>
         <q-separator />
-        <q-card-section style="padding: 0 15px;">
+        <q-card-section style="padding: 15px;">
           <div class="">
-            <q-select
-             filled
-             v-model="modeldocumento"
-             :options="optionsdocumento"
-             option-label="tipodocumento"
-             option-value="cod"
-             label="Seleccione tipo documento"
-             dense
-            />
+            <q-select outlined v-model="modeldocumento" :options="optionsdocumento" option-label="tipodocumento"
+              option-value="cod" label="Seleccione tipo documento">
+              <template v-slot:prepend>
+                <q-icon name="badge" />
+              </template>
+            </q-select>
 
           </div>
         </q-card-section>
-        <q-separator />
         <q-card-section style="padding: 10px 15px;">
           <div class="row">
-            <q-input
-             class="col-10"
-             filled
-             v-model="documento"
-             label="Documento"
-             stack-label
-             autofocus
-             v-on:keyup.enter="buscarCliente"
-             />
-            <q-btn class="col-2" icon="search" color="secondary" @click="buscarCliente" />
+            <q-input class="col-10" outlined v-model="documento" label="Documento" stack-label autofocus
+              v-on:keyup.enter="buscarCliente">
+              <template v-slot:prepend>
+                <q-icon name="badge" />
+              </template>
+            </q-input>
+            <q-btn class="col-2" icon="search" unelevated color="accent" @click="buscarCliente" />
           </div>
         </q-card-section>
         <div v-if="noencontrado" class="noencontrado">
-            CLIENTE NO ENCONTRADO
+          <p class="text-noencontrado">Lo sentimos, no existe un cliente con ese documento</p>
+
         </div>
         <div v-if="encontrado" class="encontrado">
-            CLIENTE ENCONTRADO
+          <p class="text-encontrado">Cliente encontrado</p>
         </div>
-        <q-separator v-if="clientebuscado"  />
-
-        <q-card-section v-if="clientebuscado" style="padding: 0 15px;" >
-          <q-input filled v-model="nombrecliente" label="Nombre cliente" stack-label  />
+        <q-separator v-if="clientebuscado" />
+        <q-card-section v-if="clientebuscado" style="padding: 15px;">
+          <q-input outlined v-model="nombrecliente" label="Nombre del cliente" stack-label>
+            <template v-slot:prepend>
+              <q-icon name="badge" />
+            </template>
+          </q-input>
         </q-card-section>
 
-        <q-separator v-if="clientebuscado" />
-        <q-card-section v-if="clientebuscado"  style="padding: 0 15px;">
-          <q-input filled v-model="correocliente" label="Email cliente" stack-label />
+        <q-card-section v-if="clientebuscado" style="padding:  15px;">
+          <q-input outlined v-model="correocliente" label="Email del cliente" stack-label>
+            <template v-slot:prepend>
+              <q-icon name="mail" />
+            </template>
+          </q-input>
         </q-card-section>
-        <q-separator v-if="clientebuscado" />
-        <q-card-section v-if="clientebuscado" style="padding: 0 15px;" >
-          <q-input filled v-model="telefonocliente" label="Teléfono cliente" stack-label />
+
+        <q-card-section v-if="clientebuscado" style="padding: 15px;">
+          <q-input outlined v-model="telefonocliente" label="Teléfono del cliente" stack-label>
+            <template v-slot:prepend>
+              <q-icon name="phone" />
+            </template>
+          </q-input>
         </q-card-section>
-        <q-separator v-if="clientebuscado" />
-        <q-card-section v-if="clientebuscado" style="padding: 0 15px;" >
-          <q-input filled v-model="direccioncliente" label="Dirección cliente" stack-label />
+
+        <q-card-section v-if="clientebuscado" style="padding: 15px;">
+          <q-input outlined v-model="direccioncliente" label="Dirección del cliente" stack-label>
+            <template v-slot:prepend>
+              <q-icon name="location_on" />
+            </template>
+          </q-input>
         </q-card-section>
         <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cancelar" color="negative" @click="limpiarCliente" v-close-popup />
-          <q-btn label="Aceptar (F4)" color="secondary" @click="crearCliente" :disable="dsbBtnCrearCliente" />
+        <q-card-actions align="center">
+          <q-btn outline no-caps label="Cancelar" icon-right="close" color="warning" @click="limpiarCliente"
+            v-close-popup />
+          <q-btn unelevated no-caps label="Aceptar (F4)" color="warning" icon-right="check" @click="crearCliente"
+            :disable="dsbBtnCrearCliente" />
         </q-card-actions>
         <q-card-actions align="center" style="color: #404d52;">
           Presione ESC para salir
@@ -279,41 +389,42 @@
 
       </q-card>
     </q-dialog>
+
     <!-- LIMPIAR HOLDS DE VENTA -->
     <q-dialog v-model="modaldeleteholds" persistent>
-      <q-card style="">
+      <q-card class="q-pa-lg custom-shadow custom-border-radius">
         <q-card-section style="display: flex; align-items: center;">
           <q-avatar color="primary" text-color="white">
-            <q-icon name="delete"/>
+            <q-icon name="delete" />
           </q-avatar>
-          <div class="text-h6" style="margin-left: 10px;">Eliminar Venta</div>
+          <div class="text-h6 color-texto" style="margin-left: 10px;"> ¿Desea eliminar esta venta?</div>
         </q-card-section>
-        <q-separator />
-        <q-card-section style="">
-          <div class="encontrado">
-              ¿Desea eliminar esta venta?
-          </div>
-        </q-card-section>
-        <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn label="Aceptar" color="secondary" @click="deleteHolds(1)" />
-        </q-card-actions>
 
+        <q-card-section>
+
+        </q-card-section>
+
+        <q-card-actions align="center">
+          <q-btn outline no-caps icon-right="close" label="Cancelar" color="warning" v-close-popup />
+          <q-btn unelevated no-caps label="Aceptar" color="warning" icon-right="check" @click="deleteHolds(1)" />
+        </q-card-actions>
+        <q-card-actions align="center" style="color: #404d52;">
+          Presione ESC para salir
+        </q-card-actions>
       </q-card>
     </q-dialog>
     <!-- MOSTRAR PREVIO DE VENTA -->
     <q-dialog v-model="modalrealizarventa" persistent>
-      <q-card style="">
+      <q-card class="q-pa-lg custom-shadow custom-border-radius">
         <q-card-section style="display: flex; align-items: center;">
           <q-avatar color="primary" text-color="white">
-            <q-icon name="shopping_cart_checkout"/>
+            <q-icon name="shopping_cart_checkout" />
           </q-avatar>
-          <div class="text-h6" style="margin-left: 10px;"> Realizar esta venta?</div>
+          <div class="text-h6 color-texto" style="margin-left: 10px;"> ¿Realizar esta venta?</div>
         </q-card-section>
         <q-separator />
         <q-card-section>
-          <table style="width: 100%;">
+          <table class="color-texto" style="width: 100%;">
             <tr>
               <td style="width: 30%;">Razón social:</td>
               <td style="font-weight: bold;">{{ nombrecliente }}</td>
@@ -327,7 +438,7 @@
               <td style="font-weight: bold;">{{ fechaholds }}</td>
             </tr>
           </table>
-          <table style="width: 100%;">
+          <table class="color-texto" style="width: 100%;">
             <tr style="font-weight: bold;">
               <td class="rayafactura rayaarriba">Producto</td>
               <td class="rayafactura rayaarriba">Precio</td>
@@ -336,11 +447,11 @@
               <td class="rayafactura rayaarriba">Total</td>
             </tr>
             <tr v-for="item in holds" :key="item">
-              <td style="width: 150px; font-style: italic;">{{item.producto}}</td>
-              <td style="text-align: right;">{{item.precio}}</td>
-              <td style="text-align: center;">{{item.cantidad}}</td>
-              <td style="text-align: center;">{{item.tasa}}%</td>
-              <td style="text-align: right;">{{item.total}}</td>
+              <td style="width: 150px; font-style: italic;">{{ item.producto }}</td>
+              <td style="text-align: right;">{{ item.precio }}</td>
+              <td style="text-align: center;">{{ item.cantidad }}</td>
+              <td style="text-align: center;">{{ item.tasa }}%</td>
+              <td style="text-align: right;">{{ item.total }}</td>
             </tr>
 
             <tr>
@@ -351,7 +462,7 @@
               <td class="rayafactura"></td>
             </tr>
           </table>
-          <table style="width: 100%;">
+          <table class="color-texto" style="width: 100%;">
             <tr class="letratotalesfactura">
               <td style="width: 50%;"></td>
               <td>Subtotal Bs.:</td>
@@ -372,12 +483,12 @@
               <td class="rayafactura">IGTF 3% Bs.:</td>
               <td class="rayafactura" style="text-align: right;">{{ igtf }}</td>
             </tr>
-            <tr class="letratotalesfactura"  style="font-weight: bold;">
+            <tr class="letratotalesfactura" style="font-weight: bold;">
               <td></td>
               <td>Total Bs.:</td>
               <td style="text-align: right;">{{ total }}</td>
             </tr>
-            <tr class="letratotalesfactura"  style="font-weight: bold;">
+            <tr class="letratotalesfactura" style="font-weight: bold;">
               <td></td>
               <td>Total $:</td>
               <td style="text-align: right;">{{ totalusd }}</td>
@@ -385,17 +496,19 @@
           </table>
         </q-card-section>
         <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn label="Aceptar" color="secondary" @click="realizarVenta" />
+        <q-card-actions align="center">
+          <q-btn outline no-caps icon-right="close" color="warning" label="Cancelar" v-close-popup />
+          <q-btn unelevated no-caps icon-right="check" color="warning" label="Aceptar" @click="realizarVenta" />
         </q-card-actions>
-
+        <q-card-actions align="center" style="color: #404d52;">
+          Presione ESC para salir
+        </q-card-actions>
       </q-card>
     </q-dialog>
     <!-- MOSTRAR DETALLE DE VENTA -->
     <q-dialog v-model="modaldetalleinvoice" persistent>
-      <q-card style="width: 320px;">
-        <div id="areaImprimir"  style="width: 100%;">
+      <q-card class="q-pa-lg custom-shadow custom-border-radius">
+        <div id="areaImprimir" style="width: 100%;">
           <q-card-section style="justify-content: center;">
             <div class="text-center letratotalesfactura " style=""> {{ empresa }} - {{ rif }}</div>
             <div class="text-center letratotalesfactura " style=""> {{ direccion }}</div>
@@ -438,11 +551,11 @@
                 <td class="rayafactura rayaarriba" style="text-align: right;">Total</td>
               </tr>
               <tr v-for="item in ventas" :key="item" style="font-size: 11px;">
-                <td style="width: 140px; font-style: italic;">{{item.producto}}</td>
-                <td style="text-align: right;">{{item.precio}}</td>
-                <td style="text-align: center;">{{item.cantidad}}</td>
-                <td style="text-align: center;">{{item.tasa}}%</td>
-                <td style="text-align: right;">{{item.subtotal}}</td>
+                <td style="width: 140px; font-style: italic;">{{ item.producto }}</td>
+                <td style="text-align: right;">{{ item.precio }}</td>
+                <td style="text-align: center;">{{ item.cantidad }}</td>
+                <td style="text-align: center;">{{ item.tasa }}%</td>
+                <td style="text-align: right;">{{ item.subtotal }}</td>
               </tr>
 
               <tr>
@@ -474,12 +587,12 @@
                 <td class="rayafactura">IGTF 3% Bs.:</td>
                 <td class="rayafactura" style="text-align: right;">{{ detalleventa.igtf }}</td>
               </tr>
-              <tr class="letratotalesfactura"  style="font-weight: bold;">
+              <tr class="letratotalesfactura" style="font-weight: bold;">
                 <td></td>
                 <td>Total Bs.:</td>
                 <td style="text-align: right;">{{ detalleventa.total }}</td>
               </tr>
-              <tr class="letratotalesfactura"  style="font-weight: bold;">
+              <tr class="letratotalesfactura" style="font-weight: bold;">
                 <td></td>
                 <td>Total $:</td>
                 <td style="text-align: right;">{{ detalleventa.totalusd }}</td>
@@ -489,124 +602,136 @@
         </div>
         <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
         <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
-          <q-btn label="Imprimir" color="secondary" @click="imprimir" />
+        <q-card-actions align="center">
+
+          <q-btn label="Cerrar" outline no-caps icon-right="close" color="warning" v-close-popup />
+          <q-btn unelevated no-caps label="Imprimir" color="warning" icon-right="check" @click="imprimir" />
+        </q-card-actions>
+        <q-card-actions align="center" style="color: #404d52;">
+          Presione ESC para salir
         </q-card-actions>
       </q-card>
     </q-dialog>
-  <!-- <anular-documento
+    <!-- <anular-documento
      v-bind:modal="modalanular"
     /> -->
     <!-- MOSTRAR ANULAR DOCUMENTO -->
     <q-dialog v-model="modalanular" persistent>
-        <q-card style="width: 320px;">
-            <q-card-section style="display: flex; align-items: center;">
-                <q-avatar color="primary" text-color="white">
-                  <q-icon name="cancel_presentation"/>
-                </q-avatar>
-                <div class="text-h6" style="margin-left: 10px;"> Anular Documento</div>
-            </q-card-section>
-            <q-separator />
-            <q-card-section style="justify-content: center;">
-              <div class="row">
-                <q-input class="col-10"  filled v-model="numerointernoanular" label="Número Interno" stack-label autofocus />
-                <q-btn class="col-2" icon="search" color="secondary" @click="buscarFactura" />
-              </div>
-            </q-card-section>
-            <q-separator />
-            <q-card-section v-if="facturabuscado" style="justify-content: center;">
-              <div :class="detalleventaanular.estatus === '1' ? 'procesada' : 'anulada'" style="display: flex; justify-content: center; align-items: center;width: 100%;"> {{ detalleventaanular.estatus === '1' ? 'PROCESADA' : 'ANULADA' }}</div>
-              <div style="display: flex; align-items: left;width: 100%;">
-                <div class="numero" style="margin-left: 10px;"> {{ detalleventaanular.tipofactura }}</div>
-                <div class="numero" style="margin-left: 10px;"> {{ detalleventaanular.numerointerno }}</div>
-              </div>
-              <div style="display: flex; align-items: center;">
-                <div class="control" style="margin-left: 10px;"> N° de control:</div>
-                <div class="control" style="margin-left: 10px;"> {{ detalleventaanular.numerocontrol }}</div>
-              </div>
-              <q-separator style="margin: 10px 0px;" />
-              <table style="width: 100%;">
-                <tr class="letratotalesfactura">
-                  <td style="width: 30%;">Razón social:</td>
-                  <td style="font-weight: bold;">{{ detalleventaanular.nombrecliente }}</td>
-                </tr>
-                <tr class="letratotalesfactura">
-                  <td>{{ detalleventaanular.abrev }}</td>
-                  <td style="font-weight: bold;">{{ detalleventaanular.documento }}</td>
-                </tr>
-                <tr class="letratotalesfactura">
-                  <td>Fecha:</td>
-                  <td style="font-weight: bold;">{{ fechaDetalle(detalleventaanular.fecha) }}</td>
-                </tr>
-                <tr class="letratotalesfactura">
-                  <td>Cajero:</td>
-                  <td style="font-weight: bold;">{{ detalleventaanular.usuario }}</td>
-                </tr>
-              </table>
-              <table style="width: 100%;">
-                <tr style="font-weight: bold; font-size: 11px;">
-                  <td class="rayafactura rayaarriba">Producto</td>
-                  <td class="rayafactura rayaarriba">Precio</td>
-                  <td class="rayafactura rayaarriba">Cant.</td>
-                  <td class="rayafactura rayaarriba">Imp %</td>
-                  <td class="rayafactura rayaarriba">Total</td>
-                </tr>
-                <tr v-for="item in ventasanular" :key="item" style="font-size: 11px;">
-                  <td style="width: 140px; font-style: italic;">{{item.producto}}</td>
-                  <td>{{item.precio}}</td>
-                  <td>{{item.cantidad}}</td>
-                  <td>{{item.tasa}}%</td>
-                  <td style="text-align: right;">{{item.subtotal}}</td>
-                </tr>
+      <q-card class="q-pa-lg custom-shadow custom-border-radius">
+        <q-card-section style="display: flex; align-items: center;">
+          <q-avatar color="primary" text-color="white">
+            <q-icon name="cancel_presentation" />
+          </q-avatar>
+          <div class="text-h6" style="margin-left: 10px;"> Anular Documento</div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section style="justify-content: center;">
+          <div class="row">
+            <q-input class="col-10" color="blue-grey-3" outlined v-model="numerointernoanular" label="Número Interno"
+              stack-label autofocus />
+            <q-btn class="col-2" icon="search" unelevated color="accent" @click="buscarFactura" />
+          </div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section v-if="facturabuscado" style="justify-content: center;">
+          <div :class="detalleventaanular.estatus === '1' ? 'procesada' : 'anulada'"
+            style="display: flex; justify-content: center; align-items: center;width: 100%;"> {{
+              detalleventaanular.estatus
+                === '1' ? 'PROCESADA' : 'ANULADA' }}</div>
+          <div style="display: flex; align-items: left;width: 100%;">
+            <div class="numero" style="margin-left: 10px;"> {{ detalleventaanular.tipofactura }}</div>
+            <div class="numero" style="margin-left: 10px;"> {{ detalleventaanular.numerointerno }}</div>
+          </div>
+          <div style="display: flex; align-items: center;">
+            <div class="control" style="margin-left: 10px;"> N° de control:</div>
+            <div class="control" style="margin-left: 10px;"> {{ detalleventaanular.numerocontrol }}</div>
+          </div>
+          <q-separator style="margin: 10px 0px;" />
+          <table style="width: 100%;">
+            <tr class="letratotalesfactura">
+              <td style="width: 30%;">Razón social:</td>
+              <td style="font-weight: bold;">{{ detalleventaanular.nombrecliente }}</td>
+            </tr>
+            <tr class="letratotalesfactura">
+              <td>{{ detalleventaanular.abrev }}</td>
+              <td style="font-weight: bold;">{{ detalleventaanular.documento }}</td>
+            </tr>
+            <tr class="letratotalesfactura">
+              <td>Fecha:</td>
+              <td style="font-weight: bold;">{{ fechaDetalle(detalleventaanular.fecha) }}</td>
+            </tr>
+            <tr class="letratotalesfactura">
+              <td>Cajero:</td>
+              <td style="font-weight: bold;">{{ detalleventaanular.usuario }}</td>
+            </tr>
+          </table>
+          <table style="width: 100%;">
+            <tr style="font-weight: bold; font-size: 11px;">
+              <td class="rayafactura rayaarriba">Producto</td>
+              <td class="rayafactura rayaarriba">Precio</td>
+              <td class="rayafactura rayaarriba">Cant.</td>
+              <td class="rayafactura rayaarriba">Imp %</td>
+              <td class="rayafactura rayaarriba">Total</td>
+            </tr>
+            <tr v-for="item in ventasanular" :key="item" style="font-size: 11px;">
+              <td style="width: 140px; font-style: italic;">{{ item.producto }}</td>
+              <td>{{ item.precio }}</td>
+              <td>{{ item.cantidad }}</td>
+              <td>{{ item.tasa }}%</td>
+              <td style="text-align: right;">{{ item.subtotal }}</td>
+            </tr>
 
-                <tr>
-                  <td class="rayafactura"></td>
-                  <td class="rayafactura"></td>
-                  <td class="rayafactura"></td>
-                  <td class="rayafactura"></td>
-                  <td class="rayafactura"></td>
-                </tr>
-              </table>
-              <table style="width: 100%;">
-                <tr class="letratotalesfactura">
-                  <td style="width: 40%;"></td>
-                  <td>Subtotal Bs.:</td>
-                  <td style="text-align: right;">{{ detalleventaanular.subtotal }}</td>
-                </tr>
-                <tr class="letratotalesfactura">
-                  <td></td>
-                  <td>Impuestos Bs.:</td>
-                  <td style="text-align: right;">{{ detalleventaanular.impuesto }}</td>
-                </tr>
-                <tr class="letratotalesfactura">
-                  <td></td>
-                  <td>Descuentos Bs.:</td>
-                  <td style="text-align: right;">{{ detalleventaanular.descuentos }}</td>
-                </tr>
-                <tr class="letratotalesfactura">
-                  <td></td>
-                  <td class="rayafactura">IGTF 3% Bs.:</td>
-                  <td class="rayafactura" style="text-align: right;">{{ detalleventaanular.igtf }}</td>
-                </tr>
-                <tr class="letratotalesfactura" style="font-weight: bold;">
-                  <td></td>
-                  <td>Total Bs.:</td>
-                  <td style="text-align: right;">{{ detalleventaanular.total }}</td>
-                </tr>
-                <tr class="letratotalesfactura" style="font-weight: bold;">
-                  <td></td>
-                  <td>Total $:</td>
-                  <td style="text-align: right;">{{ detalleventaanular.totalusd }}</td>
-                </tr>
-              </table>
-            </q-card-section>
-            <q-separator />
-            <q-card-actions align="right">
-                <q-btn label="Cerrar" color="negative" v-close-popup />
-                <q-btn label="Aceptar" color="secondary" :disable="btnDisableAnular" @click="anularDocumento" />
-            </q-card-actions>
-        </q-card>
+            <tr>
+              <td class="rayafactura"></td>
+              <td class="rayafactura"></td>
+              <td class="rayafactura"></td>
+              <td class="rayafactura"></td>
+              <td class="rayafactura"></td>
+            </tr>
+          </table>
+          <table style="width: 100%;">
+            <tr class="letratotalesfactura">
+              <td style="width: 40%;"></td>
+              <td>Subtotal Bs.:</td>
+              <td style="text-align: right;">{{ detalleventaanular.subtotal }}</td>
+            </tr>
+            <tr class="letratotalesfactura">
+              <td></td>
+              <td>Impuestos Bs.:</td>
+              <td style="text-align: right;">{{ detalleventaanular.impuesto }}</td>
+            </tr>
+            <tr class="letratotalesfactura">
+              <td></td>
+              <td>Descuentos Bs.:</td>
+              <td style="text-align: right;">{{ detalleventaanular.descuentos }}</td>
+            </tr>
+            <tr class="letratotalesfactura">
+              <td></td>
+              <td class="rayafactura">IGTF 3% Bs.:</td>
+              <td class="rayafactura" style="text-align: right;">{{ detalleventaanular.igtf }}</td>
+            </tr>
+            <tr class="letratotalesfactura" style="font-weight: bold;">
+              <td></td>
+              <td>Total Bs.:</td>
+              <td style="text-align: right;">{{ detalleventaanular.total }}</td>
+            </tr>
+            <tr class="letratotalesfactura" style="font-weight: bold;">
+              <td></td>
+              <td>Total $:</td>
+              <td style="text-align: right;">{{ detalleventaanular.totalusd }}</td>
+            </tr>
+          </table>
+        </q-card-section>
+        <q-separator />
+        <q-card-actions align="center">
+          <q-btn label="Cerrar" outline no-caps icon-right="close" color="warning" v-close-popup />
+          <q-btn label="Aceptar" unelevated no-caps color="warning" icon-right="check" :disable="btnDisableAnular"
+            @click="anularDocumento" />
+        </q-card-actions>
+        <q-card-actions align="center" style="color: #404d52;">
+          Presione ESC para salir
+        </q-card-actions>
+      </q-card>
     </q-dialog>
   </q-page>
 </template>
@@ -626,7 +751,7 @@ export default defineComponent({
     VueShortkey
     // AnularDocumento: defineAsyncComponent(() => import('components/AnularDocumento'))
   }, */
-  setup () {
+  setup() {
     return {
       slide: ref(2),
       buscadoproducto: ref(true),
@@ -687,16 +812,16 @@ export default defineComponent({
     }
   },
   methods: {
-    imprimir () {
+    imprimir() {
       window.frames.print_frame.document.body.innerHTML = document.getElementById('areaImprimir').innerHTML
       window.frames.print_frame.window.focus()
       window.frames.print_frame.window.print()
       this.modaldetalleinvoice = false
     },
-    fechaDetalle (fecha) {
+    fechaDetalle(fecha) {
       return moment(fecha).format('DD/MM/YYYY HH:mm:ss')
     },
-    abrirBuscarFactura () {
+    abrirBuscarFactura() {
       this.detalleventaanular = {}
       this.numerointernoanular = ''
       this.idUpd = ''
@@ -704,7 +829,7 @@ export default defineComponent({
       this.btnDisableAnular = true
       this.modalanular = true
     },
-    async anularDocumento () {
+    async anularDocumento() {
       // const $this = this
       const body = {
         idventa: this.idUpd
@@ -715,7 +840,7 @@ export default defineComponent({
         Notify.create('Documento ANULADO con éxito')
       })
     },
-    async buscarFactura () {
+    async buscarFactura() {
       // const $this = this
       this.detalleventaanular = {}
       this.ventasanular = []
@@ -738,7 +863,7 @@ export default defineComponent({
         }
       })
     },
-    async abrirDetalleInvoive () {
+    async abrirDetalleInvoive() {
       const $this = this
       this.detalleventa = {}
       await axios.get(ENDPOINT_PATH_V2 + 'ventas/getventa/' + this.idventa).then(async response => {
@@ -762,7 +887,7 @@ export default defineComponent({
         console.log(this.detalleventa)
       })
     },
-    async actualizarCantidad (item, accion) {
+    async actualizarCantidad(item, accion) {
       console.log(item)
       const idcantidad = document.getElementById('cantidad' + item.idproducto)
       if (accion === 1) {
@@ -794,7 +919,7 @@ export default defineComponent({
       }
       // document.getElementById('monto' + item.cod).innerHTML = 'Bs.' + item.monto
     },
-    calcularMonto (item) {
+    calcularMonto(item) {
       const idcantidad = document.getElementById('cantidad' + item.idproducto)
       if (idcantidad) {
         const cantidad = idcantidad.value > 0 ? idcantidad.value : 1
@@ -809,7 +934,7 @@ export default defineComponent({
         document.getElementById('monto' + item.idproducto).innerHTML = 'Bs.' + item.monto.toFixed(2)
       }
     },
-    async updItemHolds (iditemhold, cantidad, total, idproducto, accion, intipoproducto) {
+    async updItemHolds(iditemhold, cantidad, total, idproducto, accion, intipoproducto) {
       const body = {
         idproducto,
         iditemhold,
@@ -836,10 +961,10 @@ export default defineComponent({
         return true
       }
     },
-    openDeleteHolds () {
+    openDeleteHolds() {
       this.modaldeleteholds = true
     },
-    deleteHolds (accion) {
+    deleteHolds(accion) {
       const body = {
         idhold: this.idhold,
         accion
@@ -853,7 +978,7 @@ export default defineComponent({
         Notify.create('Problemas al ELIMINAR Hold de venta ' + error)
       })
     },
-    deleteItemHolds (item) {
+    deleteItemHolds(item) {
       console.log(item)
       const body = {
         iditemhold: item.iditemhold,
@@ -867,7 +992,7 @@ export default defineComponent({
         message: '¿Desea eliminar este item?',
         html: true,
         ok: {
-          color: 'secondary',
+          color: 'primary',
           label: 'Sí'
         },
         cancel: {
@@ -885,7 +1010,7 @@ export default defineComponent({
         })
       })
     },
-    async additemholds (item) {
+    async additemholds(item) {
       console.log(item)
       // console.log(this.holds)
       const descuento = this.descuento // DESCUENTO CERO POR DEFECTO
@@ -963,7 +1088,7 @@ export default defineComponent({
         this.slide = 2
       }
     },
-    listarProductos () {
+    listarProductos() {
       const idcategoria = 0
       axios.get(ENDPOINT_PATH_V2 + 'productos/' + sessionStorage.getItem('co_empresa') + '/' + idcategoria).then(async response => {
         // console.log(response.data)
@@ -992,12 +1117,12 @@ export default defineComponent({
         Notify.create('Problemas al listar Categorias ' + error)
       })
     },
-    abrirRealizarVenta () {
+    abrirRealizarVenta() {
       this.listarHolds()
       // console.log(this.holds)
       this.modalrealizarventa = true
     },
-    realizarVenta () {
+    realizarVenta() {
       const $this = this
       const body = {
         idhold: this.idhold,
@@ -1020,7 +1145,7 @@ export default defineComponent({
       })
       this.modalrealizarventa = false
     },
-    abrirBuscarItem () {
+    abrirBuscarItem() {
       // console.log(this.nombrecliente.length)
       if (this.nombrecliente.length === 0) {
         console.log('Debe buscar cliente')
@@ -1030,7 +1155,7 @@ export default defineComponent({
         this.textitem = ''
       }
     },
-    abrirBuscarCliente () {
+    abrirBuscarCliente() {
       this.modalcliente = true
       this.documento = ''
       // this.modeldocumento = null
@@ -1038,7 +1163,7 @@ export default defineComponent({
       this.modeldocumento = this.optionsdocumento[0]
       this.limpiarCliente()
     },
-    limpiarCliente () {
+    limpiarCliente() {
       this.nombrecliente = ''
       this.telefonocliente = ''
       this.correocliente = ''
@@ -1048,7 +1173,7 @@ export default defineComponent({
       this.clientebuscado = false
       this.dsbBtnCrearCliente = true
     },
-    listarTiposDocumentos () {
+    listarTiposDocumentos() {
       axios.get(ENDPOINT_PATH_V2 + 'tipodocumento').then(async response => {
         const datos = response.data.data
         this.optionsdocumento = []
@@ -1063,7 +1188,7 @@ export default defineComponent({
         Notify.create('Problemas al listar Tipos ' + error)
       })
     },
-    buscarCliente () {
+    buscarCliente() {
       this.limpiarCliente()
       if (!this.modeldocumento) {
         Notify.create('Debe seleccionar TIPO DOCUMENTO')
@@ -1097,7 +1222,7 @@ export default defineComponent({
         Notify.create('Problemas al buscar cliente ' + error)
       })
     },
-    crearCliente () {
+    crearCliente() {
       // if (this.modeldocumento)
       // console.log(this.modeldocumento)
       if (!this.modeldocumento) {
@@ -1141,7 +1266,7 @@ export default defineComponent({
         this.crearHolds(this.idcliente, this.idusuario)
       }
     },
-    crearHolds (idcliente, idusuario) {
+    crearHolds(idcliente, idusuario) {
       const idtipofactura = 1 // TIPO FACTURA ES FACTURA POR DEFECTO
       const body = {
         idcliente,
@@ -1158,7 +1283,7 @@ export default defineComponent({
         Notify.create('Problemas al crear hold de venta ' + error)
       })
     },
-    async listarHolds () {
+    async listarHolds() {
       this.nombrecliente = ''
       await axios.get(ENDPOINT_PATH_V2 + 'ventas/gethols/' + sessionStorage.getItem('id_usuario')).then(async response => {
         // console.log(response.data)
@@ -1204,14 +1329,14 @@ export default defineComponent({
         Notify.create('Problemas al listar Holds ' + error)
       })
     },
-    primeraletra (item) {
+    primeraletra(item) {
       return item[0]
     },
-    colorLetra (item) {
+    colorLetra(item) {
       const asciicode = item[0].charCodeAt(0)
       return '#' + asciicode + '0'
     },
-    async cargar () {
+    async cargar() {
       const datos = await axios.get(ENDPOINT_PATH_V2 + 'configuracion/' + sessionStorage.getItem('co_empresa'))
         .catch(error => {
           Notify.create('Problemas al listar Configuracion ' + error)
@@ -1221,7 +1346,7 @@ export default defineComponent({
     }
   },
   watch: {
-    textitem (val) {
+    textitem(val) {
       console.log('textitem')
       console.log(val)
       this.buscadoproducto = false
@@ -1241,7 +1366,7 @@ export default defineComponent({
       console.log(this.rowsproductosfiltre)
     }
   },
-  async mounted () {
+  async mounted() {
     const datos = await this.cargar()
     this.tasausd = datos.tasabcv
     this.empresa = datos.empresa
@@ -1286,85 +1411,134 @@ export default defineComponent({
 })
 </script>
 
-<style>
-.encontrado {
-  text-align: center;
-  color: green;
-  font-weight: bolder;
+<style scoped>
+
+.custom-border-radius {
+  border-radius: 20px;
 }
-.noencontrado {
-  text-align: center;
-  color: red;
-  font-weight: bolder;
+
+.bd-left {
+  border-left: 1px solid rgba(211, 211, 211, 0.589);
+  padding-left: 5px;
 }
+
+.negrita {
+  font-weight: bold;
+  color: #5A5A5A;
+}
+
+.letra-pequenia {
+  font-size: 11px;
+  color: gray
+}
+
+.color-degradado {
+  background: linear-gradient(90deg, rgba(255, 179, 50, 0.20) 0%, rgba(33.82, 121.76, 202.94, 0.20) 50%, rgba(255, 0, 0, 0.20) 100%)
+}
+
+.text-encontrado {
+  color: #32651A;
+  background: rgba(90.58, 233.75, 96.30, 0.13);
+}
+
+.text-noencontrado {
+  color: #900101;
+  background: rgba(255, 9.56, 9.56, 0.13);
+}
+
 .btncantidad {
   font-size: 10px;
   width: 33px;
 }
+
 .totales {
-    background: #ededed;
-    width: 100%;
+
+  width: 100%;
 }
+
 .botones {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    padding: 5px;
+  padding: 2%;
+  padding-left: 5%;
+  padding-right: 5%;
 }
+
+.boton-banner {
+  padding: 5px
+}
+
+.precio {
+  color: #5A5A5A;
+  font-size: 25px;
+  font-weight: bold;
+}
+
 .puntodeventa {
-    height: 59vh;
-    background: rgb(187, 193, 194);
-    display: flex;
-    justify-content: center;
-    overflow: auto;
+  height: 59vh;
+  background: #FFFAEC;
+  display: flex;
+  justify-content: center;
+  overflow: auto;
 }
+
 .carritofondo {
   font-size: 170px;
   color: white;
   margin-top: 114px;
 }
+
 .itemtotal {
-    font-size: 18px;
-    color: #26a69a;
-    font-weight: bolder;
+  font-size: 18px;
+  color: #26a69a;
+  font-weight: bolder;
 }
+
 .puntodeventaconitem {
-    width: 95%;
-    overflow: auto;
+  width: 95%;
+  overflow: auto;
 }
+
 .tarjetaitem {
   margin: 3px;
 }
+
 .inputCantidad {
   width: 50px;
   text-align: center;
-  border-radius: 7px;
-  border-color: lightblue;
+  border-radius: 10%;
+  border-color: rgb(255, 255, 255);
 }
+
 .tarjeticainside {
   background: #ededed;
   padding: 10px;
   border-radius: 10px;
 }
+
 .rayafactura {
-    border-bottom: 1px dashed;
+  border-bottom: 1px dashed;
 }
+
 .rayaarriba {
-    border-top: 1px dashed;
+  border-top: 1px dashed;
 }
-.letratotalesfactura{
+
+.letratotalesfactura {
   font-size: 12px;
 }
-.procesada{
+
+.procesada {
   color: green;
   font-weight: bold;
 }
-.anulada{
+
+.anulada {
   color: red;
   font-weight: bold;
 }
+
 .contenedorBtn {
   padding: 3px;
   display: grid;
 }
+
 </style>

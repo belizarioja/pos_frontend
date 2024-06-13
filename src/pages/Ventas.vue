@@ -1,52 +1,47 @@
 <template>
-  <q-page class="bg-white row">
+  <q-page class=" row">
     <div class="col">
-      <div class="botones row" style="background: #ededed;">
-         <div class="text-h6">Reporte de Ventas</div>
+      <div class="botones row fondo-gris  shadow-up-9">
+
+        <h6 class="p-4">Reporte de Ventas</h6>
+
       </div>
+
       <div class="listarcategorias row">
         <div class="listarcategoriasconitem col">
           <div class="row justify-center">
-            <q-table
-              dense
-              :rows="rows"
-              title="Ventas"
-              :columns="cols"
-              row-key="num"
-              :pagination="pagination"
-              style="width: 95%; margin-top: 20px;"
-              :loading="loading"
-              :filter="filterTable"
-              no-data-label="No hay registros!"
-              >
-                <template v-slot:top-left>
-                  <q-input dense debounce="300" color="primary" v-model="filterTable" placeholder="Buscar">
-                    <template v-slot:append>
-                      <q-icon name="search" />
-                    </template>
-                  </q-input>
-                </template>
-                <template v-slot:top-right>
-                  <div style="display: inline;">
-                    <q-btn icon-right="filter_alt" class="q-ml-sm col-md-4 col-sm-3 col-xs-3" color="secondary" label="Filtrar" @click="drawerFilters = true" />
+            <q-table dense :rows="rows" title="Ventas" :columns="cols" row-key="num" :pagination="pagination"
+              style="width: 95%; margin-top: 20px;" :loading="loading" :filter="filterTable"
+              no-data-label="No hay registros!">
+              <template v-slot:top-left>
+                <q-input dense debounce="300" color="primary" v-model="filterTable" placeholder="Buscar">
+                  <template v-slot:append>
+                    <q-icon name="search" />
+                  </template>
+                </q-input>
+              </template>
+              <template v-slot:top-right>
+                <div style="display: inline;">
+                  <q-btn icon-right="filter_alt" class="q-ml-sm col-md-4 col-sm-3 col-xs-3" color="secondary"
+                    label="Filtrar" @click="drawerFilters = true" />
+                </div>
+              </template>
+              <template v-slot:body-cell-estatus="props">
+                <q-td :props="props">
+                  <div>
+                    <q-badge :color="props.row.estatus === '1' ? 'info' : 'negative'">
+                      {{ props.row.estatus === '1' ? 'Procesada' : 'Anulada' }}
+                    </q-badge>
                   </div>
-                </template>
-                <template v-slot:body-cell-estatus="props">
-                  <q-td :props="props">
-                    <div>
-                      <q-badge :color="props.row.estatus === '1' ? 'info' : 'negative'" >
-                        {{ props.row.estatus === '1' ? 'Procesada' : 'Anulada' }}
-                      </q-badge>
-                    </div>
-                  </q-td>
-                </template>
-                <template v-slot:body-cell-accion="props">
-                  <q-td :props="props">
-                    <div>
-                      <q-btn color="primary" icon="plagiarism" @click.stop="abrirDetalleInvoive(props.row)" dense/>
-                    </div>
-                  </q-td>
-                </template>
+                </q-td>
+              </template>
+              <template v-slot:body-cell-accion="props">
+                <q-td :props="props">
+                  <div>
+                    <q-btn color="primary" icon="plagiarism" @click.stop="abrirDetalleInvoive(props.row)" dense />
+                  </div>
+                </q-td>
+              </template>
             </q-table>
           </div>
         </div>
@@ -56,14 +51,15 @@
     <!-- MOSTRAR DETALLE DE VENTA -->
     <q-dialog v-model="modaldetalleinvoice" persistent>
       <q-card style="width: 320px;">
-        <div id="areaImprimir"  style="width: 100%;">
+        <div id="areaImprimir" style="width: 100%;">
           <q-card-section style="justify-content: center;">
             <div class="text-center letratotalesfactura " style=""> {{ empresa }} - {{ rif }}</div>
             <div class="text-center letratotalesfactura " style=""> {{ direccion }}</div>
             <div class="text-center letratotalesfactura " style=""> {{ telefono }}</div>
             <div class="text-center letratotalesfactura " style=""> {{ email }}</div>
             <q-separator style="margin: 10px 0px;" />
-            <div v-if="detalleventa.estatus === '2'" class="anulada" style="display: flex; justify-content: center; align-items: center;width: 100%;">ANULADA</div>
+            <div v-if="detalleventa.estatus === '2'" class="anulada"
+              style="display: flex; justify-content: center; align-items: center;width: 100%;">ANULADA</div>
             <div style="display: flex; align-items: left;width: 100%;">
               <div class="numero" style="margin-left: 10px;"> {{ detalleventa.tipofactura }}</div>
               <div class="numero" style="margin-left: 10px;"> {{ detalleventa.numerointerno }}</div>
@@ -100,11 +96,11 @@
                 <td class="rayafactura rayaarriba">Total</td>
               </tr>
               <tr v-for="item in ventas" :key="item" style="font-size: 11px;">
-                <td style="width: 140px; font-style: italic;">{{item.producto}}</td>
-                <td>{{item.precio}}</td>
-                <td>{{item.cantidad}}</td>
-                <td>{{item.tasa}}%</td>
-                <td style="text-align: right;">{{item.subtotal}}</td>
+                <td style="width: 140px; font-style: italic;">{{ item.producto }}</td>
+                <td>{{ item.precio }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.tasa }}%</td>
+                <td style="text-align: right;">{{ item.subtotal }}</td>
               </tr>
 
               <tr>
@@ -136,12 +132,12 @@
                 <td class="rayafactura">IGTF 3% Bs.:</td>
                 <td class="rayafactura" style="text-align: right;">{{ detalleventa.igtf }}</td>
               </tr>
-              <tr class="letratotalesfactura"  style="font-weight: bold;">
+              <tr class="letratotalesfactura" style="font-weight: bold;">
                 <td></td>
                 <td>Total Bs.:</td>
                 <td style="text-align: right;">{{ detalleventa.total }}</td>
               </tr>
-              <tr class="letratotalesfactura"  style="font-weight: bold;">
+              <tr class="letratotalesfactura" style="font-weight: bold;">
                 <td></td>
                 <td>Total $:</td>
                 <td style="text-align: right;">{{ detalleventa.totalusd }}</td>
@@ -169,7 +165,7 @@ const ENDPOINT_PATH_V2 = process.env.VUE_APP_ENDPOINT
 
 export default defineComponent({
   name: 'IndexPage',
-  setup () {
+  setup() {
     return {
       modaldetalleinvoice: ref(false),
       rows: ref([]),
@@ -206,13 +202,13 @@ export default defineComponent({
     }
   },
   methods: {
-    imprimir () {
+    imprimir() {
       window.frames.print_frame.document.body.innerHTML = document.getElementById('areaImprimir').innerHTML
       window.frames.print_frame.window.focus()
       window.frames.print_frame.window.print()
       this.modaldetalleinvoice = false
     },
-    async abrirDetalleInvoive (item) {
+    async abrirDetalleInvoive(item) {
       console.log(item)
       this.detalleventa = item
       await axios.get(ENDPOINT_PATH_V2 + 'ventas/getitemsventas/' + item.cod).then(async response => {
@@ -226,7 +222,7 @@ export default defineComponent({
       })
       this.modaldetalleinvoice = true
     },
-    listar () {
+    listar() {
       this.btndisable = false
       axios.get(ENDPOINT_PATH_V2 + 'ventas/getventas/' + sessionStorage.getItem('co_empresa')).then(async response => {
         console.log(response.data)
@@ -264,7 +260,7 @@ export default defineComponent({
         Notify.create('Problemas al listar Ventas ' + error)
       })
     },
-    async cargar () {
+    async cargar() {
       const resp = await axios.get(ENDPOINT_PATH_V2 + 'configuracion/' + sessionStorage.getItem('co_empresa'))
         .catch(error => {
           Notify.create('Problemas al listar Configuracion ' + error)
@@ -277,7 +273,7 @@ export default defineComponent({
       this.email = datos.email
     }
   },
-  mounted () {
+  mounted() {
     console.log('Listar ventas')
     this.cargar()
     this.listar()
@@ -287,63 +283,77 @@ export default defineComponent({
 
 <style>
 .totales {
-    background: #ededed;
-    height: 150px;
-    width: 100%;
+  background: #ededed;
+  height: 150px;
+  width: 100%;
 }
+
 .botones {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
+
 .listarcategorias {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
+
 .carritofondo {
   font-size: 170px;
   color: white;
   margin-top: 114px;
 }
+
 .itemtotal {
-    font-size: 18px;
-    color: #26a69a;
-    font-weight: bolder;
+  font-size: 18px;
+  color: #26a69a;
+  font-weight: bolder;
 }
+
 .listarcategoriasconitem {
-    height: 85vh;
-    background: rgb(187, 193, 194);
-    overflow: auto;
+  height: 85vh;
+
+  overflow: auto;
 }
+
 .tarjetaitem {
   margin: 10px;
 }
+
 .inputCantidad {
   width: 50px;
   border-radius: 7px;
   border-color: lightblue;
 }
+
 .tarjeticainside {
   background: #ededed;
   padding: 10px;
   border-radius: 10px;
 }
+
 .rayafactura {
-    border-bottom: 1px dashed;
+  border-bottom: 1px dashed;
 }
+
 .rayaarriba {
-    border-top: 1px dashed;
+  border-top: 1px dashed;
 }
-.letratotalesfactura{
+
+.letratotalesfactura {
   font-size: 12px;
 }
-.numero{
+
+.numero {
   font-size: 14px;
 }
-.control{
+
+.control {
   font-size: 12px;
 }
-.anulada{
+
+.anulada {
   font-size: 30px;
   color: red;
   font-weight: bold;

@@ -11,15 +11,19 @@
 // It's highly recommended to change the default colors
 // to match your app's branding.
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
-$primary   : #1383a5;
-$secondary : #404d52;
-$accent    : #9C27B0;
+$typography-font-family : "Raleway",
+sans-serif !default;
 
-$dark      : #1D1D1D;
-$dark-page : #121212;
+$primary : #ff8302;
+$secondary : #ffd26d;
+$accent : #313E4D;
 
-$positive  : #1b2df5;
-$negative  : #C10015;
-$info      : rgb(187, 193, 194);
-$warning   : #F2C037;
+$dark : #5A5A5A;
+$dark-page : #fffaec;
+
+$positive : #a1ffb7;
+$negative : #ffbfc7;
+$info : #c9e7ff;
+$warning : #FFB332;

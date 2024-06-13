@@ -1,26 +1,13 @@
 <template>
   <q-layout view="hHh Lpr lff" container style="height: 100vh" class="shadow-2">
-    <q-header>
+    <q-header class="bg-accent">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" color="primary" />
         <q-toolbar-title style="display: grid;">
-          <span class="rulusuario">{{ empresa }} </span>
-          <span class="bienvenido">{{ nombreusuario }} "{{rol}}"</span>
+          <span class="rulusuario"> {{ empresa }} </span>
+          <span class="bienvenido">{{ nombreusuario }} "{{ rol }}"</span>
         </q-toolbar-title>
-        <q-btn
-          flat
-          dense
-          icon="logout"
-          aria-label="Salir"
-          @click="salir"
-        />
+        <q-btn flat dense icon="logout" aria-label="Salir" @click="salir" color="primary" />
       </q-toolbar>
     </q-header>
     <!-- <q-drawer bordered overlay
@@ -43,60 +30,57 @@
         </q-list>
       </q-scroll-area>
     </q-drawer> -->
-    <q-drawer overlay bordered
-        v-model="leftDrawerOpen"
-        show-if-above
-        :width="120"
-        :breakpoint="600"
-      >
-        <q-scroll-area style="height: calc(100% - 30px); margin-top: 20px; border-right: 1px solid #ddd">
-          <q-list padding>
-            <q-item clickable v-ripple @click="puntodeventa">
-              <q-item-section>
-                <div class="text-secondary text-center"><q-icon color="secondary" name="point_of_sale"  size="50px"/></div>
-                <div class="text-secondary text-center" style="font-size: 12px;">Punto de venta</div>
-              </q-item-section>
-            </q-item>
-            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="categorias">
-              <q-item-section>
-                <div class="text-secondary text-center"><q-icon color="secondary" name="category"  size="50px"/></div>
-                <div class="text-secondary text-center" style="font-size: 12px;">Categorias</div>
-              </q-item-section>
-            </q-item>
-            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="productos">
-              <q-item-section>
-                <div class="text-secondary text-center"><q-icon color="secondary" name="inventory_2"  size="50px"/></div>
-                <div class="text-secondary text-center" style="font-size: 12px;">Productos</div>
-              </q-item-section>
-            </q-item>
-            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="configuracion">
-              <q-item-section>
-                <div class="text-secondary text-center"><q-icon color="secondary" name="settings"  size="50px"/></div>
-                <div class="text-secondary text-center" style="font-size: 12px;">Configuración</div>
-              </q-item-section>
-            </q-item>
-            <q-item v-if="corol === '1'" clickable v-ripple @click="empresas">
-              <q-item-section>
-                <div class="text-secondary text-center"><q-icon color="secondary" name="store"  size="50px"/></div>
-                <div class="text-secondary text-center" style="font-size: 12px;">Emisores</div>
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple @click="ventas">
-              <q-item-section>
-                <div class="text-secondary text-center"><q-icon color="secondary" name="view_list"  size="50px"/></div>
-                <div class="text-secondary text-center" style="font-size: 12px;">Ventas</div>
-              </q-item-section>
-            </q-item>
-            <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="usuarios">
-              <q-item-section>
-                <div class="text-secondary text-center"><q-icon color="secondary" name="people"  size="50px"/></div>
-                <div class="text-secondary text-center" style="font-size: 12px;">Usuarios</div>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-scroll-area>
-        <!-- <q-img class="absolute-top" src="logo_sit.jpg" style="height: 100px"></q-img> -->
-      </q-drawer>
+    <q-drawer overlay bordered v-model="leftDrawerOpen" show-if-above :width="120" :breakpoint="600">
+      <q-scroll-area style="height: calc(100% - 30px); margin-top: 20px; border-right: 1px solid #ddd">
+        <q-list padding>
+          <q-item clickable v-ripple @click="puntodeventa">
+            <q-item-section>
+              <div class="text-accent text-center"><q-icon color="accent" name="receipt_long" size="40px" />
+              </div>
+              <div class="text-accent text-center" style="font-size: 10px;">Punto de venta</div>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="categorias">
+            <q-item-section>
+              <div class="text-accent text-center"><q-icon color="accent" name="collections_bookmark" size="40px" />
+              </div>
+              <div class="text-accent text-center" style="font-size: 10px;">Categorias</div>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="productos">
+            <q-item-section>
+              <div class="text-accent text-center"><q-icon color="accent" name="inventory_2" size="40px" /></div>
+              <div class="text-accent text-center" style="font-size: 10px;">Productos</div>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="configuracion">
+            <q-item-section>
+              <div class="text-accent text-center"><q-icon color="accent" name="settings" size="40px" /></div>
+              <div class="text-accent text-center" style="font-size: 10px;">Configuración</div>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="corol === '1'" clickable v-ripple @click="empresas">
+            <q-item-section>
+              <div class="text-accent text-center"><q-icon color="accent" name="store" size="40px" /></div>
+              <div class="text-accent text-center" style="font-size: 10px;">Emisores</div>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple @click="ventas">
+            <q-item-section>
+              <div class="text-accent text-center"><q-icon color="accent" name="payments" size="40px" /></div>
+              <div class="text-accent text-center" style="font-size: 10px;">Ventas</div>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="corol === '1' || corol === '2'" clickable v-ripple @click="usuarios">
+            <q-item-section>
+              <div class="text-accent text-center"><q-icon color="accent" name="people" size="40px" /></div>
+              <div class="text-accent text-center" style="font-size: 10px;">Usuarios</div>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
+      <!-- <q-img class="absolute-top" src="logo_sit.jpg" style="height: 100px"></q-img> -->
+    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -112,7 +96,7 @@ const ENDPOINT_PATH_V2 = process.env.VUE_APP_ENDPOINT
 
 export default defineComponent({
   name: 'MainLayout',
-  setup () {
+  setup() {
     const leftDrawerOpen = ref(false)
     const saldoactual = ref(0.00)
     const nombreusuario = ref(sessionStorage.getItem('tx_nombre'))
@@ -127,14 +111,14 @@ export default defineComponent({
       saldoactual,
       nombreusuario,
       leftDrawerOpen,
-      toggleLeftDrawer () {
+      toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
   },
   methods: {
 
-    salir () {
+    salir() {
       this.$q.dialog({
         title: 'Confirmación!',
         message: '¿Está seguro que quieres cerrar sesión?',
@@ -157,28 +141,28 @@ export default defineComponent({
         this.$router.push('/')
       })
     },
-    usuarios () {
+    usuarios() {
       this.$router.push('/usuarios')
     },
-    empresas () {
+    empresas() {
       this.$router.push('/empresas')
     },
-    ventas () {
+    ventas() {
       this.$router.push('/ventas')
     },
-    puntodeventa () {
+    puntodeventa() {
       this.$router.push('/puntodeventa')
     },
-    categorias () {
+    categorias() {
       this.$router.push('/categorias')
     },
-    productos () {
+    productos() {
       this.$router.push('/productos')
     },
-    configuracion () {
+    configuracion() {
       this.$router.push('/configuracion')
     },
-    async cargar () {
+    async cargar() {
       const datos = await axios.get(ENDPOINT_PATH_V2 + 'configuracion/' + sessionStorage.getItem('co_empresa'))
         .catch(error => {
           Notify.create('Problemas al listar Configuracion ' + error)
@@ -194,8 +178,10 @@ export default defineComponent({
   font-size: 15px;
   /* font-weight: bolder; */
 }
+
 .rulusuario {
   font-size: 16px;
   font-weight: bolder;
+  text-transform: capitalize;
 }
 </style>

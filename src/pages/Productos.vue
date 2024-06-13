@@ -1,45 +1,59 @@
 <template>
-  <q-page class="bg-white">
+  <q-page>
     <div class="col">
-      <div class="botones row" style="background: #ededed;">
-        <q-input
-         color="white"
-         bg-color="primary"
-         rounded standout
-         v-model="textitem"
-         label="Nombre o Sku de producto"
-         style="margin: 5px; width: 310px;"
-         autofocus>
-          <template v-slot:prepend>
-            <q-icon name="search" />
-          </template>
-          <template v-slot:append>
-            <q-icon name="close" @click="textitem = ''" class="cursor-pointer" />
-          </template>
-        </q-input>
-        <q-btn color="secondary" icon="add_circle" @click="openCrear" label="Agregar producto" style="margin: 10px;" />
+      <div class="botones row fondo-gris  shadow-up-9">
+
+        <h6 class="p-4">Productos</h6>
+
       </div>
+      <div class="botones ">
+        <div class="row">
+          <div class="col">
+            <q-input color="blue-grey-3" bg-color="white" dense outlined v-model="textitem"
+              label="Nombre o Sku de producto" style="margin: 5px; width: 310px;" autofocus>
+              <template v-slot:prepend>
+                <q-icon name="search" />
+              </template>
+              <template v-slot:append>
+                <q-icon name="close" @click="textitem = ''" class="cursor-pointer" />
+              </template>
+            </q-input>
+          </div>
+          <div class="col" style="display: flex; justify-content: flex-end;">
+            <q-btn no-caps unelevated dense class="gradient-btn " icon="add_circle" @click="openCrear"
+              label="Agregar producto" style="margin: 10px;" />
+
+          </div>
+        </div>
+      </div>
+
       <div class="listarproductos row">
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
         <div v-else class="puntodeventaconitem col">
           <div v-if="buscadoproducto" class="row justify-center">
-            <q-card v-for="item in rowsproductosfiltre" :key="item" class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11 ">
+            <q-card v-for="item in rowsproductosfiltre" :key="item"
+              class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11 custom-shadow custom-border-radius">
               <q-item horizontal>
                 <q-item-section>
-                  <q-item-label>{{item.sku}} {{item.producto}}</q-item-label>
+                  <q-item-label>{{ item.sku }} {{ item.producto }}</q-item-label>
                   <q-item-label caption>
-                    <q-badge :color="item.intipoproducto === '1' ? 'green' : item.intipoproducto === '2' ? 'orange' : 'accent'" style="margin-top: 5px;margin-right: 5px;">
-                      {{item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' : 'Servicio'}}
+                    <q-badge
+                      :color="item.intipoproducto === '1' ? 'light-green-2' : item.intipoproducto === '2' ? 'deep-orange-2' : 'orange-2'"
+                      style="margin-top: 5px;margin-right: 5px; color:#404d52">
+                      {{ item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' :
+                        'Servicio' }}
                     </q-badge>
-                    {{item.categoria}}
+                    {{ item.categoria }}
                   </q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <div style="display: flex;">
-                    <q-btn dense v-if="item.intipoproducto === '2'" color="primary" icon="dashboard_customize" style="margin: 3px;" @click="openEditarCompuesto(item)" />
-                    <q-btn dense v-if="item.intipoproducto === '2'" color="primary" icon="inventory_2" style="margin: 3px;" @click="openAbrirCompuesto(item)" />
-                    <q-btn v-show="false" dense color="primary" icon="delete" style="margin: 3px;" />
-                    <q-btn dense color="primary" icon="edit" @click="openEditar(item)" style="margin: 3px;" />
+                    <q-btn flat round v-if="item.intipoproducto === '2'" icon="dashboard_customize" style="margin: 3px;"
+                      @click="openEditarCompuesto(item)" />
+                    <q-btn flat round v-if="item.intipoproducto === '2'" icon="inventory_2" style="margin: 3px;"
+                      @click="openAbrirCompuesto(item)" />
+                    <q-btn v-show="false" flat round icon="delete" style="margin: 3px;" />
+                    <q-btn flat round icon="edit" @click="openEditar(item)" style="margin: 3px;" />
                   </div>
                 </q-item-section>
               </q-item>
@@ -47,40 +61,40 @@
               <q-item horizontal>
                 <q-item-section avatar style="padding-right: 15px;align-items: center;">
                   <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
-                    {{primeraletra(item.producto)}}
+                    {{ primeraletra(item.producto) }}
                   </q-avatar>
-                  <q-badge color="secondary" style="margin-top: 5px;">
-                    Bs.{{item.precio}}
+                  <q-badge color="dark" style="margin-top: 5px;">
+                    Bs.{{ item.precio }}
                   </q-badge>
                 </q-item-section>
 
                 <q-item-section class="tarjeticainside">
                   <div style="display: flex;">
-                    {{item.descripcion}}
+                    {{ item.descripcion }}
                   </div>
                   <div style="display: flex;">
                     <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
                       <div class="text-center">Unidad</div>
-                      <div class="text-secondary">{{item.unidad}}</div>
+                      <div class="text-primary">{{ item.unidad }}</div>
                     </div>
                     <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
                       <div class="text-center">Impuesto.</div>
-                      <div class="text-secondary">{{item.impuesto}}</div>
+                      <div class="text-primary">{{ item.impuesto }}</div>
                     </div>
                     <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
-                    <div class="text-center">Inventario</div>
-                    <div class="text-center">
-                      <q-badge v-if="item.inventario > 10" class="estatusbien">
-                        {{item.inventario}}
-                      </q-badge>
-                      <q-badge v-if="item.inventario > 0 && item.inventario <= 10" class="estatusmedio">
-                        {{item.inventario}}
-                      </q-badge>
-                      <q-badge  v-if="item.inventario === 0" class="estatusmal">
-                        {{ item.intipoproducto === '3' ? 'N/A' : 0}}
-                      </q-badge>
+                      <div class="text-center">Inventario</div>
+                      <div class="text-center">
+                        <q-badge v-if="item.inventario > 10" class="estatusbien">
+                          {{ item.inventario }}
+                        </q-badge>
+                        <q-badge v-if="item.inventario > 0 && item.inventario <= 10" class="estatusmedio">
+                          {{ item.inventario }}
+                        </q-badge>
+                        <q-badge v-if="item.inventario === 0" class="estatusmal">
+                          {{ item.intipoproducto === '3' ? 'N/A' : 0 }}
+                        </q-badge>
+                      </div>
                     </div>
-                  </div>
                   </div>
                 </q-item-section>
               </q-item>
@@ -91,38 +105,24 @@
     </div>
 
     <!-- CREAR PRODUCTOS -->
-    <q-dialog v-model="buscaritem" position="top">
-      <q-card>
+    <q-dialog v-model="buscaritem">
+      <q-card class=" custom-shadow custom-border-radius">
         <q-card-section>
-          <div class="text-h6">Crear producto</div>
+          <div class="text-h6 text-center color-texto">Crear producto</div>
         </q-card-section>
         <q-separator />
         <q-card-section class="row">
           <q-input class="col" filled v-model="sku" label="SKU" stack-label dense />
           <div class="col" style="padding: 0 10px;">
-            <q-select
-             filled
-             v-model="modeltipoproducto"
-             :options="optionstipoproducto"
-             option-label="tipoproducto"
-             option-value="id"
-             label="Seleccione tipo"
-             dense
-            />
+            <q-select filled v-model="modeltipoproducto" :options="optionstipoproducto" option-label="tipoproducto"
+              option-value="id" label="Seleccione tipo" dense />
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section class="row">
           <div class="col" style="padding: 0 10px;">
-            <q-select
-             filled
-             v-model="model"
-             :options="options"
-             option-label="categoria"
-             option-value="cod"
-             label="Seleccione categoría"
-             dense
-            />
+            <q-select filled v-model="model" :options="options" option-label="categoria" option-value="cod"
+              label="Seleccione categoría" dense />
           </div>
         </q-card-section>
         <q-separator />
@@ -135,89 +135,47 @@
         <q-separator />
 
         <q-card-section>
-          <q-input
-            v-model="descripcion"
-            label="Descripción de producto"
-            filled
-            rows="2"
-            dense
-            type="textarea"
-          />
+          <q-input v-model="descripcion" label="Descripción de producto" filled rows="2" dense type="textarea" />
         </q-card-section>
 
         <q-separator />
         <q-card-section class="row">
           <div class="col">
-            <q-select
-             filled
-             v-model="modeltax"
-             :options="optionstax"
-             option-label="impuesto"
-             option-value="cod"
-             label="Elija impuesto"
-             dense
-            />
+            <q-select filled v-model="modeltax" :options="optionstax" option-label="impuesto" option-value="cod"
+              label="Elija impuesto" dense />
 
           </div>
           <div class="col">
-            <q-select
-             filled
-             v-model="modelunidad"
-             :options="optionsunidad"
-             option-label="unidad"
-             option-value="cod"
-             label="Elija unidad"
-             dense
-            />
+            <q-select filled v-model="modelunidad" :options="optionsunidad" option-label="unidad" option-value="cod"
+              label="Elija unidad" dense />
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
           <div class="row">
-            <q-input
-             style="margin-right: 5px;"
-             type="number"
-             min="0"
-             class="col"
-             filled
-             v-model="costo"
-             label="Costo Bs."
-             stack-label
-             dense
-            />
-            <q-input
-             style="margin-left: 5px;"
-             class="col"
-             filled
-             v-model="costousd"
-             label="Costo USD"
-             stack-label
-             dense
-            />
+            <q-input style="margin-right: 5px;" type="number" min="0" class="col" filled v-model="costo"
+              label="Costo Bs." stack-label dense />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="costousd" label="Costo USD" stack-label
+              dense />
           </div>
           <div class="row">
-            <q-input
-             style="margin-right: 5px;"
-             type="number"
-             min="0"
-             class="col"
-             filled
-             v-model="precio"
-             label="Precio Bs."
-             stack-label
-             dense
-            />
-            <q-input style="margin-left: 5px;" class="col" filled v-model="preciousd" label="Precio USD" stack-label dense />
+            <q-input style="margin-right: 5px;" type="number" min="0" class="col" filled v-model="precio"
+              label="Precio Bs." stack-label dense />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="preciousd" label="Precio USD" stack-label
+              dense />
           </div>
           <div class="row">
-            <q-input style="margin-right: 5px;" class="col" filled v-model="utilidad" label="Utilidad %" stack-label dense readonly/>
-            <q-input style="margin-left: 5px;" class="col" filled v-model="inventario" label="Inventario" stack-label dense />
+            <q-input style="margin-right: 5px;" class="col" filled v-model="utilidad" label="Utilidad %" stack-label
+              dense readonly />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="inventario" label="Inventario" stack-label
+              dense />
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn label="Aceptar" color="secondary" @click="crear" v-close-popup />
+        <q-card-actions align="center">
+
+          <q-btn outline no-caps icon-right="close" label="Cancelar" color="warning" v-close-popup />
+          <q-btn unelevated no-caps label="Aceptar" color="warning" icon-right="check" @click="crear" v-close-popup />
         </q-card-actions>
 
       </q-card>
@@ -233,30 +191,15 @@
         <q-card-section class="row">
           <q-input class="col" filled v-model="sku" label="SKU" stack-label dense />
           <div class="col" style="padding: 0 10px;">
-            <q-select
-             filled
-             disable
-             v-model="modeltipoproducto"
-             :options="optionstipoproducto"
-             option-label="tipoproducto"
-             option-value="id"
-             label="Seleccione tipo"
-             dense
-            />
+            <q-select filled disable v-model="modeltipoproducto" :options="optionstipoproducto"
+              option-label="tipoproducto" option-value="id" label="Seleccione tipo" dense />
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section class="row">
           <div class="col" style="padding: 0 10px;">
-            <q-select
-             filled
-             v-model="model"
-             :options="options"
-             option-label="categoria"
-             option-value="cod"
-             label="Seleccione categoría"
-             dense
-            />
+            <q-select filled v-model="model" :options="options" option-label="categoria" option-value="cod"
+              label="Seleccione categoría" dense />
           </div>
         </q-card-section>
         <q-separator />
@@ -269,82 +212,40 @@
         <q-separator />
 
         <q-card-section>
-          <q-input
-          v-model="descripcion"
-          label="Descripción de producto"
-          filled
-          dense
-          type="textarea"
-        />
+          <q-input v-model="descripcion" label="Descripción de producto" filled dense type="textarea" />
         </q-card-section>
 
         <q-separator />
         <q-card-section class="row">
           <div class="col">
-            <q-select
-             filled
-             v-model="modeltax"
-             :options="optionstax"
-             option-label="impuesto"
-             option-value="cod"
-             label="Elija impuesto"
-             dense
-            />
+            <q-select filled v-model="modeltax" :options="optionstax" option-label="impuesto" option-value="cod"
+              label="Elija impuesto" dense />
 
           </div>
           <div class="col">
-            <q-select
-             filled
-             v-model="modelunidad"
-             :options="optionsunidad"
-             option-label="unidad"
-             option-value="cod"
-             label="Elija unidad"
-             dense
-            />
+            <q-select filled v-model="modelunidad" :options="optionsunidad" option-label="unidad" option-value="cod"
+              label="Elija unidad" dense />
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
           <div class="row">
-            <q-input
-             style="margin-right: 5px;"
-             type="number"
-             min="0"
-             class="col"
-             filled
-             v-model="costo"
-             label="Costo Bs."
-             stack-label
-             dense
-            />
-            <q-input
-             style="margin-left: 5px;"
-             class="col"
-             filled
-             v-model="costousd"
-             label="Costo USD"
-             stack-label
-             dense
-            />
+            <q-input style="margin-right: 5px;" type="number" min="0" class="col" filled v-model="costo"
+              label="Costo Bs." stack-label dense />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="costousd" label="Costo USD" stack-label
+              dense />
           </div>
           <div class="row">
-            <q-input
-             style="margin-right: 5px;"
-             type="number"
-             min="0"
-             class="col"
-             filled
-             v-model="precio"
-             label="Precio Bs."
-             stack-label
-             dense
-            />
-            <q-input style="margin-left: 5px;" class="col" filled v-model="preciousd" label="Precio USD" stack-label dense />
+            <q-input style="margin-right: 5px;" type="number" min="0" class="col" filled v-model="precio"
+              label="Precio Bs." stack-label dense />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="preciousd" label="Precio USD" stack-label
+              dense />
           </div>
           <div class="row">
-            <q-input style="margin-right: 5px;" class="col" filled v-model="utilidad" label="Utilidad %" stack-label dense readonly/>
-            <q-input style="margin-left: 5px;" class="col" filled v-model="inventario" label="Inventario" stack-label dense />
+            <q-input style="margin-right: 5px;" class="col" filled v-model="utilidad" label="Utilidad %" stack-label
+              dense readonly />
+            <q-input style="margin-left: 5px;" class="col" filled v-model="inventario" label="Inventario" stack-label
+              dense />
           </div>
         </q-card-section>
         <q-separator />
@@ -366,7 +267,8 @@
         <q-separator />
         <q-card-section style="padding: 10px 15px 7px;">
           <div class="">
-            <q-input color="white" bg-color="primary"  rounded standout bottom-slots v-model="textitemsimple" label="Nombre o Sku Producto Simple" counter autofocus>
+            <q-input color="white" bg-color="primary" rounded standout bottom-slots v-model="textitemsimple"
+              label="Nombre o Sku Producto Simple" counter autofocus>
               <template v-slot:prepend>
                 <q-icon name="search" />
               </template>
@@ -387,13 +289,14 @@
           <q-card v-for="item in rowsproductosimple" :key="item.id" class="my-card tarjetaitem">
             <q-item horizontal>
               <q-item-section>
-                <q-item-label>{{item.producto}}</q-item-label>
-                <q-item-label>SKU {{item.sku}}</q-item-label>
-                <q-item-label caption>{{item.categoria}}</q-item-label>
+                <q-item-label>{{ item.producto }}</q-item-label>
+                <q-item-label>SKU {{ item.sku }}</q-item-label>
+                <q-item-label caption>{{ item.categoria }}</q-item-label>
               </q-item-section>
               <q-item-section side>
                 <div style="display: flex;">
-                  <q-btn flat round color="blue" icon="add_box" @click="addproductosimple(item)" style="font-size: 20px;"></q-btn>
+                  <q-btn flat round color="blue" icon="add_box" @click="addproductosimple(item)"
+                    style="font-size: 20px;"></q-btn>
                 </div>
               </q-item-section>
             </q-item>
@@ -401,25 +304,25 @@
             <q-item horizontal>
               <q-item-section avatar style="padding-right: 15px;align-items: center;">
                 <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
-                  {{primeraletra(item.producto)}}
+                  {{ primeraletra(item.producto) }}
                 </q-avatar>
                 <q-badge color="blue" style="margin-top: 5px;">
-                  Bs. {{item.precio}}
+                  Bs. {{ item.precio }}
                 </q-badge>
               </q-item-section>
 
               <q-item-section class="tarjeticainside">
                 <div style="display: flex;">
-                  {{item.descripcion}}
+                  {{ item.descripcion }}
                 </div>
                 <div style="display: flex;">
                   <div style="display: grid;width: 48%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Unidad</div>
-                    <div class="text-secondary">{{item.unidad}}</div>
+                    <div class="text-secondary">{{ item.unidad }}</div>
                   </div>
                   <div style="display: grid;width: 48%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Impuesto.</div>
-                    <div class="text-secondary">{{item.impuesto}}</div>
+                    <div class="text-secondary">{{ item.impuesto }}</div>
                   </div>
                 </div>
               </q-item-section>
@@ -444,15 +347,15 @@
         </q-card-section>
 
         <q-separator />
-         <q-card-section v-if="rowsproductocompuesto.length === 0" style="padding: 10px 15px 7px;">
+        <q-card-section v-if="rowsproductocompuesto.length === 0" style="padding: 10px 15px 7px;">
           <div class="titulonohay">No tiene item asignado</div>
         </q-card-section>
         <q-card-section style="max-height: 64vh" class="scroll">
           <q-card v-for="item in rowsproductocompuesto" :key="item.id" class="my-card tarjetaitem">
             <q-item horizontal>
               <q-item-section>
-                <q-item-label>{{item.producto}}</q-item-label>
-                <q-item-label caption>SKU {{item.sku}} - {{item.categoria}}</q-item-label>
+                <q-item-label>{{ item.producto }}</q-item-label>
+                <q-item-label caption>SKU {{ item.sku }} - {{ item.categoria }}</q-item-label>
               </q-item-section>
             </q-item>
 
@@ -460,26 +363,21 @@
               <q-item-section class="tarjeticainside">
                 <div style="display: flex;">
                   <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
-                      <div class="text-center">Cantidad</div>
-                      <input
-                        class="inputCantidad"
-                        :id="'cantidad' + item.cod"
-                        :value="item.cantidad"
-                        pattern="^\d*(\.\d{0,2})?$"
-                        @input="calcularMonto(item)"
-                      />
+                    <div class="text-center">Cantidad</div>
+                    <input class="inputCantidad" :id="'cantidad' + item.cod" :value="item.cantidad"
+                      pattern="^\d*(\.\d{0,2})?$" @input="calcularMonto(item)" />
                   </div>
                   <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Disponible</div>
-                    <div class="text-secondary text-center">{{item.inventario}}</div>
+                    <div class="text-secondary text-center">{{ item.inventario }}</div>
                   </div>
                   <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Unidad</div>
-                    <div class="text-secondary text-center">{{item.unidad}}</div>
+                    <div class="text-secondary text-center">{{ item.unidad }}</div>
                   </div>
                   <div style="display: grid;width: 25%;font-size: 11px; justify-content: center;">
                     <div class="text-center">Estimado</div>
-                    <div :id="'estimado' + item.cod" class="text-secondary text-center">{{item.estimado}}</div>
+                    <div :id="'estimado' + item.cod" class="text-secondary text-center">{{ item.estimado }}</div>
                   </div>
                 </div>
               </q-item-section>
@@ -506,7 +404,7 @@ const ENDPOINT_PATH_V2 = process.env.VUE_APP_ENDPOINT
 
 export default defineComponent({
   name: 'IndexPage',
-  setup () {
+  setup() {
     return {
       slide: ref(2),
       inventariocompuesto: ref(0),
@@ -544,7 +442,7 @@ export default defineComponent({
     }
   },
   methods: {
-    calcularMonto (item) {
+    calcularMonto(item) {
       console.log(item.inventario)
       const idcantidad = document.getElementById('cantidad' + item.cod)
       // console.log(idcantidad)
@@ -554,7 +452,7 @@ export default defineComponent({
         document.getElementById('estimado' + item.cod).innerHTML = (item.inventario / cantidad).toFixed(2)
       }
     },
-    listar () {
+    listar() {
       this.btndisable = false
       const idcategoria = 0
       axios.get(ENDPOINT_PATH_V2 + 'productos/' + sessionStorage.getItem('co_empresa') + '/' + idcategoria).then(async response => {
@@ -591,13 +489,13 @@ export default defineComponent({
         Notify.create('Problemas al listar Categorias ' + error)
       })
     },
-    openEditarCompuesto (item) {
+    openEditarCompuesto(item) {
       console.log(item)
       this.idproducto = item.cod
       this.productocompuestoedit = item.producto
       this.buscarsimples = true
     },
-    openAbrirCompuesto (item) {
+    openAbrirCompuesto(item) {
       console.log(item)
       this.idproducto = item.cod
       this.productocompuestoedit = item.producto
@@ -639,7 +537,7 @@ export default defineComponent({
       })
       this.buscarcompuestos = true
     },
-    addproductosimple (item) {
+    addproductosimple(item) {
       console.log(item.idunidad)
       console.log(item.cod)
       console.log(this.idproducto)
@@ -660,7 +558,7 @@ export default defineComponent({
         Notify.create('Problemas al Crear Producto Compuesto >>> ' + error)
       })
     },
-    openEditar (item) {
+    openEditar(item) {
       console.log(item.intipoproducto)
       console.log(this.optionstipoproducto)
       this.editaritem = true
@@ -684,12 +582,12 @@ export default defineComponent({
       this.utilidad = item.utilidad
       this.preciousd = item.preciousd
     },
-    openCrear () {
+    openCrear() {
       // console.log(item)
       this.limpiar()
       this.buscaritem = true
     },
-    limpiar () {
+    limpiar() {
       this.model = null
       this.modeltax = null
       this.modelunidad = null
@@ -702,7 +600,7 @@ export default defineComponent({
       this.precio = 0
       this.preciousd = 0
     },
-    async editarCompuesto () {
+    async editarCompuesto() {
       // console.log(this.idproducto)
       let minimo = 999999999
       for (const i in this.rowsproductocompuesto) {
@@ -730,7 +628,7 @@ export default defineComponent({
 
       this.listar()
     },
-    editar () {
+    editar() {
       if (this.producto.length === 0) {
         return
       }
@@ -770,7 +668,7 @@ export default defineComponent({
         this.listar()
       })
     },
-    crear () {
+    crear() {
       if (this.producto.length === 0) {
         return
       }
@@ -811,7 +709,7 @@ export default defineComponent({
         Notify.create('Problemas al Crear Producto ' + error)
       })
     },
-    listarCategoria () {
+    listarCategoria() {
       axios.get(ENDPOINT_PATH_V2 + 'categoria/' + sessionStorage.getItem('co_empresa')).then(async response => {
         const datos = response.data.resp
         this.options = []
@@ -826,7 +724,7 @@ export default defineComponent({
         Notify.create('Problemas al listar Categorias ' + error)
       })
     },
-    listarImpuesto () {
+    listarImpuesto() {
       axios.get(ENDPOINT_PATH_V2 + 'impuestos').then(async response => {
         const datos = response.data.resp
         this.optionstax = []
@@ -841,7 +739,7 @@ export default defineComponent({
         Notify.create('Problemas al listar Impuestos ' + error)
       })
     },
-    listarUnidades () {
+    listarUnidades() {
       axios.get(ENDPOINT_PATH_V2 + 'unidades').then(async response => {
         const datos = response.data.resp
         this.optionsunidad = []
@@ -855,14 +753,14 @@ export default defineComponent({
         Notify.create('Problemas al listar Unidades ' + error)
       })
     },
-    primeraletra (item) {
+    primeraletra(item) {
       return item[0]
     },
-    colorLetra (item) {
+    colorLetra(item) {
       const asciicode = item[0].charCodeAt(0)
       return '#' + asciicode + '0'
     },
-    async cargar () {
+    async cargar() {
       const datos = await axios.get(ENDPOINT_PATH_V2 + 'configuracion/' + sessionStorage.getItem('co_empresa'))
         .catch(error => {
           Notify.create('Problemas al listar Configuracion ' + error)
@@ -872,7 +770,7 @@ export default defineComponent({
     }
   },
   watch: {
-    textitem (val) {
+    textitem(val) {
       console.log('textitem')
       console.log(val)
       this.buscadoproducto = false
@@ -889,7 +787,7 @@ export default defineComponent({
       }
       this.buscadoproducto = true
     },
-    textitemsimple (val) {
+    textitemsimple(val) {
       console.log('textitemsimple')
       console.log(val)
       this.buscadoproductosimple = false
@@ -906,7 +804,7 @@ export default defineComponent({
       }
       this.buscadoproductosimple = true
     },
-    costo () {
+    costo() {
       if (this.costo > 0) {
         this.costousd = (this.costo / this.tasausd).toFixed(2)
         this.utilidad = ((this.precio - this.costo) / this.costo * 100).toFixed(2)
@@ -916,7 +814,7 @@ export default defineComponent({
         this.costo = 0
       }
     },
-    precio () {
+    precio() {
       if (this.precio > 0) {
         this.preciousd = (this.precio / this.tasausd).toFixed(2)
         if (this.costo > 0) {
@@ -929,7 +827,7 @@ export default defineComponent({
       }
     }
   },
-  async mounted () {
+  async mounted() {
     const datos = await this.cargar()
     this.tasausd = datos.tasabcv
     this.listar()
@@ -958,30 +856,35 @@ export default defineComponent({
   height: 150px;
   width: 100%;
 }
+
 .botones {
   display: flex;
   justify-content: space-around;
   width: 100%;
 }
+
 .listarproductos {
   display: flex;
   justify-content: center;
 }
+
 .carritofondo {
   font-size: 170px;
   color: white;
 }
+
 .itemtotal {
   font-size: 18px;
   color: #26a69a;
   font-weight: bolder;
 }
+
 .puntodeventaconitem {
   height: 85vh;
-  background: rgb(187, 193, 194);
   width: 95%;
   overflow: auto;
 }
+
 .tarjetaitem {
   margin: 10px;
 }
@@ -992,53 +895,60 @@ export default defineComponent({
   border-radius: 7px;
   border-color: lightblue;
 }
+
 .tarjeticainside {
   background: #ededed;
   padding: 10px;
   border-radius: 10px;
 }
+
 .estatusbien {
-  color: white;
-  background: blue;
+  color: #558B2F;
+  background: #C5E1A5;
   width: 40px;
   justify-content: center;
 }
+
 .estatusmal {
-  background: red;
-  color: white;
+  background: #EF9A9A;
+  color: #C62828;
   width: 40px;
   justify-content: center;
 }
+
 .estatusmedio {
-  background: yellow;
-  color: black;
+  background: #FFCC80;
+  color: #EF6C00;
   width: 40px;
   justify-content: center;
 }
+
 .titulobuscar {
-    font-size: 16px;
-    font-weight: bolder;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  font-size: 16px;
+  font-weight: bolder;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .subtitulobuscar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: italic;
 }
+
 .titulonohay {
-    border: 1px solid #9c0707;
-    font-size: 16px;
-    font-weight: bolder;
-    height: 81px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #9c0707;
-    border-radius: 10px;
-    background: #d4b8b8;
+  border: 1px solid #9c0707;
+  font-size: 16px;
+  font-weight: bolder;
+  height: 81px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9c0707;
+  border-radius: 10px;
+  background: #d4b8b8;
 }
 </style>
