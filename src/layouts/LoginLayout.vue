@@ -121,7 +121,7 @@ export default {
 
 .left-pane {
   flex: 0.6;
-  background: linear-gradient(360deg, rgba(204, 95, 2, 0.95) 0%, rgba(204, 95, 2, 0) 68%), url('img/log.avif') no-repeat center center;
+  background: linear-gradient(360deg, rgba(204, 95, 2, 0.95) 0%, rgba(204, 95, 2, 0) 68%), url('../assets/log.avif') no-repeat center center;
   background-size: cover;
 }
 

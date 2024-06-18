@@ -3,6 +3,7 @@
     <q-header class="bg-accent">
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" color="primary" />
+        <img src="img/logo-prosales-dark.png" class="logo">
         <q-toolbar-title style="display: grid;">
           <span class="rulusuario"> {{ empresa }} </span>
           <span class="bienvenido">{{ nombreusuario }} "{{ rol }}"</span>
@@ -30,7 +31,7 @@
         </q-list>
       </q-scroll-area>
     </q-drawer> -->
-    <q-drawer overlay bordered v-model="leftDrawerOpen" show-if-above :width="120" :breakpoint="600">
+    <q-drawer bordered v-model="leftDrawerOpen" show-if-above :width="120" :breakpoint="600">
       <q-scroll-area style="height: calc(100% - 30px); margin-top: 20px; border-right: 1px solid #ddd">
         <q-list padding>
           <q-item clickable v-ripple @click="puntodeventa">
@@ -174,6 +175,13 @@ export default defineComponent({
 })
 </script>
 <style>
+.logo {
+  width: 7%;
+  max-width: 200px;
+  /* Ajusta el tamaño máximo para pantallas grandes */
+  height: auto;
+}
+
 .bienvenido {
   font-size: 15px;
   /* font-weight: bolder; */
