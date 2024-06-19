@@ -6,14 +6,16 @@
         <h6 class="p-2">Categorías</h6>
 
       </div>
-      <div class="botones ">
+
+      <div class="listarcategorias row" style="margin-top:20px">
         <q-btn no-caps unelevated dense class="gradient-btn " icon-right="add_circle" @click="buscaritem = true"
           label="Agregar categoria" style="margin: 10px;" />
       </div>
 
       <div class="listarcategorias row">
 
-        <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
+        <q-img v-if="slide === 1" src="img/sin-productos.png"
+          style="width: 35%; height: auto; display: block; margin: auto" fit="contain" />
         <div v-else class="listarcategoriasconitem col">
           <div class="row justify-center">
             <q-card v-for="item in rows" :key="item"

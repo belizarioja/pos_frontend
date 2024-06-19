@@ -3,33 +3,38 @@
     <div class="col">
       <div class="botones row fondo-gris  shadow-up-9">
 
-        <h6 class="p-4">Reporte de Ventas</h6>
+        <h6 class="p-2">Reporte de Ventas</h6>
 
       </div>
 
-      <div class="listarcategorias row">
-        <div class="listarcategoriasconitem col">
+      <div class="listarcategorias row" style="margin-top:20px">
+        <q-input color="blue-grey-3" bg-color="white" outlined standout bottom-slots dense debounce="500"
+          v-model="filterTable" placeholder="Buscar" style="width:30%">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </div>
+
+      <div class=" row">
+        <div class="col">
           <div class="row justify-center">
-            <q-table dense :rows="rows" title="Ventas" :columns="cols" row-key="num" :pagination="pagination"
-              style="width: 95%; margin-top: 20px;" :loading="loading" :filter="filterTable"
-              no-data-label="No hay registros!">
-              <template v-slot:top-left>
-                <q-input dense debounce="300" color="primary" v-model="filterTable" placeholder="Buscar">
-                  <template v-slot:append>
-                    <q-icon name="search" />
-                  </template>
-                </q-input>
-              </template>
+            <q-table :rows="rows" title="Ventas" :columns="cols" row-key="num" :pagination="pagination"
+              style="width: 95%; margin: 20px;" :loading="loading" :filter="filterTable"
+              no-data-label="⚠ Sin registros " wrap-cells separator="cell"
+              class="custom-shadow custom-border-radius-table">
               <template v-slot:top-right>
                 <div style="display: inline;">
-                  <q-btn icon-right="filter_alt" class="q-ml-sm col-md-4 col-sm-3 col-xs-3" color="secondary"
-                    label="Filtrar" @click="drawerFilters = true" />
+                  <q-btn icon-right="filter_list" class="q-ml-sm col-md-4 col-sm-3 col-xs-3" unelevated rounded
+                    color="orange-1" text-color="orange-10" label="Filtrar" @click="drawerFilters = true" />
                 </div>
               </template>
               <template v-slot:body-cell-estatus="props">
                 <q-td :props="props">
-                  <div>
-                    <q-badge :color="props.row.estatus === '1' ? 'info' : 'negative'">
+                  <div class="text-center">
+                    <q-badge :color="props.row.estatus === '1' ? 'green-1' : 'red-1'"
+                      :text-color="props.row.estatus === '1' ? 'green-9' : 'red-9'" class="q-mt-xs q-mr-xs q-pa-xs"
+                      rounded>
                       {{ props.row.estatus === '1' ? 'Procesada' : 'Anulada' }}
                     </q-badge>
                   </div>
@@ -37,8 +42,9 @@
               </template>
               <template v-slot:body-cell-accion="props">
                 <q-td :props="props">
-                  <div>
-                    <q-btn color="primary" icon="plagiarism" @click.stop="abrirDetalleInvoive(props.row)" dense />
+                  <div align="center">
+                    <q-btn round unelevated color="orange-1" text-color="orange-10" icon="plagiarism"
+                      @click.stop="abrirDetalleInvoive(props.row)" />
                   </div>
                 </q-td>
               </template>
@@ -171,18 +177,18 @@ export default defineComponent({
       rows: ref([]),
       ventas: ref([]),
       cols: [
-        { name: 'tipofactura', align: 'center', label: 'Tipo Documento', field: 'tipofactura' },
-        { name: 'numerointerno', align: 'center', label: 'N° Interno', field: 'numerointerno' },
-        { name: 'numerocontrol', align: 'center', label: '# Control', field: 'numerocontrol' },
-        { name: 'fecha', align: 'center', label: 'Fecha', field: 'fecha' },
-        { name: 'cliente', align: 'left', label: 'Cliente', field: 'cliente' },
-        { name: 'documento', align: 'left', label: 'Identificación', field: 'documento' },
-        { name: 'usuario', align: 'left', label: 'Usuario', field: 'usuario' },
-        { name: 'subtotal', align: 'left', label: 'Subtotal', field: 'subtotal' },
-        { name: 'impuesto', align: 'left', label: 'Impuesto', field: 'impuesto' },
-        { name: 'total', align: 'center', label: 'Total', field: 'total' },
-        { name: 'estatus', align: 'center', label: 'Estatus', field: 'estatus' },
-        { name: 'accion', align: 'left', label: 'Accion', field: 'accion' }
+        { name: 'tipofactura', align: 'center', label: '📃 Tipo Documento', field: 'tipofactura' },
+        { name: 'numerointerno', align: 'center', label: '🔢 N° Interno', field: 'numerointerno' },
+        { name: 'numerocontrol', align: 'center', label: '🔍 # Control', field: 'numerocontrol' },
+        { name: 'fecha', align: 'center', label: '📅 Fecha', field: 'fecha' },
+        { name: 'cliente', align: 'left', label: '👨‍💼 Cliente', field: 'cliente' },
+        { name: 'documento', align: 'left', label: '🆔 Identificación', field: 'documento' },
+        { name: 'usuario', align: 'left', label: '👤 Usuario', field: 'usuario' },
+        { name: 'subtotal', align: 'left', label: '💲 Subtotal', field: 'subtotal' },
+        { name: 'impuesto', align: 'left', label: '🏛 Impuesto', field: 'impuesto' },
+        { name: 'total', align: 'center', label: '💵 Total', field: 'total' },
+        { name: 'estatus', align: 'center', label: '🔄 Estatus', field: 'estatus' },
+        { name: 'accion', align: 'left', label: '🔧 Accion', field: 'accion' }
       ],
       filterTable: ref(''),
       empresa: ref(''),

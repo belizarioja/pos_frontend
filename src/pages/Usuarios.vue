@@ -3,42 +3,52 @@
     <div class="col">
       <div class="botones row fondo-gris  shadow-up-9">
 
-        <h6 class="p-4">Usuarios</h6>
+        <h6 class="p-2">Usuarios</h6>
 
       </div>
+      <div class="listarcategorias row" style="margin-top:20px">
 
-      <div class="botonesU row">
-        <div style="display: inline;">
-          <q-btn no-caps unelevated dense icon-right="person_add"
-            class="q-ml-sm col-md-4 col-sm-3 col-xs-3 gradient-btn" label="Crear Usuario" @click="openCreate()" />
-        </div>
+        <q-btn no-caps unelevated dense icon-right="person_add" class="q-ml-sm col-md-4 col-sm-3 col-xs-3 gradient-btn"
+          label="Crear Usuario" @click="openCreate()" style="width:150px" />
+      </div>
+      <div class="listarcategorias row" style="margin-top:20px">
+        <q-input color="blue-grey-3" bg-color="white" outlined standout bottom-slots dense debounce="500"
+          v-model="filterTable" placeholder="Buscar" style="width:30%">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
       </div>
       <div class="listarcategorias row">
         <div class="listarcategoriasconitem col">
           <div class="row justify-center">
-            <q-table dense :rows="rows" :columns="cols" row-key="num" :pagination="pagination"
+            <q-table title="Usuarios" :rows="rows" :columns="cols" row-key="num" :pagination="pagination"
               style="width: 95%; margin-top: 20px;" :loading="loading" :filter="filterTable"
-              no-data-label="No hay registros!">
-              <template v-slot:top-left>
-                <q-input dense debounce="300" color="primary" v-model="filterTable" placeholder="Buscar">
-                  <template v-slot:append>
-                    <q-icon name="search" />
-                  </template>
-                </q-input>
-              </template>
+              no-data-label="⚠ Sin registros " wrap-cells separator="cell"
+              class="custom-shadow custom-border-radius-table">
               <template v-slot:body-cell-accion="props">
                 <q-td :props="props">
-                  <div>
-                    <q-btn color="primary" icon="group_remove" @click.stop="openEdit(props.row)" dense />
+                  <div align="center">
+                    <q-btn round unelevated color="orange-1" text-color="orange-10" icon="edit"
+                      @click.stop="openEdit(props.row)" />
+
+                  </div>
+                </q-td>
+              </template>
+              <template v-slot:body-cell-clave="props">
+                <q-td :props="props">
+                  <div align="center">
+                    <q-btn icon="visibility" @click.stop="btnviewpass(props.row)" dense flat round color="grey-7" />
                   </div>
                 </q-td>
               </template>
               <template v-slot:body-cell-estatus="props">
                 <q-td :props="props">
-                  <div>
-                    <q-btn :color="props.row.estatus === '1' ? 'secondary' : 'negative'"
+                  <div align="center">
+                    <q-btn :color="props.row.estatus === '1' ? 'green' : 'grey'"
                       :icon="props.row.estatus === '1' ? 'toggle_on' : 'toggle_off'"
                       @click.stop="btnOpenUpdEstatus(props.row)" dense />
+
                   </div>
                 </q-td>
               </template>
@@ -138,6 +148,31 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <!-- MODAL PARA VISUALIZAR CLAVE -->
+    <q-dialog v-model="viewpass" persistent>
+      <q-card style="width: auto;">
+        <q-card-section class="row items-center">
+          <span class="q-ml-sm">Esta información es secreta 🤫</span>
+        </q-card-section>
+
+        <q-card-section class="tarjeticainside">
+          <q-item>
+            <q-card-section avatar>
+              <q-icon name="password_2" color="grey-7" />
+            </q-card-section>
+            <q-card-section>
+              <q-card-label caption>Contraseña:</q-card-label>
+              <p> {{ password }}</p>
+            </q-card-section>
+          </q-item>
+
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Aceptar" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -153,15 +188,15 @@ export default defineComponent({
     return {
       rows: ref([]),
       cols: [
-        { name: 'id', align: 'center', label: 'ID', field: 'id' },
-        { name: 'usuario', align: 'center', label: 'Usuario', field: 'usuario' },
-        { name: 'clave', align: 'center', label: 'Clave', field: 'clave' },
-        { name: 'nombre', align: 'left', label: 'Nombre', field: 'nombre' },
-        { name: 'email', align: 'left', label: 'Email', field: 'email' },
-        { name: 'empresa', align: 'left', label: 'Empresa', field: 'empresa' },
-        { name: 'rol', align: 'left', label: 'Rol', field: 'rol' },
-        { name: 'estatus', align: 'left', label: 'Estatus', field: 'estatus' },
-        { name: 'accion', align: 'left', label: 'Accion', field: 'accion' }
+        { name: 'id', align: 'center', label: '🆔 ID', field: 'id' },
+        { name: 'usuario', align: 'center', label: '👤 Usuario', field: 'usuario' },
+        { name: 'clave', align: 'center', label: '🔑 Clave', field: 'clave' },
+        { name: 'nombre', align: 'left', label: '📝 Nombre', field: 'nombre' },
+        { name: 'email', align: 'left', label: '📧 Email', field: 'email' },
+        { name: 'empresa', align: 'left', label: '🏢 Empresa', field: 'empresa' },
+        { name: 'rol', align: 'left', label: '🎭 Rol', field: 'rol' },
+        { name: 'estatus', align: 'left', label: '🔄 Estatus', field: 'estatus' },
+        { name: 'accion', align: 'left', label: '🔧 Accion', field: 'accion' }
       ],
       co_rol: ref(sessionStorage.getItem('co_rol')),
       co_empresa: ref(sessionStorage.getItem('co_empresa')),
@@ -178,6 +213,7 @@ export default defineComponent({
       modelrol: ref(''),
       optionsrol: ref([]),
       modelsede: ref(''),
+      viewpass: ref(false),
       optionssede: ref([]),
       pagination: {
         page: 1,
@@ -338,6 +374,11 @@ export default defineComponent({
       }).catch(error => {
         Notify.create('Problemas al listar Emisores ' + error)
       })
+    },
+    btnviewpass(row) {
+      console.log(row)
+      this.password = row.clave
+      this.viewpass = true
     }
   },
   mounted() {

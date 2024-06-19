@@ -3,48 +3,53 @@
     <div class="col">
       <div class="botones row fondo-gris  shadow-up-9">
 
-        <h6 class="p-4">Módulo emisores</h6>
+        <h6 class="p-2">Módulo emisores</h6>
 
+      </div>
+      <div class="listarcategorias row" style="margin-top:20px">
+        <q-btn no-caps unelevated dense icon-right="add_business"
+          class="q-ml-sm col-md-4 col-sm-3 col-xs-3 gradient-btn " label="Crear Emisor" @click="openCrear"
+          style="width:150px" />
+      </div>
+      <div class="listarcategorias row" style="margin-top:20px">
+        <q-input color="blue-grey-3" bg-color="white" outlined standout bottom-slots dense debounce="500"
+          v-model="filterTable" placeholder="Buscar" style="width:30%">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
       </div>
       <div class="listarcategorias row">
         <div class="listarcategoriasconitem col">
           <div class="row justify-center">
-            <q-table dense :rows="rows" title="Emisores" :columns="cols" row-key="num" :pagination="pagination"
+            <q-table :rows="rows" title="Emisores" :columns="cols" row-key="num" :pagination="pagination"
               style="width: 95%; margin-top: 20px;" :loading="loading" :filter="filterTable"
-              no-data-label="No hay registros!">
-              <template v-slot:top-left>
-                <q-input dense debounce="300" color="primary" v-model="filterTable" placeholder="Buscar">
-                  <template v-slot:append>
-                    <q-icon name="search" />
-                  </template>
-                </q-input>
-              </template>
-              <template v-slot:top-right>
-                <div style="display: inline;">
-                  <q-btn no-caps unelevated dense icon-right="add_business"
-                    class="q-ml-sm col-md-4 col-sm-3 col-xs-3 gradient-btn " label="Crear Emisor" @click="openCrear" />
-                </div>
-              </template>
+              no-data-label="⚠ Sin registros " wrap-cells separator="cell"
+              class="custom-shadow custom-border-radius-table">
+
               <template v-slot:body-cell-token="props">
                 <q-td :props="props">
-                  <div>
-                    <q-btn icon="visibility" @click.stop="btnviewtoken(props.row)" dense flat />
+                  <div align="center">
+                    <q-btn icon="visibility" @click.stop="btnviewtoken(props.row)" dense flat round color="grey-7" />
                   </div>
                 </q-td>
               </template>
               <template v-slot:body-cell-accion="props">
                 <q-td :props="props">
-                  <div>
-                    <q-btn color="primary" icon="app_registration" @click.stop="openEdit(props.row)" dense />
+                  <div align="center">
+                    <q-btn round unelevated color="orange-1" text-color="orange-10" icon="edit"
+                      @click.stop="openEdit(props.row)" />
+
                   </div>
                 </q-td>
               </template>
               <template v-slot:body-cell-estatus="props">
                 <q-td :props="props">
-                  <div>
-                    <q-btn :color="props.row.estatus === '1' ? 'secondary' : 'negative'"
+                  <div align="center">
+                    <q-btn :color="props.row.estatus === '1' ? 'green' : 'grey'"
                       :icon="props.row.estatus === '1' ? 'toggle_on' : 'toggle_off'"
                       @click.stop="btnOpenUpdEstatus(props.row)" dense />
+
                   </div>
                 </q-td>
               </template>
@@ -53,6 +58,7 @@
         </div>
       </div>
     </div>
+
     <!-- MODAL PARA VISUALIZAR TOKEN -->
     <q-dialog v-model="viewtoken" persistent>
       <q-card style="width: auto;">
@@ -162,16 +168,16 @@ export default defineComponent({
       tasabcv: ref(''),
       rows: ref([]),
       cols: [
-        { name: 'rif', align: 'center', label: 'Rif', field: 'rif' },
-        { name: 'empresa', align: 'center', label: 'Razón Social', field: 'empresa' },
-        { name: 'direccion', align: 'center', label: 'Dirección', field: 'direccion' },
-        { name: 'telefono', align: 'left', label: 'Teléfono', field: 'telefono' },
-        { name: 'email', align: 'left', label: 'Email', field: 'email' },
-        { name: 'token', align: 'left', label: 'Token', field: 'token' },
-        { name: 'url', align: 'left', label: 'Url Integración', field: 'url' },
-        { name: 'tasabcv', align: 'left', label: 'Tasa BCV', field: 'tasabcv' },
-        { name: 'estatus', align: 'left', label: 'Estatus', field: 'estatus' },
-        { name: 'accion', align: 'left', label: 'Accion', field: 'accion' }
+        { name: 'rif', align: 'left', label: '🆔 Rif', field: 'rif' },
+        { name: 'empresa', align: 'left', label: '🏢 Razón Social', field: 'empresa', style: 'min-width: 200px; width: 200px' },
+        { name: 'direccion', align: 'left', label: '📍 Dirección', field: 'direccion', style: 'min-width: 200px; width: 200px' },
+        { name: 'telefono', align: 'left', label: '📞 Teléfono', field: 'telefono' },
+        { name: 'email', align: 'left', label: '📧 Email', field: 'email' },
+        { name: 'token', align: 'left', label: '🔑 Token', field: 'token' },
+        { name: 'url', align: 'left', label: '🌐 Url Integración', field: 'url' },
+        { name: 'tasabcv', align: 'left', label: '💹 Tasa BCV', field: 'tasabcv' },
+        { name: 'estatus', align: 'left', label: '🔄 Estatus', field: 'estatus' },
+        { name: 'accion', align: 'left', label: '🔧 Accion', field: 'accion' }
       ],
       filterTable: ref(''),
       titulomodal: ref(''),

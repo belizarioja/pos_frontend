@@ -3,52 +3,25 @@
     <div class="col">
       <div class="botones row fondo-gris  shadow-up-9">
 
-        <h6 class="p-4">Configuración</h6>
+        <h6 class="p-2">Configuración</h6>
 
       </div>
       <div class="zonaconfiguracion row">
-        <q-card class="col-md-6 col-sm-11 col-xs-11 custom-shadow custom-border-radius" style="margin-top: 20px;">
-          <q-card-section>
-            <div class="text-center color-texto">
-              <!-- <img src="logo_bcv.png" style="width: 100px; "> -->
-              <h6>🏦 Tasa BCV</h6>
-            </div>
-          </q-card-section>
+        <q-card class="my-card custom-shadow custom-border-radius" bordered style="margin-top: 20px; padding-top:10px">
+          <q-img src="logo_bcv.png" style="width: 20%; height: auto; display: block; margin: auto" fit="contain" />
 
           <q-card-section>
-            <div class="row justify-around">
 
-              <q-input class="col-md-3 col-sm-12 col-xs-12" outlined standout bottom-slots v-model="tasabcv"
-                label="Tasa BCV" stack-label dense style="margin-bottom: 10px;" />
-            </div>
+            <div class="text-h5 q-mt-sm q-mb-xs color-texto">Tasa del Banco Central de Venezuela</div>
+            <q-input class="" outlined standout bottom-slots v-model="tasabcv" label="Tasa BCV" stack-label dense
+              style="margin: 10px;" />
           </q-card-section>
-
-          <!-- <q-card-section>
-            <div class="row justify-around">
-              <q-input class="col-md-3 col-sm-12 col-xs-12" filled v-model="rif" label="RIF" stack-label dense style="margin-bottom: 10px;" />
-              <q-input class="col-md-8 col-sm-12 col-xs-12" filled v-model="empresa" label="Razón Social" stack-label dense />
-            </div>
-          </q-card-section>
-          <q-separator class="row" />
-          <q-card-section>
-            <div class="row justify-around">
-              <q-input class="col-md-5 col-sm-12 col-xs-12" filled v-model="telefono" label="Teléfono" stack-label dense style="margin-bottom: 10px;" />
-              <q-input class="col-md-6 col-sm-12 col-xs-12" filled v-model="email" label="Email" stack-label dense />
-            </div>
-          </q-card-section>
-          <q-separator class="row" />
-          <q-card-section>
-            <div class="row justify-around">
-              <q-input class="col-12" filled v-model="direccion" label="Dirección" stack-label dense style="margin-bottom: 10px;" />
-            </div>
-          </q-card-section> -->
-
           <q-separator />
           <q-card-actions align="center">
             <q-btn unelevated no-caps color="warning" icon-right="check" label="Actualizar" @click="guardar" />
           </q-card-actions>
-
         </q-card>
+
       </div>
     </div>
   </q-page>

@@ -89,17 +89,17 @@
     </div>
 
     <!-- Sección las tarjetas -->
-    <div class="puntodeventa row mt-2">
-      <q-img v-if="slide === 1" src="img/sin-productos.png" style="width: 35%; height: auto;" fit="contain" />
-      <div v-else class="puntodeventaconitem col">
-        <div class="row justify-center">
+    <div class=" row">
 
+      <q-img v-if="slide === 1" src="img/sin-productos.png"
+        style="width: 35%; height: auto; display: block; margin: auto" fit="contain" />
+      <div v-else class="listarcategoriasconitem col">
+        <div class="row justify-center">
           <q-card class="my-card custom-shadow custom-border-radius col-md-5 col-sm-11 col-xs-11" bordered
             v-for="item in holds" :key="item" style="margin: 10px;">
             <div class="row no-wrap">
               <!-- Imagen a la izquierda -->
-              <q-img class="borde-cust col-4"
-                src="img/no-photo-prod.avif">
+              <q-img class="borde-cust col-4" src="img/no-photo-prod.avif">
                 <div class="overlay-content"
                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; background: rgba(0, 0, 0, 0.5);">
                   <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)" size="40px">

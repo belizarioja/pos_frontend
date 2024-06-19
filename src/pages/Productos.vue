@@ -7,31 +7,30 @@
 
       </div>
       <!-- Sección de botones principales y secundarios -->
-      <div class="q-px-md q-py-sm q-gutter-sm row items-center justify-center">
-        <!-- Botones principales -->
-        <div class="col-12 col-md-auto text-center">
-          <q-input color="blue-grey-3" bg-color="white" dense outlined v-model="textitem"
-            label="Nombre o Sku de producto" style="margin: 5px; width: 310px;" autofocus>
-            <template v-slot:prepend>
-              <q-icon name="search" />
-            </template>
-            <template v-slot:append>
-              <q-icon name="close" @click="textitem = ''" class="cursor-pointer" />
-            </template>
-          </q-input>
-        </div>
 
-        <!-- Botones secundarios -->
-        <div class="col-12 col-md-auto text-center q-mt-md">
-          <q-btn no-caps unelevated dense class="gradient-btn " icon="add_circle" @click="openCrear"
-            label="Agregar producto" style="margin: 10px;" />
-        </div>
+      <div class="listarcategorias row" style="margin-top:20px">
+
+        <q-btn no-caps unelevated dense class="gradient-btn " icon="add_circle" @click="openCrear"
+          label="Agregar producto" style="width: 180px" />
+      </div>
+      <div class="listarcategorias row" style="margin-top:20px">
+        <q-input color="blue-grey-3" bg-color="white" dense outlined v-model="textitem" label="Nombre o Sku de producto"
+          style=" width:30%;" autofocus>
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+          <template v-slot:append>
+            <q-icon name="close" @click="textitem = ''" class="cursor-pointer" />
+          </template>
+        </q-input>
       </div>
 
-      <div class="listarproductos row">
-        <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
-        <div v-else class="puntodeventaconitem col">
-          <div v-if="buscadoproducto" class="row justify-center">
+      <div class=" row">
+
+        <q-img v-if="slide === 1" src="img/sin-productos.png"
+          style="width: 35%; height: auto; display: block; margin: auto" fit="contain" />
+        <div v-else class="listarcategoriasconitem col">
+          <div class="row justify-center">
             <q-card v-for="item in rowsproductosfiltre" :key="item.id"
               class="my-card custom-shadow custom-border-radius col-md-4 col-sm-11 col-xs-11" bordered flat
               style="margin: 10px;">
@@ -126,10 +125,10 @@
                 </div>
               </div>
             </q-card>
-
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- CREAR PRODUCTOS -->
@@ -889,11 +888,6 @@ export default defineComponent({
   display: flex;
   justify-content: space-around;
   width: 100%;
-}
-
-.listarproductos {
-  display: flex;
-  justify-content: center;
 }
 
 .carritofondo {
