@@ -2,7 +2,7 @@
   "name": "pos-frontend",
   "version": "0.0.1",
   "description": "App de POS",
-  "productName": "SMART",
+  "productName": "ProSales",
   "author": "Jesus Belizario <belizarioja@gmail.com>",
   "private": true,
   "scripts": {

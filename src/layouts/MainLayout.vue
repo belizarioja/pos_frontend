@@ -121,15 +121,25 @@ export default defineComponent({
 
     salir() {
       this.$q.dialog({
-        title: 'Confirmación!',
+        title: 'Confirmación',
         message: '¿Está seguro que quieres cerrar sesión?',
         ok: {
-          color: 'secondary',
-          label: 'Sí'
+          label: 'Sí',
+          color: 'primary', // Cambia el color del botón a primario (azul)
+          flat: false, // Botón con estilo plano
+          outline: false, // Botón sin borde
+          unelevated: true,
+          icon: 'check',
+          noCaps: true
         },
         cancel: {
-          color: 'negative',
-          label: 'No'
+          label: 'No',
+          color: 'primary', // Cambia el color del botón a negativo (rojo)
+          icon: 'close',
+          flat: false, // Botón con estilo plano
+          outline: true, // Botón sin borde
+          unelevated: true,
+          noCaps: true
         },
         persistent: true
       }).onOk(() => {

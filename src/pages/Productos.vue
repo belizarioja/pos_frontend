@@ -3,27 +3,28 @@
     <div class="col">
       <div class="botones row fondo-gris  shadow-up-9">
 
-        <h6 class="p-4">Productos</h6>
+        <h6 class="p-2">Productos</h6>
 
       </div>
-      <div class="botones ">
-        <div class="row">
-          <div class="col">
-            <q-input color="blue-grey-3" bg-color="white" dense outlined v-model="textitem"
-              label="Nombre o Sku de producto" style="margin: 5px; width: 310px;" autofocus>
-              <template v-slot:prepend>
-                <q-icon name="search" />
-              </template>
-              <template v-slot:append>
-                <q-icon name="close" @click="textitem = ''" class="cursor-pointer" />
-              </template>
-            </q-input>
-          </div>
-          <div class="col" style="display: flex; justify-content: flex-end;">
-            <q-btn no-caps unelevated dense class="gradient-btn " icon="add_circle" @click="openCrear"
-              label="Agregar producto" style="margin: 10px;" />
+      <!-- Sección de botones principales y secundarios -->
+      <div class="q-px-md q-py-sm q-gutter-sm row items-center justify-center">
+        <!-- Botones principales -->
+        <div class="col-12 col-md-auto text-center">
+          <q-input color="blue-grey-3" bg-color="white" dense outlined v-model="textitem"
+            label="Nombre o Sku de producto" style="margin: 5px; width: 310px;" autofocus>
+            <template v-slot:prepend>
+              <q-icon name="search" />
+            </template>
+            <template v-slot:append>
+              <q-icon name="close" @click="textitem = ''" class="cursor-pointer" />
+            </template>
+          </q-input>
+        </div>
 
-          </div>
+        <!-- Botones secundarios -->
+        <div class="col-12 col-md-auto text-center q-mt-md">
+          <q-btn no-caps unelevated dense class="gradient-btn " icon="add_circle" @click="openCrear"
+            label="Agregar producto" style="margin: 10px;" />
         </div>
       </div>
 
@@ -31,74 +32,101 @@
         <q-icon v-if="slide === 1" class="carritofondo" name="remove_shopping_cart"></q-icon>
         <div v-else class="puntodeventaconitem col">
           <div v-if="buscadoproducto" class="row justify-center">
-            <q-card v-for="item in rowsproductosfiltre" :key="item"
-              class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11 custom-shadow custom-border-radius">
-              <q-item horizontal>
-                <q-item-section>
-                  <q-item-label>{{ item.sku }} {{ item.producto }}</q-item-label>
-                  <q-item-label caption>
-                    <q-badge
-                      :color="item.intipoproducto === '1' ? 'light-green-2' : item.intipoproducto === '2' ? 'deep-orange-2' : 'orange-2'"
-                      style="margin-top: 5px;margin-right: 5px; color:#404d52">
-                      {{ item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' :
-                        'Servicio' }}
-                    </q-badge>
+            <q-card v-for="item in rowsproductosfiltre" :key="item.id"
+              class="my-card custom-shadow custom-border-radius col-md-4 col-sm-11 col-xs-11" bordered flat
+              style="margin: 10px;">
+              <div class="row no-wrap">
+                <!-- Imagen a la izquierda -->
+                <q-img class="borde-cust col-4" src="img/no-photo-prod.avif">
+                  <div class="overlay-content"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; background: rgba(0, 0, 0, 0.5);">
+                    <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)" size="40px">
+                      {{ primeraletra(item.producto) }}
+                    </q-avatar>
+                    <div><b>{{ item.producto }}</b></div>
                     {{ item.categoria }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <div style="display: flex;">
-                    <q-btn flat round v-if="item.intipoproducto === '2'" icon="dashboard_customize" style="margin: 3px;"
-                      @click="openEditarCompuesto(item)" />
-                    <q-btn flat round v-if="item.intipoproducto === '2'" icon="inventory_2" style="margin: 3px;"
-                      @click="openAbrirCompuesto(item)" />
-                    <q-btn v-show="false" flat round icon="delete" style="margin: 3px;" />
-                    <q-btn flat round icon="edit" @click="openEditar(item)" style="margin: 3px;" />
+                    <q-badge
+                      :color="item.intipoproducto === '1' ? 'grey-5' : item.intipoproducto === '2' ? 'grey-5' : 'grey-5'"
+                      class="q-mt-xs q-mr-xs q-pa-xs" rounded>
+                      {{ item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' : 'Servicio'
+                      }}
+                    </q-badge>
+                    <div>SKU: {{ item.sku }}</div>
                   </div>
-                </q-item-section>
-              </q-item>
+                </q-img>
 
-              <q-item horizontal>
-                <q-item-section avatar style="padding-right: 15px;align-items: center;">
-                  <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
-                    {{ primeraletra(item.producto) }}
-                  </q-avatar>
-                  <q-badge color="dark" style="margin-top: 5px;">
-                    Bs.{{ item.precio }}
-                  </q-badge>
-                </q-item-section>
+                <!-- Contenido a la derecha -->
+                <div class="col-8">
+                  <q-card-section class="q-pa-sm">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <h6 class="q-mb-none">{{ item.producto }}</h6>
+                      <q-btn round unelevated color="orange-1" text-color="orange-10" icon="edit"
+                        @click="openEditar(item)" />
+                    </div>
 
-                <q-item-section class="tarjeticainside">
-                  <div style="display: flex;">
-                    {{ item.descripcion }}
-                  </div>
-                  <div style="display: flex;">
-                    <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
-                      <div class="text-center">Unidad</div>
-                      <div class="text-primary">{{ item.unidad }}</div>
-                    </div>
-                    <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
-                      <div class="text-center">Impuesto.</div>
-                      <div class="text-primary">{{ item.impuesto }}</div>
-                    </div>
-                    <div style="display: grid;width: 33%;font-size: 11px; justify-content: center;">
-                      <div class="text-center">Inventario</div>
-                      <div class="text-center">
-                        <q-badge v-if="item.inventario > 10" class="estatusbien">
-                          {{ item.inventario }}
-                        </q-badge>
-                        <q-badge v-if="item.inventario > 0 && item.inventario <= 10" class="estatusmedio">
-                          {{ item.inventario }}
-                        </q-badge>
-                        <q-badge v-if="item.inventario === 0" class="estatusmal">
-                          {{ item.intipoproducto === '3' ? 'N/A' : 0 }}
-                        </q-badge>
-                      </div>
-                    </div>
-                  </div>
-                </q-item-section>
-              </q-item>
+                  </q-card-section>
+                  <q-separator />
+                  <q-card-section class="q-pa-sm">
+                    <q-item-label caption>Precio:</q-item-label>
+                    <h6>
+                      Bs. {{ item.precio }} </h6>
+
+                  </q-card-section>
+                  <q-separator />
+                  <q-list>
+                    <q-item>
+                      <q-item-section avatar>
+                        <q-icon name="attach_money" />
+                      </q-item-section>
+                      <q-item-section>
+                        <q-item-label caption>Impuesto:</q-item-label>
+                        <q-item-label>{{ item.impuesto }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                    <q-item>
+                      <q-item-section avatar>
+                        <q-icon name="description" />
+                      </q-item-section>
+                      <q-item-section>
+                        <q-item-label caption>Descripción:</q-item-label>
+                        <q-item-label>{{ item.descripcion }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                    <q-item>
+                      <q-item-section avatar>
+                        <q-icon name="straighten" />
+                      </q-item-section>
+                      <q-item-section>
+                        <q-item-label caption>Unidad:</q-item-label>
+                        <q-item-label>{{ item.unidad }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                    <q-item>
+                      <q-item-section avatar>
+                        <q-icon name="inventory" />
+                      </q-item-section>
+                      <q-item-section>
+                        <q-item-label caption>Inventario:</q-item-label>
+                        <q-item-label>
+                          <div>
+                            <q-badge v-if="item.inventario > 10" class="estatusbien">
+                              {{ item.inventario }}
+                            </q-badge>
+                            <q-badge v-if="item.inventario > 0 && item.inventario <= 10" class="estatusmedio">
+                              {{ item.inventario }}
+                            </q-badge>
+                            <q-badge v-if="item.inventario === 0" class="estatusmal">
+                              {{ item.intipoproducto === '3' ? 'N/A' : 0 }}
+                            </q-badge>
+                          </div>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </div>
+              </div>
             </q-card>
+
           </div>
         </div>
       </div>

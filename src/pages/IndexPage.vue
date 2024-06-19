@@ -1,8 +1,6 @@
 <template>
   <q-page>
-
     <!-- Banner con 3 secciones -->
-
     <q-banner class="fondo-gris shadow-up-9">
       <div class="row">
         <!-- Columna con información del cliente -->
@@ -66,7 +64,7 @@
     <!-- Sección de botones principales y secundarios -->
     <div class="q-px-md q-py-sm q-gutter-sm row items-center justify-between">
       <!-- Botones principales -->
-      <div class="col-10 col-md-auto text-center">
+      <div class="col-12 col-md-auto text-center">
         <q-btn-group unelevated>
           <q-btn no-caps unelevated color="accent" icon-right="add" @click="abrirBuscarItem"
             label="Agregar item (F2)" />
@@ -80,69 +78,96 @@
       </div>
 
       <!-- Botones secundarios -->
-      <div class="col-12 col-md-auto text-center">
+      <div class="col-12 col-md-auto text-center q-mt-md">
         <q-btn-group unelevated>
           <q-btn outline unelevated no-caps color="primary" icon-right="close" @click="openDeleteHolds" label="Cancelar"
             :disable="holds.length <= 0" />
           <q-btn no-caps unelevated class="gradient-btn" icon-right="point_of_sale" @click="abrirRealizarVenta"
             label="Realizar venta (F6)" :disable="holds.length <= 0" />
-
         </q-btn-group>
       </div>
     </div>
 
     <!-- Sección las tarjetas -->
     <div class="puntodeventa row mt-2">
-      <q-img v-if="slide === 1" src="img/sin-productos.png" style=" width: 35% ; height: auto;" fit="contain" />
+      <q-img v-if="slide === 1" src="img/sin-productos.png" style="width: 35%; height: auto;" fit="contain" />
       <div v-else class="puntodeventaconitem col">
         <div class="row justify-center">
 
           <q-card class="my-card custom-shadow custom-border-radius col-md-5 col-sm-11 col-xs-11" bordered
-            v-for="item in holds" :key="item" style="margin:10px;">
-            <q-card-section>
-              <div class="row items-center no-wrap">
-                <q-img class="rounded-borders col-3" src="img/no-photo.png" />
-                <div class="col-9">
-                  <div class="row items-center justify-between q-mb-md" style="margin:10px;">
-                    <div class="row items-center col">
-                      <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)" class="q-mr-sm">
-                        {{ primeraletra(item.producto) }}
-                      </q-avatar>
-                      <div>
-                        <div class="text-h6">
-                          {{ item.producto }}
-                        </div>
-                        <div class="text-grey">
-                          {{ item.categoria }}
-                        </div>
-                      </div>
-                    </div>
-                    <q-btn round unelevated color="red-1" text-color="red-10" icon="delete"
-                      @click="deleteItemHolds(item)" style="margin:0" />
-                  </div>
-                  <div class="tarjeticainside" style="margin:10px;">
-                    <span class="color-texto">Precio unitario: <b>Bs {{ item.precio }}</b> </span><br>
-                    <span class="color-texto">🏛️ Imp %: <b>{{ item.tasa }}</b></span><br>
-                    <span :id="'monto' + item.idproducto" class="precio">Bs. {{ item.total }}</span>
-                  </div>
+            v-for="item in holds" :key="item" style="margin: 10px;">
+            <div class="row no-wrap">
+              <!-- Imagen a la izquierda -->
+              <q-img class="borde-cust col-4"
+                src="img/no-photo-prod.avif">
+                <div class="overlay-content"
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; background: rgba(0, 0, 0, 0.5);">
+                  <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)" size="40px">
+                    {{ primeraletra(item.producto) }}
+                  </q-avatar>
+                  <div><b>{{ item.producto }}</b></div>
+                  <q-badge color="grey-5" class="q-mt-xs q-mr-xs q-pa-xs" rounded>
+                    {{ item.categoria }}
+                  </q-badge>
                 </div>
+              </q-img>
+
+              <!-- Contenido a la derecha -->
+              <div class="col-8">
+                <q-card-section class="q-pa-sm">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h6 class="q-mb-none">{{ item.producto }}</h6>
+                    <q-btn round unelevated color="red-1" text-color="red-10" icon="delete"
+                      @click="deleteItemHolds(item)" style="margin: 0;" />
+                  </div>
+
+                </q-card-section>
+                <q-separator />
+
+                <q-separator />
+                <q-list>
+                  <q-item>
+                    <q-item-section avatar>
+                      <q-icon name="sell" color="grey-7" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label caption>Precio unitario:</q-item-label>
+                      <q-item-label>{{ item.precio }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section avatar>
+                      <q-icon name="account_balance" color="grey-7" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label caption>Impuesto (%):</q-item-label>
+                      <q-item-label>{{ item.tasa }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section avatar>
+                      <q-icon name="attach_money" color="grey-7" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label caption>Total:</q-item-label>
+                      <span :id="'monto' + item.idproducto" class="precio">Bs. {{ item.total }}</span>
+                    </q-item-section>
+                  </q-item>
+
+                </q-list>
+                <q-separator />
+                <q-card-actions align="center">
+                  <span style="margin-right: 10px;">Cantidad</span>
+                  <input class="inputCantidad" :id="'cantidad' + item.idproducto" :value="item.cantidad"
+                    @input="calcularMonto(item)" style="margin-right: 10px;" />
+                  <q-btn round unelevated class="btncantidad" icon="remove" color="red-1" text-color="red-10"
+                    @click="actualizarCantidad(item, 2)" style="margin-right: 10px;" />
+                  <q-btn round unelevated class="btncantidad" color="green-1" text-color="green-10" icon="add"
+                    @click="actualizarCantidad(item, 1)" />
+                </q-card-actions>
               </div>
-            </q-card-section>
+            </div>
 
-            <q-separator />
-
-            <q-card-actions align="center">
-
-              <span style="margin-right: 10px;">Cantidad</span>
-              <input class="inputCantidad" :id="'cantidad' + item.idproducto" :value="item.cantidad"
-                @input="calcularMonto(item)" style="margin-right: 10px;" />
-
-              <q-btn round unelevated class="btncantidad" icon="remove" color="red-1" text-color="red-10"
-                @click="actualizarCantidad(item, 2)" style="margin-right: 10px;" />
-              <q-btn round unelevated class="btncantidad" color="green-1" text-color="green-10" icon="add"
-                @click="actualizarCantidad(item, 1)" />
-
-            </q-card-actions>
           </q-card>
         </div>
       </div>
@@ -151,95 +176,110 @@
     <!-- Sección de modales -->
     <!-- BUSCAR ITEMS DE PRODUCTOS -->
     <q-dialog v-model="buscaritem">
-      <q-card class="q-pa-lg custom-shadow custom-border-radius" style=" width: 400px;">
-        <q-card-section style="padding: 10px 15px 7px;">
-          <div class="">
-            <q-input color="blue-grey-3" outlined standout bottom-slots v-model="textitem"
-              label="Nombre o Sku de producto" counter autofocus>
-              <template v-slot:prepend>
-                <q-icon name="search" />
-              </template>
-              <template v-slot:append>
-                <q-icon name="close" @click="textitem = ''" class="cursor-pointer" />
-              </template>
-
-              <template v-slot:hint>
-                Cantidad de letras
-              </template>
-            </q-input>
+      <q-card class="q-pa-lg custom-shadow custom-border-radius" style="width: 800px; " bordered>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Agregar Item</h6>
           </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section style="padding: 10px 15px;">
+          <q-input color="blue-grey-3" outlined standout bottom-slots v-model="textitem"
+            label="Nombre o Sku de producto" counter autofocus>
+            <template v-slot:prepend>
+              <q-icon name="search" />
+            </template>
+
+            <template v-slot:hint>
+              Cantidad de letras
+            </template>
+          </q-input>
         </q-card-section>
 
         <q-separator />
 
-        <q-card-section v-if="buscadoproducto" style="max-height: 64vh" class="scroll">
-          <q-card v-for="item in rowsproductosfiltre" :key="item.id" class=" custom-shadow custom-border-radius"
-            style="margin:10px">
-            <q-item horizontal>
-              <q-item-section>
-                <q-item-label>{{ item.producto }}</q-item-label>
-                <q-item-label>
-                  <q-badge
-                    :color="item.intipoproducto === '1' ? 'light-green-2' : item.intipoproducto === '2' ? 'deep-orange-2' : 'orange-2'"
-                    style="margin-top: 5px;margin-right: 5px; border-radius: 10%; color:#404d52">
-                    {{ item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' : 'Servicio'
-                    }}
-                  </q-badge>
-                  SKU {{ item.sku }}
-                </q-item-label>
-                <q-item-label caption>{{ item.categoria }}</q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <div style="display: flex;">
-                  <q-btn flat round color="primary" icon="add_shopping_cart" @click="additemholds(item)" />
-                </div>
-              </q-item-section>
-            </q-item>
+        <q-card-section v-if="buscadoproducto">
+          <q-scroll-area style="height:  64vh;">
+            <q-card v-for="item in rowsproductosfiltre" :key="item.id"
+              class="custom-shadow custom-border-radius q-mb-md" bordered>
+              <q-item class="q-pa-sm">
+                <q-item-section>
+                  <q-item-label caption style="padding-left:7px">{{ item.categoria }}</q-item-label>
+                  <q-item-label class="text-h6"> <q-avatar text-color="white"
+                      :style="'background: ' + colorLetra(item.producto)">
+                      {{ primeraletra(item.producto) }}
+                    </q-avatar>
+                    {{ item.producto }}</q-item-label>
+                  <q-item-label>
+                    <q-badge
+                      :color="item.intipoproducto === '1' ? 'light-green-5' : item.intipoproducto === '2' ? 'deep-orange-5' : 'orange-5'"
+                      class="q-mt-xs q-mr-xs q-pa-xs" rounded>
+                      {{ item.intipoproducto === '1' ? 'Simple' : item.intipoproducto === '2' ? 'Compuesto' : 'Servicio'
+                      }}
+                    </q-badge>
+                    <span class="q-ml-sm">SKU: {{ item.sku }}</span>
+                  </q-item-label>
 
-            <q-item horizontal>
-              <q-item-section avatar style="padding-right: 15px;align-items: center;">
-                <q-avatar text-color="white" :style="'background: ' + colorLetra(item.producto)">
-                  {{ primeraletra(item.producto) }}
-                </q-avatar>
-                <q-badge color="dark" style="margin-top: 5px;">
-                  Bs. {{ item.precio }}
-                </q-badge>
-              </q-item-section>
+                </q-item-section>
+                <q-item-section side>
+                  <q-btn round unelevated color="deep-orange-1" text-color="deep-orange-8" icon="add_shopping_cart"
+                    @click="additemholds(item)" />
+                </q-item-section>
+              </q-item>
 
-              <q-item-section class="tarjeticainside">
-                <div style="display: flex;">
-                  {{ item.descripcion }}
-                </div>
-                <div style="display: flex;">
-                  <div style="display: grid;width: 48%;font-size: 11px; justify-content: center;">
-                    <div class="text-left">Unidad</div>
-                    <div class="text-primary">{{ item.unidad }}</div>
+              <q-separator />
+
+              <q-item class="q-pa-sm">
+                <q-item-section class=" q-ml-md">
+
+                  <div class="row q-mt-sm">
+                    <div class="col-4 text-left">
+                      <span class="color-texto texto-pequeno">Descripción: </span>
+                      <p class=" tarjeticainside mr-2 texto-pequeno"> {{ item.descripcion }}</p>
+
+                    </div>
+                    <div class="col-4  text-left">
+                      <span class="color-texto texto-pequeno">Unidad: </span>
+                      <p>{{ item.unidad }}</p>
+                    </div>
+                    <div class="col-4  text-left">
+                      <span class="color-texto texto-pequeno">Impuesto: </span>
+                      <p>{{ item.impuesto }}</p>
+                    </div>
                   </div>
-                  <div style="display: grid;width: 48%;font-size: 11px; justify-content: center;">
-                    <div class="text-center">Impuesto.</div>
-                    <div class="text-primary">{{ item.impuesto }}</div>
-                  </div>
-                </div>
-              </q-item-section>
-            </q-item>
-          </q-card>
+                </q-item-section>
+              </q-item>
+              <q-card-actions class="tarjeticainside" align="right">
+                <h6> <span class="color-texto texto-pequeno">Precio: </span>
+                  Bs. {{ item.precio }} </h6>
+              </q-card-actions>
+            </q-card>
+          </q-scroll-area>
         </q-card-section>
 
         <q-separator />
 
-        <q-card-actions align="center">
-          <q-btn outline no-caps icon-right="close" label="Cancelar" color="warning" v-close-popup />
+        <q-card-actions align="right">
+          <q-btn outline no-caps label="Cancelar" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <!-- BUSCAR Y AGREGAR CLIENTES A LA VENTA -->
-
     <q-dialog v-model="modalcliente">
       <q-card class="q-pa-lg custom-shadow custom-border-radius">
-        <q-card-section class="text-center">
-          <h6>Buscar cliente</h6>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Agregar cliente</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
+
         <q-separator />
         <q-card-section style="padding: 15px;">
           <div class="">
@@ -263,11 +303,11 @@
             <q-btn class="col-2" icon="search" unelevated color="accent" @click="buscarCliente" />
           </div>
         </q-card-section>
-        <div v-if="noencontrado" class="noencontrado">
+        <div v-if="noencontrado" class="noencontrado text-center">
           <p class="text-noencontrado">Lo sentimos, no existe un cliente con ese documento</p>
 
         </div>
-        <div v-if="encontrado" class="encontrado">
+        <div v-if="encontrado" class="encontrado text-center">
           <p class="text-encontrado">Cliente encontrado</p>
         </div>
         <q-separator v-if="clientebuscado" />
@@ -304,12 +344,12 @@
         </q-card-section>
         <q-separator />
         <q-card-actions align="center">
-          <q-btn outline no-caps label="Cancelar" icon-right="close" color="warning" @click="limpiarCliente"
+          <q-btn outline no-caps label="Cancelar" icon-right="close" color="primary" @click="limpiarCliente"
             v-close-popup />
-          <q-btn unelevated no-caps label="Aceptar (F4)" color="warning" icon-right="check" @click="crearCliente"
+          <q-btn unelevated no-caps label="Aceptar (F4)" color="primary" icon-right="check" @click="crearCliente"
             :disable="dsbBtnCrearCliente" />
         </q-card-actions>
-        <q-card-actions align="center" style="color: #404d52;">
+        <q-card-actions align="center" class=" color-texto">
           Presione ESC para salir
         </q-card-actions>
 
@@ -319,34 +359,49 @@
     <!-- LIMPIAR HOLDS DE VENTA -->
     <q-dialog v-model="modaldeleteholds" persistent>
       <q-card class="q-pa-lg custom-shadow custom-border-radius">
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Eliminar</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
         <q-card-section style="display: flex; align-items: center;">
-          <q-avatar color="primary" text-color="white">
-            <q-icon name="delete" />
-          </q-avatar>
-          <div class="text-h6 color-texto" style="margin-left: 10px;"> ¿Desea eliminar esta venta?</div>
+
+          <div class=" color-texto" style="margin-left: 10px;"> ¿Desea eliminar esta venta?</div>
         </q-card-section>
 
         <q-card-section>
-
+          <q-img class="rounded-borders col-3" src="img/delete.png" />
         </q-card-section>
 
         <q-card-actions align="center">
-          <q-btn outline no-caps icon-right="close" label="Cancelar" color="warning" v-close-popup />
-          <q-btn unelevated no-caps label="Aceptar" color="warning" icon-right="check" @click="deleteHolds(1)" />
+          <q-btn outline no-caps icon-right="close" label="Cancelar" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Aceptar" color="primary" icon-right="check" @click="deleteHolds(1)" />
         </q-card-actions>
-        <q-card-actions align="center" style="color: #404d52;">
+        <q-card-actions align="center" class=" color-texto">
           Presione ESC para salir
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <!-- MOSTRAR PREVIO DE VENTA -->
     <q-dialog v-model="modalrealizarventa" persistent>
       <q-card class="q-pa-lg custom-shadow custom-border-radius">
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Realizar venta</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
         <q-card-section style="display: flex; align-items: center;">
           <q-avatar color="primary" text-color="white">
             <q-icon name="shopping_cart_checkout" />
           </q-avatar>
-          <div class="text-h6 color-texto" style="margin-left: 10px;"> ¿Realizar esta venta?</div>
+          <div class="text-p color-texto" style="margin-left: 10px;"> ¿Desea realizar esta venta?</div>
         </q-card-section>
         <q-separator />
         <q-card-section>
@@ -423,14 +478,15 @@
         </q-card-section>
         <q-separator />
         <q-card-actions align="center">
-          <q-btn outline no-caps icon-right="close" color="warning" label="Cancelar" v-close-popup />
-          <q-btn unelevated no-caps icon-right="check" color="warning" label="Aceptar" @click="realizarVenta" />
+          <q-btn outline no-caps icon-right="close" color="primary" label="Cancelar" v-close-popup />
+          <q-btn unelevated no-caps icon-right="check" color="primary" label="Aceptar" @click="realizarVenta" />
         </q-card-actions>
-        <q-card-actions align="center" style="color: #404d52;">
+        <q-card-actions align="center" class=" color-texto">
           Presione ESC para salir
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <!-- MOSTRAR DETALLE DE VENTA -->
     <q-dialog v-model="modaldetalleinvoice" persistent>
       <q-card class="q-pa-lg custom-shadow custom-border-radius">
@@ -530,10 +586,10 @@
         <q-separator />
         <q-card-actions align="center">
 
-          <q-btn label="Cerrar" outline no-caps icon-right="close" color="warning" v-close-popup />
-          <q-btn unelevated no-caps label="Imprimir" color="warning" icon-right="check" @click="imprimir" />
+          <q-btn label="Cerrar" outline no-caps icon-right="close" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Imprimir" color="primary" icon-right="check" @click="imprimir" />
         </q-card-actions>
-        <q-card-actions align="center" style="color: #404d52;">
+        <q-card-actions align="center" class=" color-texto">
           Presione ESC para salir
         </q-card-actions>
       </q-card>
@@ -544,11 +600,19 @@
     <!-- MOSTRAR ANULAR DOCUMENTO -->
     <q-dialog v-model="modalanular" persistent>
       <q-card class="q-pa-lg custom-shadow custom-border-radius">
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Anular documento</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
         <q-card-section style="display: flex; align-items: center;">
           <q-avatar color="primary" text-color="white">
             <q-icon name="cancel_presentation" />
           </q-avatar>
-          <div class="text-h6" style="margin-left: 10px;"> Anular Documento</div>
+          <div style="margin-left: 10px;"> Buscar número interno</div>
         </q-card-section>
         <q-separator />
         <q-card-section style="justify-content: center;">
@@ -561,9 +625,9 @@
         <q-separator />
         <q-card-section v-if="facturabuscado" style="justify-content: center;">
           <div :class="detalleventaanular.estatus === '1' ? 'procesada' : 'anulada'"
-            style="display: flex; justify-content: center; align-items: center;width: 100%;"> {{
+            style="display: flex; justify-content: center; align-items: center;width: 100%;">{{
               detalleventaanular.estatus
-                === '1' ? 'PROCESADA' : 'ANULADA' }}</div>
+                === '1' ? 'Procesada' : 'Anulada' }}</div>
           <div style="display: flex; align-items: left;width: 100%;">
             <div class="numero" style="margin-left: 10px;"> {{ detalleventaanular.tipofactura }}</div>
             <div class="numero" style="margin-left: 10px;"> {{ detalleventaanular.numerointerno }}</div>
@@ -650,11 +714,11 @@
         </q-card-section>
         <q-separator />
         <q-card-actions align="center">
-          <q-btn label="Cerrar" outline no-caps icon-right="close" color="warning" v-close-popup />
-          <q-btn label="Aceptar" unelevated no-caps color="warning" icon-right="check" :disable="btnDisableAnular"
+          <q-btn label="Cerrar" outline no-caps icon-right="close" color="primary" v-close-popup />
+          <q-btn label="Aceptar" unelevated no-caps color="primary" icon-right="check" :disable="btnDisableAnular"
             @click="anularDocumento" />
         </q-card-actions>
-        <q-card-actions align="center" style="color: #404d52;">
+        <q-card-actions align="center" class=" color-texto">
           Presione ESC para salir
         </q-card-actions>
       </q-card>
@@ -844,7 +908,7 @@ export default defineComponent({
       await axios.post(ENDPOINT_PATH_V2 + 'ventas/anularventa', body).then(async response => {
         console.log(response)
         this.modalanular = false
-        Notify.create('Documento ANULADO con éxito')
+        Notify.create({ message: 'Documento ANULADO con éxito', type: 'positive' })
       })
     },
     async buscarFactura() {
@@ -863,7 +927,7 @@ export default defineComponent({
           this.facturabuscado = true
           this.btnDisableAnular = this.detalleventaanular.estatus === '2' || false
         } else {
-          Notify.create('Documento NO ENCONTRADO')
+          Notify.create({ message: 'Documento NO ENCONTRADO', type: 'info' })
           this.facturabuscado = false
           this.btnDisableAnular = true
           this.idUpd = ''
@@ -889,7 +953,10 @@ export default defineComponent({
           // console.log('VENTA REALIZADA')
           $this.modaldetalleinvoice = true
         }).catch(error => {
-          Notify.create('Problemas al listar items Ventas ' + error)
+          Notify.create({
+            message: 'Problemas al listar items Ventas ' + error,
+            type: 'negative'
+          })
         })
         console.log(this.detalleventa)
       })
@@ -982,7 +1049,10 @@ export default defineComponent({
         this.documentoclienteventa = ''
         this.listarHolds()
       }).catch(error => {
-        Notify.create('Problemas al ELIMINAR Hold de venta ' + error)
+        Notify.create({
+          message: 'Problemas al ELIMINAR Hold de venta ' + error,
+          type: 'negative'
+        })
       })
     },
     deleteItemHolds(item) {
@@ -995,16 +1065,26 @@ export default defineComponent({
       }
       // console.log(body)
       this.$q.dialog({
-        title: 'Eliminar Item!',
+        title: 'Eliminar Item',
         message: '¿Desea eliminar este item?',
-        html: true,
         ok: {
-          color: 'primary',
-          label: 'Sí'
+          label: 'Aceptar',
+          color: 'primary', // Cambia el color del botón a primario (azul)
+          flat: false, // Botón con estilo plano
+          outline: false, // Botón sin borde
+          unelevated: true,
+          icon: 'check',
+          noCaps: true
+
         },
         cancel: {
-          color: 'negative',
-          label: 'No'
+          label: 'No',
+          color: 'primary', // Cambia el color del botón a negativo (rojo)
+          icon: 'close',
+          flat: false, // Botón con estilo plano
+          outline: true, // Botón sin borde
+          unelevated: true,
+          noCaps: true
         },
         persistent: true
       }).onOk(() => {
@@ -1013,7 +1093,10 @@ export default defineComponent({
           this.nombrecliente = ''
           this.listarHolds()
         }).catch(error => {
-          Notify.create('Problemas al ELIMINAR itemhold de venta ' + error)
+          Notify.create({
+            message: 'Problemas al ELIMINAR itemhold de venta ' + error,
+            type: 'negative'
+          })
         })
       })
     },
@@ -1066,10 +1149,15 @@ export default defineComponent({
           } else {
             this.buscaritem = false
             this.slide = 2
-            Notify.create(response.data.resp.toUpperCase())
+            Notify.create({
+              message: `<span style="text-transform: uppercase;">${response.data.resp}</span>`
+            })
           }
         }).catch(error => {
-          Notify.create('Problemas al crear itemhold de venta ' + error)
+          Notify.create({
+            message: 'Problemas al crear itemhold de venta ' + error,
+            type: 'negative'
+          })
         })
       } else { // si find
         // console.log('this.holds[find]')
@@ -1121,7 +1209,10 @@ export default defineComponent({
         }
         this.rowsproductosfiltre = this.rowsproductos
       }).catch(error => {
-        Notify.create('Problemas al listar Categorias ' + error)
+        Notify.create({
+          message: 'Problemas al listar Categorías' + error,
+          type: 'negative'
+        })
       })
     },
     abrirRealizarVenta() {
@@ -1145,10 +1236,16 @@ export default defineComponent({
           $this.abrirDetalleInvoive()
           // $this.modaldetalleinvoice = true
         } else {
-          Notify.create(datos.resp.message)
+          Notify.create({
+            message: datos.resp.message,
+            type: 'negative'
+          })
         }
       }).catch(error => {
-        Notify.create('Problemas al REALIZAR venta ' + error)
+        Notify.create({
+          message: 'Problemas al REALIZAR venta ' + error,
+          type: 'negative'
+        })
       })
       this.modalrealizarventa = false
     },
@@ -1192,17 +1289,20 @@ export default defineComponent({
           this.optionsdocumento.push(obj)
         }
       }).catch(error => {
-        Notify.create('Problemas al listar Tipos ' + error)
+        Notify.create({
+          message: 'Problemas al listar Tipos' + error,
+          type: 'negative'
+        })
       })
     },
     buscarCliente() {
       this.limpiarCliente()
       if (!this.modeldocumento) {
-        Notify.create('Debe seleccionar TIPO DOCUMENTO')
+        Notify.create({ message: 'Debe seleccionar TIPO DOCUMENTO', type: 'info' })
         return
       }
       if (this.documento.length === 0) {
-        Notify.create('Debe agregar DOCUMENTO')
+        Notify.create({ message: 'Debe agregar DOCUMENTO', type: 'info' })
         return
       }
       const body = {
@@ -1226,22 +1326,25 @@ export default defineComponent({
         this.clientebuscado = true
         this.dsbBtnCrearCliente = false
       }).catch(error => {
-        Notify.create('Problemas al buscar cliente ' + error)
+        Notify.create({
+          message: 'Problemas al buscar cliente' + error,
+          type: 'negative'
+        })
       })
     },
     crearCliente() {
       // if (this.modeldocumento)
       // console.log(this.modeldocumento)
       if (!this.modeldocumento) {
-        Notify.create('Debe seleccionar TIPO DOCUMENTO')
+        Notify.create({ message: 'Debe seleccionar TIPO DOCUMENTO', type: 'info' })
         return
       }
       if (this.documento.length === 0) {
-        Notify.create('Debe agregar DOCUMENTO')
+        Notify.create({ message: 'Debe agregar DOCUMENTO', type: 'info' })
         return
       }
       if (this.nombrecliente.length === 0) {
-        Notify.create('Debe agregar NOMBRE')
+        Notify.create({ message: 'Debe agregar NOMBRE', type: 'info' })
         return
       }
       if (!this.encontrado) {
@@ -1263,7 +1366,10 @@ export default defineComponent({
             this.crearHolds(datos, this.idusuario)
           }
         }).catch(error => {
-          Notify.create('Problemas al crear cliente ' + error)
+          Notify.create({
+            message: 'Problemas al crear cliente' + error,
+            type: 'negative'
+          })
         })
       } else {
         this.modalcliente = false
@@ -1287,7 +1393,10 @@ export default defineComponent({
           this.fechaholds = datos.fecha
         }
       }).catch(error => {
-        Notify.create('Problemas al crear hold de venta ' + error)
+        Notify.create({
+          message: 'Problemas al crear hold de venta' + error,
+          type: 'negative'
+        })
       })
     },
     async listarHolds() {
@@ -1323,7 +1432,10 @@ export default defineComponent({
             }
             this.slide = this.holds.length > 0 ? 2 : 1
           }).catch(error => {
-            Notify.create('Problemas al listar items Holds ' + error)
+            Notify.create({
+              message: 'Problemas al listar items Holds' + error,
+              type: 'negative'
+            })
           })
         }
         this.subtotalusd = (this.subtotal / this.tasa).toFixed(2)
@@ -1331,9 +1443,12 @@ export default defineComponent({
         this.totalusd = (this.total / this.tasausd).toFixed(2)
         // this.holds.push(obj)
         /* for (const i in datos) {
-        } */
+    } */
       }).catch(error => {
-        Notify.create('Problemas al listar Holds ' + error)
+        Notify.create({
+          message: 'Problemas al listar Holds' + error,
+          type: 'negative'
+        })
       })
     },
     primeraletra(item) {
@@ -1346,7 +1461,10 @@ export default defineComponent({
     async cargar() {
       const datos = await axios.get(ENDPOINT_PATH_V2 + 'configuracion/' + sessionStorage.getItem('co_empresa'))
         .catch(error => {
-          Notify.create('Problemas al listar Configuracion ' + error)
+          Notify.create({
+            message: 'Problemas al listar Configuración' + error,
+            type: 'negative'
+          })
         })
       console.log(datos)
       return datos.data.resp
@@ -1407,7 +1525,7 @@ export default defineComponent({
           }
           if (event.key === 'F6') {
             if ($this.holds.length <= 0) {
-              Notify.create('NO TIENE VENTA ')
+              Notify.create({ message: 'No tiene venta', type: 'info' })
             } else {
               event.preventDefault()
               $this.abrirRealizarVenta()
@@ -1474,12 +1592,14 @@ export default defineComponent({
   background: linear-gradient(90deg, rgba(255, 179, 50, 0.20) 0%, rgba(33.82, 121.76, 202.94, 0.20) 50%, rgba(255, 0, 0, 0.20) 100%)
 }
 
-.text-encontrado {
+.text-encontrado,
+.procesada {
   color: #32651A;
   background: rgba(90.58, 233.75, 96.30, 0.13);
 }
 
-.text-noencontrado {
+.text-noencontrado,
+.anulada {
   color: #900101;
   background: rgba(255, 9.56, 9.56, 0.13);
 }
@@ -1510,13 +1630,13 @@ export default defineComponent({
   font-weight: bold;
 }
 
-.puntodeventa {
+/* .puntodeventa {
   height: 59vh;
   background: #FFFAEC;
   display: flex;
   justify-content: center;
   overflow: auto;
-}
+} */
 
 .carritofondo {
   font-size: 170px;
@@ -1562,16 +1682,6 @@ export default defineComponent({
 
 .letratotalesfactura {
   font-size: 12px;
-}
-
-.procesada {
-  color: green;
-  font-weight: bold;
-}
-
-.anulada {
-  color: red;
-  font-weight: bold;
 }
 
 .contenedorBtn {

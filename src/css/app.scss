@@ -15,7 +15,11 @@ h4,
 h5,
 h6 {
   color: #5A5A5A;
-  overflow-wrap: break-word;
+
+}
+
+p {
+  margin: 0
 }
 
 hr {
@@ -260,4 +264,9 @@ select {
 
 .color-texto {
   color: #3f3f3f
+}
+
+.borde-cust {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }

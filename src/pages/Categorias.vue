@@ -3,7 +3,7 @@
     <div class="col">
       <div class="botones row fondo-gris  shadow-up-9">
 
-        <h6 class="p-4">Categorías</h6>
+        <h6 class="p-2">Categorías</h6>
 
       </div>
       <div class="botones ">
@@ -17,32 +17,46 @@
         <div v-else class="listarcategoriasconitem col">
           <div class="row justify-center">
             <q-card v-for="item in rows" :key="item"
-              class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11  custom-shadow custom-border-radius">
+              class="my-card tarjetaitem col-md-5 col-sm-11 col-xs-11  custom-shadow custom-border-radius" bordered>
               <q-item horizontal>
                 <q-item-section>
-                  <q-item-label class="color-texto"><b>{{ item.categoria }}</b></q-item-label>
+                  <div class="text-h6">
+                    <q-avatar text-color="white" :style="'background: ' + colorLetra(item.categoria)">
+                      {{ primeraletra(item.categoria) }}
+                    </q-avatar>
+                    <span class="text-h6 color-texto ml-2">{{ item.categoria }}</span>
+                  </div>
+
                 </q-item-section>
                 <q-item-section side>
                   <div style="display: flex;">
-                    <q-btn flat round icon="delete" />
-                    <q-btn flat round icon="edit" />
+                    <q-btn round unelevated color="red-1" text-color="red-10" icon="delete"
+                      style="margin-right: 10px;" />
+                    <q-btn round unelevated color="orange-1" text-color="orange-10" icon="edit" />
                   </div>
                 </q-item-section>
               </q-item>
 
               <q-item horizontal>
                 <q-item-section avatar style="padding-right: 15px;align-items: center;">
-                  <q-avatar text-color="white" :style="'background: ' + colorLetra(item.categoria)">
-                    {{ primeraletra(item.categoria) }}
-                  </q-avatar>
+
                 </q-item-section>
 
                 <q-item-section class="tarjeticainside">
-                  <div style="display: flex;">
-                    {{ item.descripcion }}
-                  </div>
+                  <q-item>
+                    <q-item-section avatar>
+                      <q-icon name="description" color="grey-7" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label caption>Descripción:</q-item-label>
+                      <p> {{ item.descripcion }}</p>
+                    </q-item-section>
+                  </q-item>
+
                 </q-item-section>
+
               </q-item>
+
             </q-card>
           </div>
         </div>
