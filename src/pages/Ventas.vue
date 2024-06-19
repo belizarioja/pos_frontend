@@ -153,9 +153,11 @@
           <q-separator />
         </div>
         <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
-          <q-btn label="Imprimir" color="secondary" @click="imprimir" />
+
+        <q-separator />
+        <q-card-actions align="center">
+          <q-btn outline no-caps label="Cancelar" icon-right="close" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Imprimir" color="primary" icon-right="print" @click="imprimir" />
         </q-card-actions>
       </q-card>
     </q-dialog>

@@ -134,47 +134,51 @@
     <!-- CREAR PRODUCTOS -->
     <q-dialog v-model="buscaritem">
       <q-card class=" custom-shadow custom-border-radius">
-        <q-card-section>
-          <div class="text-h6 text-center color-texto">Crear producto</div>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Crear producto</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
-        <q-separator />
+
         <q-card-section class="row">
-          <q-input class="col" filled v-model="sku" label="SKU" stack-label dense />
+          <q-input outlined class="col" v-model="sku" label="SKU" stack-label dense />
           <div class="col" style="padding: 0 10px;">
-            <q-select filled v-model="modeltipoproducto" :options="optionstipoproducto" option-label="tipoproducto"
+            <q-select outlined v-model="modeltipoproducto" :options="optionstipoproducto" option-label="tipoproducto"
               option-value="id" label="Seleccione tipo" dense />
           </div>
         </q-card-section>
-        <q-separator />
+
         <q-card-section class="row">
-          <div class="col" style="padding: 0 10px;">
-            <q-select filled v-model="model" :options="options" option-label="categoria" option-value="cod"
+          <div class="col">
+            <q-select outlined v-model="model" :options="options" option-label="categoria" option-value="cod"
               label="Seleccione categoría" dense />
           </div>
         </q-card-section>
-        <q-separator />
+
         <q-card-section>
           <div class="">
-            <q-input filled v-model="producto" label="Producto" stack-label dense />
+            <q-input outlined v-model="producto" label="Producto" stack-label dense />
 
           </div>
         </q-card-section>
-        <q-separator />
 
         <q-card-section>
-          <q-input v-model="descripcion" label="Descripción de producto" filled rows="2" dense type="textarea" />
+          <q-input outlined v-model="descripcion" label="Descripción de producto" rows="2" dense type="textarea" />
         </q-card-section>
 
         <q-separator />
         <q-card-section class="row">
           <div class="col">
-            <q-select filled v-model="modeltax" :options="optionstax" option-label="impuesto" option-value="cod"
+            <q-select outlined v-model="modeltax" :options="optionstax" option-label="impuesto" option-value="cod"
               label="Elija impuesto" dense />
 
           </div>
           <div class="col">
-            <q-select filled v-model="modelunidad" :options="optionsunidad" option-label="unidad" option-value="cod"
-              label="Elija unidad" dense />
+            <q-select outlined v-model="modelunidad" :options="optionsunidad" option-label="unidad" option-value="cod"
+              label="Elija unidad" dense style="padding: 0 10px;" />
           </div>
         </q-card-section>
         <q-separator />
@@ -201,56 +205,61 @@
         <q-separator />
         <q-card-actions align="center">
 
-          <q-btn outline no-caps icon-right="close" label="Cancelar" color="warning" v-close-popup />
-          <q-btn unelevated no-caps label="Aceptar" color="warning" icon-right="check" @click="crear" v-close-popup />
+          <q-btn outline no-caps icon-right="close" label="Cancelar" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Aceptar" color="primary" icon-right="check" @click="crear" v-close-popup />
         </q-card-actions>
 
       </q-card>
     </q-dialog>
 
     <!-- EDITAR PRODUCTOS -->
-    <q-dialog v-model="editaritem" position="top">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Editar producto</div>
+    <q-dialog v-model="editaritem">
+      <q-card class=" custom-shadow custom-border-radius">
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Editar producto</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-separator />
         <q-card-section class="row">
-          <q-input class="col" filled v-model="sku" label="SKU" stack-label dense />
+          <q-input class="col" outlined v-model="sku" label="SKU" stack-label dense />
           <div class="col" style="padding: 0 10px;">
-            <q-select filled disable v-model="modeltipoproducto" :options="optionstipoproducto"
+            <q-select outlined disable v-model="modeltipoproducto" :options="optionstipoproducto"
               option-label="tipoproducto" option-value="id" label="Seleccione tipo" dense />
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section class="row">
-          <div class="col" style="padding: 0 10px;">
-            <q-select filled v-model="model" :options="options" option-label="categoria" option-value="cod"
+          <div class="col">
+            <q-select outlined v-model="model" :options="options" option-label="categoria" option-value="cod"
               label="Seleccione categoría" dense />
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
           <div class="">
-            <q-input filled v-model="producto" label="Producto" stack-label dense />
+            <q-input outlined v-model="producto" label="Producto" stack-label dense />
 
           </div>
         </q-card-section>
         <q-separator />
 
         <q-card-section>
-          <q-input v-model="descripcion" label="Descripción de producto" filled dense type="textarea" />
+          <q-input v-model="descripcion" label="Descripción de producto" outlined dense type="textarea" />
         </q-card-section>
 
         <q-separator />
         <q-card-section class="row">
           <div class="col">
-            <q-select filled v-model="modeltax" :options="optionstax" option-label="impuesto" option-value="cod"
+            <q-select outlined v-model="modeltax" :options="optionstax" option-label="impuesto" option-value="cod"
               label="Elija impuesto" dense />
 
           </div>
           <div class="col">
-            <q-select filled v-model="modelunidad" :options="optionsunidad" option-label="unidad" option-value="cod"
+            <q-select outlined v-model="modelunidad" :options="optionsunidad" option-label="unidad" option-value="cod"
               label="Elija unidad" dense />
           </div>
         </q-card-section>
@@ -276,20 +285,24 @@
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn label="Aceptar" color="secondary" @click="editar" v-close-popup />
+        <q-card-actions align="center">
+          <q-btn outline no-caps icon-right="close" label="Cancelar" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Aceptar" color="primary" icon-right="check" @click="editar" v-close-popup />
         </q-card-actions>
-
       </q-card>
     </q-dialog>
 
     <!-- BUSCAR y AGREGAR PRODUCTOS SIMPLES AL COMPUESTO-->
     <q-dialog v-model="buscarsimples" position="top" persistent>
       <q-card style="background: #ddd; width: 350px;">
-        <q-card-section style="padding: 10px 15px 7px;">
-          <div class="titulobuscar">Agregar item al Producto Compuesto</div>
-          <div class="subtitulobuscar">{{ productocompuestoedit }}</div>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <span class="titulobuscar">Agregar item al Producto Compuesto</span>
+            <span class="subtitulobuscar">{{ productocompuestoedit }}</span>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-separator />
         <q-card-section style="padding: 10px 15px 7px;">
@@ -359,8 +372,8 @@
 
         <q-separator />
 
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
+        <q-card-actions align="center">
+          <q-btn outline no-caps icon-right="close" label="Cancelar" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -368,11 +381,15 @@
     <!-- EDITAR PRODUCTOS SIMPLES DEL COMPUESTO -->
     <q-dialog v-model="buscarcompuestos" position="top" persistent>
       <q-card style="background: #ddd; width: 350px;">
-        <q-card-section style="padding: 10px 15px 7px;">
-          <div class="titulobuscar">Editar items del Producto Compuesto</div>
-          <div class="subtitulobuscar">{{ productocompuestoedit }}</div>
-        </q-card-section>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <span class="titulobuscar">Editar items del Producto Compuesto</span>
+            <span class="subtitulobuscar">{{ productocompuestoedit }}</span>
+          </div>
 
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
         <q-separator />
         <q-card-section v-if="rowsproductocompuesto.length === 0" style="padding: 10px 15px 7px;">
           <div class="titulonohay">No tiene item asignado</div>
@@ -414,9 +431,9 @@
 
         <q-separator />
 
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
-          <q-btn label="Guardar" color="primary" @click="editarCompuesto" />
+        <q-card-actions align="center">
+          <q-btn outline no-caps icon-right="close" label="Cancelar" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Guardar" color="primary" icon-right="check" @click="editarCompuesto" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -729,7 +746,11 @@ export default defineComponent({
       axios.post(ENDPOINT_PATH_V2 + 'productos', data).then(async response => {
         this.modalcrear = false
         // console.log(response.data)
-        Notify.create(response.data.message)
+        Notify.create({
+          message: 'Producto creado exitosamente',
+          color: 'positive',
+          icon: 'check'
+        })
         // this.limpiar()
         this.listar()
       }).catch(error => {

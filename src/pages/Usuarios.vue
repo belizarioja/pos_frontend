@@ -57,93 +57,110 @@
         </div>
       </div>
     </div>
+
     <!-- MODAL PARA CREAR USUARIOS -->
     <q-dialog v-model="modalCreate" persistent>
       <q-card class="col-md-6 col-sm-11 col-xs-11" style="margin-top: 20px;">
-        <q-card-section class="row">
-          <div class="text-h6">Crear Usuario</div>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Crear Usuario</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-input class="col-md-6 col-sm-12 col-xs-12" filled v-model="usuario" label="Usuario" stack-label dense
+            <q-input class="col-md-6 col-sm-12 col-xs-12" outlined v-model="usuario" label="Usuario" stack-label dense
               style="margin-bottom: 10px;" />
-            <q-input class="col-md-5 col-sm-12 col-xs-12" filled v-model="clave" label="Clave" stack-label dense />
+            <q-input class="col-md-5 col-sm-12 col-xs-12" outlined v-model="clave" label="Clave" stack-label dense />
           </div>
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-input class="col-md-4 col-sm-12 col-xs-12" filled v-model="nombre" label="Nombre" stack-label dense
+            <q-input class="col-md-4 col-sm-12 col-xs-12" outlined v-model="nombre" label="Nombre" stack-label dense
               style="margin-bottom: 10px;" />
-            <q-input class="col-md-7 col-sm-12 col-xs-12" filled v-model="email" label="Email" stack-label dense />
+            <q-input class="col-md-7 col-sm-12 col-xs-12" outlined v-model="email" label="Email" stack-label dense />
           </div>
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-select dense class="col" filled options-dense v-model="modelrol" :options="optionsrol"
+            <q-select dense class="col" outlined options-dense v-model="modelrol" :options="optionsrol"
               option-label="name" option-value="cod" label="Rol de usuario" style="margin: 10px;" />
           </div>
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-select dense class="col" filled options-dense v-model="modelsede" :options="optionssede"
+            <q-select dense class="col" outlined options-dense v-model="modelsede" :options="optionssede"
               option-label="name" option-value="cod" label="Emisores" style="margin: 10px;" />
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
-          <q-btn label="Guardar" color="secondary" @click="crear" />
+        <q-card-actions align="center">
+          <q-btn outline no-caps label="Cancelar" icon-right="close" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Guardar" color="primary" icon-right="check" @click="crear" />
         </q-card-actions>
       </q-card>
     </q-dialog>
     <!-- MODAL PARA EDITAR USUARIOS -->
     <q-dialog v-model="modalEdit" persistent>
       <q-card class="col-md-6 col-sm-11 col-xs-11" style="margin-top: 20px;">
-        <q-card-section class="row">
-          <div class="text-h6">Editar Usuario</div>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Editar usuario</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-input class="col-md-6 col-sm-12 col-xs-12" filled v-model="usuario" label="Usuario" stack-label dense
+            <q-input class="col-md-6 col-sm-12 col-xs-12" outlined v-model="usuario" label="Usuario" stack-label dense
               style="margin-bottom: 10px;" />
-            <q-input class="col-md-5 col-sm-12 col-xs-12" filled v-model="clave" label="Clave" stack-label dense />
+            <q-input class="col-md-5 col-sm-12 col-xs-12" outlined v-model="clave" label="Clave" stack-label dense />
           </div>
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-input class="col-md-4 col-sm-12 col-xs-12" filled v-model="nombre" label="Nombre" stack-label dense
+            <q-input class="col-md-4 col-sm-12 col-xs-12" outlined v-model="nombre" label="Nombre" stack-label dense
               style="margin-bottom: 10px;" />
-            <q-input class="col-md-7 col-sm-12 col-xs-12" filled v-model="email" label="Email" stack-label dense />
+            <q-input class="col-md-7 col-sm-12 col-xs-12" outlined v-model="email" label="Email" stack-label dense />
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
-          <q-btn label="Guardar" color="secondary" @click="guardar" />
+        <q-card-actions align="center">
+          <q-btn outline no-caps label="Cancelar" icon-right="close" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Guardar" color="primary" icon-right="check" @click="guardar" />
         </q-card-actions>
       </q-card>
     </q-dialog>
     <!-- MODAL PARA EDITAR ESTATUS -->
     <q-dialog v-model="modalUpdEstatus" persistent>
-      <q-card style="width: 250px;">
-        <q-card-section>
-          <div class="text-h6" style="text-align: center;">Actualizar Estatus</div>
+      <q-card>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Actualizar Estatus</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-card-section class="q-pt-none">
           <div>
             ¿Desea {{ messageActualizar }} este usuario?
           </div>
         </q-card-section>
-        <q-card-section class="q-pt-none">
+        <q-card-section align="center">
           <div style="display: flex; justify-content: space-evenly;margin-top: 20px;">
-            <q-btn color="negative" label="Cancelar" v-close-popup />
-            <q-btn color="secondary" label="Aceptar" @click="actualizarEstatus" />
+            <q-btn outline no-caps label="Cancelar" icon-right="close" color="primary" v-close-popup />
+            <q-btn unelevated no-caps label="Aceptar (F4)" color="primary" icon-right="check" @click="actualizarEstatus"
+              style="margin-left:10px" />
           </div>
         </q-card-section>
       </q-card>

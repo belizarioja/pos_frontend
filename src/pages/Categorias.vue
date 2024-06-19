@@ -64,29 +64,44 @@
         </div>
       </div>
     </div>
-    <q-dialog v-model="buscaritem" position="top">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Crear categotía</div>
+
+    <!-- Dialogo para crear caregoria -->
+    <q-dialog v-model="buscaritem">
+      <q-card class="q-pa-lg custom-shadow custom-border-radius">
+        <q-card-section style=" display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Crear categoría</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-separator />
         <q-card-section>
           <div class="">
-            <q-input filled v-model="categoria" label="Categoría" stack-label />
+            <q-input outlined v-model="categoria" label="Categoría" stack-label>
+              <template v-slot:prepend>
+                <q-icon name="collections_bookmark" />
+              </template>
 
+            </q-input>
           </div>
         </q-card-section>
         <q-separator />
 
         <q-card-section>
-          <q-input v-model="descripcion" label="Descripción de categoría" filled type="textarea" />
+          <q-input outlined v-model="descripcion" label="Descripción" filled type="textarea">
+            <template v-slot:prepend>
+              <q-icon name="description" />
+            </template>
+          </q-input>
         </q-card-section>
 
         <q-separator />
 
-        <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup />
-          <q-btn label="Aceptar" color="secondary" @click="crear" v-close-popup />
+        <q-card-actions align="center ">
+          <q-btn outline no-caps label="Cancelar" icon-right="close" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Aceptar (F4)" color="primary" icon-right="check" @click="crear"
+            v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>

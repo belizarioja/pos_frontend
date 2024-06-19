@@ -61,87 +61,116 @@
 
     <!-- MODAL PARA VISUALIZAR TOKEN -->
     <q-dialog v-model="viewtoken" persistent>
-      <q-card style="width: auto;">
+      <q-card class="q-pa-lg custom-shadow custom-border-radius">
         <q-card-section class="row items-center">
-          <span class="q-ml-sm">Token del Cliente Emisor {{ razonsocialtitulo + ' - ' + riftitulo }}</span>
+          <span class="q-ml-sm">Esta información es secreta 🤫</span>
         </q-card-section>
-        <q-card-section class="row items-center" style="word-break: break-all;">
-          <div style="">
-            {{ tokenservicios }}
-          </div>
+        <q-separator />
+        <q-card-section class="row items-center">
+          <span class="q-ml-sm">Cliente Emisor: <b>{{ razonsocialtitulo + ' - ' + riftitulo }}</b></span>
         </q-card-section>
-        <q-card-actions align="right">
-          <q-btn label="Aceptar" color="primary" v-close-popup />
+        <q-card-section class="tarjeticainside" style="word-break: break-all;">
+          <q-item>
+            <q-card-section avatar>
+              <q-icon name="token" color="grey-7" />
+            </q-card-section>
+            <q-card-section>
+              <q-card-label caption>Token:</q-card-label>
+              <p> {{ tokenservicios }}</p>
+            </q-card-section>
+          </q-item>
+
+        </q-card-section>
+        <q-separator />
+        <q-card-actions align="center">
+          <q-btn unelevated no-caps label="Aceptar" color="primary" icon-right="check" v-close-popup />
+
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <!-- MODAL PARA EDITAR/CREAR EMISOR -->
     <q-dialog v-model="modalEdit" persistent>
       <q-card class="col-md-6 col-sm-11 col-xs-11" style="margin-top: 20px;">
-        <q-card-section class="row">
-          <div class="text-h6">{{ titulomodal }} Emisor</div>
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>{{ titulomodal }} Emisor</h6>
+          </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
+
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-input class="col-md-3 col-sm-12 col-xs-12" filled v-model="tasabcv" label="Tasa BCV" stack-label dense
+            <q-input class="col-md-3 col-sm-12 col-xs-12" outlined v-model="tasabcv" label="Tasa BCV" stack-label dense
               style="margin-bottom: 10px;" />
-            <q-input class="col-md-8 col-sm-12 col-xs-12" filled v-model="urlfacturacion" label="Url facturación"
+            <q-input class="col-md-8 col-sm-12 col-xs-12" outlined v-model="urlfacturacion" label="Url facturación"
               stack-label dense />
           </div>
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-input class="col-md-3 col-sm-12 col-xs-12" filled v-model="rif" label="RIF" stack-label dense
+            <q-input class="col-md-3 col-sm-12 col-xs-12" outlined v-model="rif" label="RIF" stack-label dense
               style="margin-bottom: 10px;" />
-            <q-input class="col-md-8 col-sm-12 col-xs-12" filled v-model="empresa" label="Razón Social" stack-label
+            <q-input class="col-md-8 col-sm-12 col-xs-12" outlined v-model="empresa" label="Razón Social" stack-label
               dense />
           </div>
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-input class="col-md-5 col-sm-12 col-xs-12" filled v-model="telefono" label="Teléfono" stack-label dense
+            <q-input class="col-md-5 col-sm-12 col-xs-12" outlined v-model="telefono" label="Teléfono" stack-label dense
               style="margin-bottom: 10px;" />
-            <q-input class="col-md-6 col-sm-12 col-xs-12" filled v-model="email" label="Email" stack-label dense />
+            <q-input class="col-md-6 col-sm-12 col-xs-12" outlined v-model="email" label="Email" stack-label dense />
           </div>
         </q-card-section>
         <q-separator class="row" />
         <q-card-section>
           <div class="row justify-around">
-            <q-input class="col-12" filled v-model="direccion" label="Dirección" stack-label dense
+            <q-input class="col-12" outlined v-model="direccion" label="Dirección" stack-label dense
               style="margin-bottom: 10px;" />
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
-          <q-input v-model="tokenfacturacion" label="Token facturación" filled dense type="textarea" />
+          <q-input v-model="tokenfacturacion" label="Token facturación" outlined dense type="textarea" />
         </q-card-section>
         <q-separator />
-        <q-card-actions align="right">
-          <q-btn label="Cerrar" color="negative" v-close-popup />
-          <q-btn label="Guardar" color="secondary" @click="guardar" />
+        <q-card-actions align="center">
+          <q-btn outline no-caps label="Cancelar" icon-right="close" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Guardar" color="primary" icon-right="check" @click="guardar" />
         </q-card-actions>
       </q-card>
     </q-dialog>
     <!-- MODAL PARA EDITAR ESTATUS -->
     <q-dialog v-model="modalUpdEstatus" persistent>
       <q-card style="width: 250px;">
-        <q-card-section>
-          <div class="text-h6" style="text-align: center;">Actualizar Estatus</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          <div>
-            ¿Desea {{ messageActualizar }} este usuario?
+        <q-card-section
+          style="padding: 10px 15px 7px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-center">
+            <h6>Actualizar Estatus</h6>
           </div>
+
+          <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
+
         <q-card-section class="q-pt-none">
-          <div style="display: flex; justify-content: space-evenly;margin-top: 20px;">
-            <q-btn color="negative" label="Cancelar" v-close-popup />
-            <q-btn color="secondary" label="Aceptar" @click="actualizarEstatus" />
-          </div>
+          <q-card-section class="tarjeticainside">
+
+            <q-card-label caption></q-card-label>
+            <p> ¿Desea {{ messageActualizar }} este usuario?</p>
+
+          </q-card-section>
+
         </q-card-section>
+        <q-separator />
+        <q-card-actions align="center">
+          <q-btn outline no-caps label="Cancelar" icon-right="close" color="primary" v-close-popup />
+          <q-btn unelevated no-caps label="Aceptar" color="primary" icon-right="check" @click="actualizarEstatus" />
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </q-page>
