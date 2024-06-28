@@ -242,11 +242,11 @@ export default defineComponent({
           obj.numerointerno = datos[i].numerointerno
           obj.numerocontrol = datos[i].numerocontrol
           obj.fecha = moment(datos[i].fecha).format('DD/MM/YYYY HH:mm:ss')
-          obj.subtotal = datos[i].subtotal
-          obj.impuesto = datos[i].impuesto
-          obj.total = datos[i].total
-          obj.totalusd = datos[i].totalusd
-          obj.igtf = datos[i].igtf
+          obj.subtotal = datos[i].subtotal ? datos[i].subtotal.toFixed(2) : '0.00'
+          obj.impuesto = datos[i].impuesto ? datos[i].impuesto.toFixed(2) : '0.00'
+          obj.total = datos[i].total ? datos[i].total.toFixed(2) : '0.00'
+          obj.totalusd = datos[i].totalusd ? datos[i].totalusd.toFixed(2) : '0.00'
+          obj.igtf = datos[i].igtf ? datos[i].igtf.toFixed(2) : '0.00'
           obj.descuentos = datos[i].descuentos
           obj.usuario = datos[i].usuario
           obj.documentosolo = datos[i].documento
