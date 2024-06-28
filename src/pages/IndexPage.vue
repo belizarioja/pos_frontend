@@ -14,7 +14,7 @@
         <div class="col  bd-left ">
           <div class="row">
             <div class="col-1 logo-bcv ">
-              <img src="public/logo_bcv.png">
+              <img src="logo_bcv.png">
             </div>
             <div class="col ">
               <div class="texto-pequeno ellipsis">🗓️ Fecha de venta:</div>
